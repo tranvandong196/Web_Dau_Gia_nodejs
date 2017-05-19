@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta content="width=device-width, initial-scale=1" name="viewport">
+            <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+                <meta charset="utf-8">
+                    <title>
+                        Đăng ký
+                    </title>
+                    <link href="Bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+                        <link href="Bootstrap/css/dcalendar.picker.css" rel="stylesheet">
+                            <style media="screen" type="text/css">
+                            </style>
+                        </link>
+                    </link>
+                </meta>
+            </meta>
+        </meta>
+    </head>
+    <body>
+        <!-- FORM -->
+        <form class="form-horizontal col-sm-12" id="signupform" style="margin-top: 20px ">
+            <div class="panel panel-info ">
+                <div class="panel-heading">
+                    <span class="panel-title">
+                        Đăng ký thành viên
+                    </span>
+                    <span style="float:right; font-size: 80%; position: relative; margin: 5px">
+                        <a href="signin.html">
+                            Đăng nhập
+                        </a>
+                    </span>
+                </div>
+                <div class="panel-body">
+                    Tất cả thông tin đều bắt buộc
+                    <hr>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <div>
+                                        <label class="control-label col-md-4" for="inputEmail">
+                                            Email
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input class="form-control" id="inputEmail" placeholder="example@gmail.com" type="text">
+                                        </input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <div>
+                                        <label class="control-label col-md-3" for="inputFullName">
+                                            Họ tên
+                                        </label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="inputFullName" placeholder="Trần Văn A" type="text">
+                                        </input>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <div>
+                                        <label class="control-label col-md-4" for="inputPassword">
+                                            Mật khẩu
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input class="form-control" id="inputPassword" type="password">
+                                        </input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <div>
+                                        <label class="control-label col-md-3" for="inputAddress">
+                                            Địa chỉ
+                                        </label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="inputAddress" type="text">
+                                        </input>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <div>
+                                        <label class="control-label col-md-4" for="inputPasswordConfirm">
+                                            Nhập lại mật khẩu
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input class="form-control" id="inputPasswordConfirm" type="password">
+                                        </input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <div>
+                                        <label class="control-label col-md-3" for="inputDistrict">
+                                            Quận/Huyện
+                                        </label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="inputDistrict" type="password">
+                                        </input>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <div>
+                                    </div>
+                                    <div class="col-md-6">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <div>
+                                        <label class="control-label col-md-3" for="inputProvince">
+                                            Tỉnh/Thành phố
+                                        </label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <select class="required form-control" id="city" name="city">
+                                            <option value="">
+                                                Chọn Tỉnh/Thành phố
+                                            </option>
+                                            <option value="51">
+                                                An Giang
+                                            </option>
+                                            <option value="46">
+                                                Bà Rịa – Vũng Tàu
+                                            </option>
+                                            <option value="15">
+                                                Bắc Giang
+                                            </option>
+                                            <option value="9">
+                                                Bắc Kạn
+                                            </option>
+                                            <option value="52">
+                                                Bạc Liêu
+                                            </option>
+                                            <option value="16">
+                                                Bắc Ninh
+                                            </option>
+                                            <option value="53">
+                                                Bến Tre
+                                            </option>
+                                            <option value="47">
+                                                Bình Dương
+                                            </option>
+                                            <option value="48">
+                                                Bình Phước
+                                            </option>
+                                            <option value="40">
+                                                Bình Thuận
+                                            </option>
+                                            <option value="36">
+                                                Bình Định
+                                            </option>
+                                            <option value="54">
+                                                Cà Mau
+                                            </option>
+                                            <option value="55">
+                                                Cần Thơ
+                                            </option>
+                                            <option value="10">
+                                                Cao Bằng
+                                            </option>
+                                            <option value="43">
+                                                Gia Lai
+                                            </option>
+                                            <option value="11">
+                                                Hà Giang
+                                            </option>
+                                            <option value="17">
+                                                Hà Nam
+                                            </option>
+                                            <option value="1">
+                                                Hà Nội
+                                            </option>
+                                            <option value="27">
+                                                Hà Tĩnh
+                                            </option>
+                                            <option value="18">
+                                                Hải Dương
+                                            </option>
+                                            <option value="19">
+                                                Hải Phòng
+                                            </option>
+                                            <option value="57">
+                                                Hậu Giang
+                                            </option>
+                                            <option value="4">
+                                                Hòa Bình
+                                            </option>
+                                            <option value="20">
+                                                Hưng Yên
+                                            </option>
+                                            <option value="37">
+                                                Khánh Hòa
+                                            </option>
+                                            <option value="58">
+                                                Kiên Giang
+                                            </option>
+                                            <option value="44">
+                                                Kontum
+                                            </option>
+                                            <option value="5">
+                                                Lai Châu
+                                            </option>
+                                            <option value="45">
+                                                Lâm Đồng
+                                            </option>
+                                            <option value="12">
+                                                Lạng Sơn
+                                            </option>
+                                            <option value="6">
+                                                Lào Cai
+                                            </option>
+                                            <option value="59">
+                                                Long An
+                                            </option>
+                                            <option value="21">
+                                                Nam Định
+                                            </option>
+                                            <option value="28">
+                                                Nghệ An
+                                            </option>
+                                            <option value="22">
+                                                Ninh Bình
+                                            </option>
+                                            <option value="38">
+                                                Ninh Thuận
+                                            </option>
+                                            <option value="23">
+                                                Phú Thọ
+                                            </option>
+                                            <option value="39">
+                                                Phú Yên
+                                            </option>
+                                            <option value="29">
+                                                Quảng Bình
+                                            </option>
+                                            <option value="34">
+                                                Quảng Nam
+                                            </option>
+                                            <option value="35">
+                                                Quảng Ngãi
+                                            </option>
+                                            <option value="24">
+                                                Quảng Ninh
+                                            </option>
+                                            <option value="30">
+                                                Quảng Trị
+                                            </option>
+                                            <option value="60">
+                                                Sóc Trăng
+                                            </option>
+                                            <option value="7">
+                                                Sơn La
+                                            </option>
+                                            <option value="50">
+                                                Tây Ninh
+                                            </option>
+                                            <option value="26">
+                                                Thái Bình
+                                            </option>
+                                            <option value="13">
+                                                Thái Nguyên
+                                            </option>
+                                            <option value="31">
+                                                Thanh Hóa
+                                            </option>
+                                            <option value="32">
+                                                Thừa Thiên Huế
+                                            </option>
+                                            <option value="61">
+                                                Tiền Giang
+                                            </option>
+                                            <option value="2">
+                                                TP. Hồ Chí Minh
+                                            </option>
+                                            <option value="62">
+                                                Trà Vinh
+                                            </option>
+                                            <option value="14">
+                                                Tuyên Quang
+                                            </option>
+                                            <option value="63">
+                                                Vĩnh Long
+                                            </option>
+                                            <option value="25">
+                                                Vĩnh Phúc
+                                            </option>
+                                            <option value="8">
+                                                Yên Bái
+                                            </option>
+                                            <option value="33">
+                                                Đà Nẵng
+                                            </option>
+                                            <option value="41">
+                                                Đắc Lắc
+                                            </option>
+                                            <option value="42">
+                                                Đắc Nông
+                                            </option>
+                                            <option value="3">
+                                                Điện Biên
+                                            </option>
+                                            <option value="49">
+                                                Đồng Nai
+                                            </option>
+                                            <option value="56">
+                                                Đồng Tháp
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <div>
+                                    </div>
+                                    <div class="col-md-6">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <div>
+                                        <label class="control-label col-md-3" for="inputNumber">
+                                            Điện thoại
+                                        </label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="inputNumber" type="password">
+                                        </input>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Rows -->
+                    </hr>
+                </div>
+                <!-- 00000000000000000000000000000000 -->
+                <div class=" panel-footer" padding="0px">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div>
+                                    <label class="col-md-3" for="exampleInputName2">
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input align="center" class="btn btn-primary" id="submit" type="button" value="Đăng ký">
+                                        <a href="signup.html">
+                                            <input class="btn" id="cancel" type="button" value="Nhập lại">
+                                            </input>
+                                        </a>
+                                    </input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- FORM -->
+        <script src="Bootstrap/js/jquery-3.2.0.min.js" type="text/javascript">
+        </script>
+        <script src="Bootstrap/js/bootstrap.min.js" type="text/javascript">
+        </script>
+    </body>
+</html>
