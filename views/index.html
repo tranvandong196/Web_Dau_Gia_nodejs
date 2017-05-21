@@ -10,52 +10,101 @@
     </script>
     <script>
         $(document).ready(function(){
-         $("#DSSP").hover(function(){
+           $("#DSSP").hover(function(){
             $(this).css("color", "red");
         }, function(){
             $(this).css("color", "black");
         });
-     });
+       });
 
         $(document).ready(function(){
-         $("[data-toggle=popover]").popover({ 
+           $("[data-toggle=popover]").popover({ 
             trigger: 'manual',
             html: true,
             content: function() {
-               return $(this).next('.popover').html();
-           }
-       }).on("mouseenter", function () {
+             return $(this).next('.popover').html();
+         }
+     }).on("mouseenter", function () {
         var _this = this;
         $(this).popover("show");
         $(".popover").on("mouseleave", function () {
-           $(_this).popover('hide');
-       });
+         $(_this).popover('hide');
+     });
     }).on("mouseleave", function () {
         var _this = this;
         setTimeout(function () {
-           if (!$(".popover:hover").length) {
-              $(_this).popover("hide");
-          }
-      }, 300);
+         if (!$(".popover:hover").length) {
+          $(_this).popover("hide");
+      }
+  }, 300);
     });
 });
-</script>
 
-<style type="text/css">
-    .nav-top .nav-logo {
-     position: absolute;
-     left: 0;
-     top: 0px;
-     display: inline-block;
- }
+        var count = 0;
+        var ArrayImage = [];
 
- .group-ht{
-     font-size: 10px;
-     font-weight: bold;
- }
- #DSSP{
-     font-weight: bold;
- }
+        ArrayImage[0] ="../public/assests/images/Banner-Phu-Kien-cdg.jpg";
+        ArrayImage[1] ="../public/assests/images/Banner-T-trang-nu-cdg.jpg";
+        ArrayImage[2] ="../public/assests/images/Banner-Dong-Ho-cdg.png";
+        ArrayImage[3] ="../public/assests/images/12324.jpg";
+        ArrayImage[4] ="../public/assests/images/Banner-Fishing-cdg.jpg"
+        ArrayImage[5] ="../public/assests/images/Banner Tui Nu cdg.jpg";
+        ArrayImage[6] ="../public/assests/images/Banner-Tui-Nam-cdg.jpg";
+        ArrayImage[7] ="../public/assests/images/Banner-Giay-cdg.jpg";
+        ArrayImage[8] ="../public/assests/images/Banner-Nuoc-Hoa-cdg.jpg";
+        ArrayImage[9] ="../public/assests/images/Banner-Phu-Kien-cdg.jpg";
+
+        function next(){
+            count++;
+            if(count > 9)
+            {
+                count = 0;
+            }
+            document.images['slide'].src = ArrayImage[count];
+        }
+
+        function pre(){
+            count--;
+            if(count < 0)
+            {
+                count = 9;
+            }
+            document.images['slide'].src = ArrayImage[count];
+        }
+
+    </script>
+
+
+    <style type="text/css">
+        .nav-top .nav-logo {
+           position: absolute;
+           left: 0;
+           top: 0px;
+           display: inline-block;
+       }
+
+       .group-ht{
+           font-size: 10px;
+           font-weight: bold;
+       }
+       #DSSP{
+           font-weight: bold;
+       }
+
+       #next{
+        text-transform: uppercase;
+        position: absolute;
+        top: 100px;
+        right: -10px;
+    }
+
+    #pre{
+        text-transform: uppercase;
+        position: absolute;
+        top: 100px;
+        left: -5px;
+
+    }
 </style>
 
 </head>
@@ -137,6 +186,7 @@
                             </h3>
                         </div>
                         <div class="panel-body">
+
                             <li class="nav-li bold" data-submenu-id="submenu-41">
                                 <a data-toggle="popover" href="/danh-muc-san-pham/thoi-trang-nu-41.html">
                                     Thời trang nữ
@@ -145,7 +195,7 @@
                                     <h3 class="popover-title">
                                         Thời trang nữ
                                     </h3>
-                                    <ul class="box-nav-menu" id="1" style="margin-left: -30px; width: 180px">
+                                    <ul class="box-nav-menu" id="1" style="margin-left: -20px; width: 250px">
                                         <li class="nav-li no-bold">
                                             <a class="" href="/danh-muc-san-pham/ao-voan-ao-kieu-697.html">
                                                 Áo voan - áo kiểu
@@ -191,177 +241,353 @@
                                                 Váy - đầm
                                             </a>
                                         </li>
-                                        <li class="nav-li no-bold">
-                                            <a class="" href="/danh-muc-san-pham/veston-nu-695.html">
-                                                Veston nữ
-                                            </a>
-                                        </li>
-                                        <li class="nav-li no-bold">
-                                            <a class="" href="/danh-muc-san-pham/do-lot-nu-bikini-694.html">
-                                                Đồ ngủ - đồ bộ - Bikini
-                                            </a>
-                                        </li>
-                                        <li class="nav-li no-bold">
-                                            <a class="" href="/danh-muc-san-pham/do-len-da-693.html">
-                                                Đồ len - dạ
-                                            </a>
-                                        </li>
                                     </ul>
                                 </div>
                             </li>
+
+                            <li class="nav-li bold" data-submenu-id="submenu-606">
+                                <a href="/danh-muc-san-pham/thoi-trang-nam-606.html" data-toggle="popover">Thời trang nam
+                                </a>
+
+                                <div class="popover" id="submenu-606" style="display: none; top: -1px; left: 211px; height: 390px;">
+                                   <h3 class="popover-title">
+                                       Thời trang nam
+                                   </h3>
+                                   <ul class="box-nav-menu" style="margin-left: -20px; width: 250px">
+
+                                    <li class="nav-li no-bold"><a href="/danh-muc-san-pham/quan-jean-kaki-641.html" class="">Quần Jean - Kaki</a>
+
+                                    </li>
+                                    <li class="nav-li no-bold"><a href="/danh-muc-san-pham/quan-short-640.html" class="">Quần Short</a>
+
+                                    </li>
+                                    <li class="nav-li no-bold"><a href="/danh-muc-san-pham/quan-tay-639.html" class="">Quần Tây</a>
+
+                                    </li>
+                                    <li class="nav-li no-bold"><a href="/danh-muc-san-pham/quan-thun-815.html" class="">Quần thun</a>
+
+                                    </li>
+                                    <li class="nav-li no-bold"><a href="/danh-muc-san-pham/ao-thun-615.html" class="">Áo Thun</a>
+
+                                    </li>
+                                    <li class="nav-li no-bold"><a href="/danh-muc-san-pham/ao-somi-638.html" class="">Áo Sơmi</a>
+                                    </li>
+                                    <li class="nav-li no-bold"><a href="/danh-muc-san-pham/ao-khoac-ao-gio-637.html" class="">Áo khoác - áo gió</a>
+                                    </li>
+                                    <li class="nav-li no-bold"><a href="/danh-muc-san-pham/veston-635.html" class="">Veston</a>
+                                    </li>
+                                </ul>                               
+                            </div>
+                        </li>
+
+                        <li class="nav-li bold" data-submenu-id="submenu-625">
+                            <a href="/danh-muc-san-pham/phu-kien-thoi-trang-625.html" data-toggle="popover">Phụ kiện thời trang
+                            </a>
+
+                            <div class="popover" id="submenu-625" style="display: none; top: -1px; left: 211px; height: 390px;">
+                             <h3 class="popover-title">Phụ kiện thời trang</h3>
+                             <ul class="box-nav-menu" style="margin-left: -20px; width: 250px">
+
+                                <li class="nav-li no-bold"><a href="/danh-muc-san-pham/dong-ho-629.html" class="">Đồng hồ</a>
+
+                                </li>
+                                <li class="nav-li no-bold"><a href="/danh-muc-san-pham/giay-dep-626.html" class="">Giày dép</a>
+
+                                </li>
+                                <li class="nav-li no-bold"><a href="/danh-muc-san-pham/mat-kinh-628.html" class="">Mắt kính</a>
+
+                                </li>
+                                <li class="nav-li no-bold"><a href="/danh-muc-san-pham/vi-bop-631.html" class="">Ví - Bóp</a>
+
+                                </li>
+                                <li class="nav-li no-bold"><a href="/danh-muc-san-pham/that-lung-day-nit-630.html" class="">Thắt lưng - Dây nịt</a>
+
+                                </li>
+                                <li class="nav-li no-bold"><a href="/danh-muc-san-pham/tui-xach-627.html" class="">Túi xách</a>
+
+                                </li>
+                                <li class="nav-li no-bold"><a href="/danh-muc-san-pham/trang-suc-632.html" class="">Trang sức</a>
+
+                                </li>
+                                <li class="nav-li no-bold"><a href="/danh-muc-san-pham/mu-non-743.html" class="">Mũ - Nón</a>
+
+                                </li>
+                                <li class="nav-li no-bold"><a href="/danh-muc-san-pham/tat-vo-750.html" class="">Tất - Vớ</a>
+
+                                </li>
+                                <li class="nav-li no-bold"><a href="/danh-muc-san-pham/phu-kien-khac-633.html" class="">Phụ kiện khác</a>
+
+                                </li>
+                            </ul>                         
                         </div>
+                    </li>
+
+                    <li class="nav-li bold" data-submenu-id="submenu-40">
+                        <a href="/danh-muc-san-pham/dien-tu-dien-may-40.html" data-toggle="popover">Điện tử &amp; Điện máy
+                        </a>
+
+                        <div class="popover" id="submenu-40" style="display: none; top: -1px; left: 211px; height: 390px;">
+                         <h3 class="popover-title">Điện tử &amp; Điện máy</h3>
+                         <ul class="box-nav-menu" style="margin-left: -20px; width: 250px">
+
+                            <li class="nav-li no-bold"><a href="/danh-muc-san-pham/dien-thoai-phu-kien-46.html" class="">Điện Thoại &amp; Phụ Kiện</a>
+
+                            </li>
+                            <li class="nav-li no-bold"><a href="/danh-muc-san-pham/may-quay-phim-chup-hinh-47.html" class="">Máy Quay phim &amp; Chụp hình</a>
+
+                            </li>
+                            <li class="nav-li no-bold"><a href="/danh-muc-san-pham/may-tinh-tablet-48.html" class="">Máy Tính &amp; Tablet</a>
+
+                            </li>
+                            <li class="nav-li no-bold"><a href="/danh-muc-san-pham/thiet-bi-nghe-nhin-49.html" class="">Thiết bị nghe nhìn</a>
+
+                            </li>
+                            <li class="nav-li no-bold"><a href="/danh-muc-san-pham/may-van-phong-214.html" class="">Máy văn phòng</a>
+
+                            </li>
+                            <li class="nav-li no-bold"><a href="/danh-muc-san-pham/dien-may-gia-dinh-215.html" class="">Điện máy gia đình</a>
+
+                            </li>
+
+                            <li class="nav-li no-bold"><a href="/danh-muc-san-pham/thiet-bi-khac-353.html" class="">Thiết bị khác</a>
+
+                            </li>
+                        </ul>
                     </div>
-                </div>
-                <!-- END Danh sách sản phẩm -->
-                <!-- Body -->
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                </li>
 
+            </div>
+        </div>
+    </div>
+    <!-- END Danh sách sản phẩm -->
+    <!-- Body -->
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" >
 
+        <div>    
+            <img id="slide" src="../public/assests/images/Banner-Phu-Kien-cdg.jpg" style="width: 100%">      
+            <button type="button" class="btn btn-default btn-lg" id="pre" onclick="pre()">
+              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+          </button>
+          <button type="button" class="btn btn-default btn-lg" id="next" onclick="next()">
+              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+          </button>
+      </div>
 
+      <div class="box-navB" style="display:block">
+        <h2 class="nav-title">Đấu giá hot</h2>
+        <div id="scrollBidHot" style="margin: 0px auto; width: 435px; visibility: visible; overflow: hidden; position: relative; z-index: 2; left: 0px;">
+            <ul class="thumbnails" style="margin: 0px; padding: 0px; position: relative; list-style-type: none; z-index: 1; width: 1514px; left: 0px;">
+                <li style="width: 435px; overflow: hidden; float: left;">
+                    <div class="box-auction " style="width: 435px;">
+                      <table class="table table-hover">
+                          <tbody>
+                              <tr>
+                                  <td>
+                                   <div class="show-auction ui-border "><a href="/san-pham/ao-caro-22009.html"><img src="../public/assests/images/so-mi.jpg"><span></span></a></div>
+                               </td>
 
-
-                    <!-- {{{Phần nội dung làm ở đây}}} -->
-
-
-
-
-
-
-                </div>
-                <!-- END Body -->
-                <!-- Hỗ trợ thanh toán -->
-                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-top: -115px">
-                    <table class="table table-hover">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="group-ht" style="width: 90%">
-                                        <a class="bold" href="/thong-tin/thanh-toan-an-toan-3.html">
-                                            Thanh toán an toàn
-                                        </a>
-                                        <span class="c_font">
-                                            <br>
-                                            Thanh toán an toàn, mua hàng bảo đảm, website bán hàng uy tín
-                                        </span>
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <div class="icon-gh">
-                                        <img src="../public/assests/images/tt.png"/>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="group-ht" style="width: 90%">
-                                        <a class="bold" href="/thong-tin/giao-hang-tan-nguoi-mua-4.html">
-                                            Giao hàng tận người mua
-                                        </a>
-                                        <span class="c_font">
-                                            <br>
-                                            Liên kết với các Công ty vận chuyển hàng đầu VN để giao hàng tận tay Quý khách
-                                        </span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="icon-gh">
-                                        <img src="../public/assests/images/gh.png"/>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="group-ht" style="width: 90%">
-                                        <a class="bold" href="/thong-tin/ho-tro-rui-ro-ve-hang-hoa-5.html">
-                                            Hỗ trợ rủi ro về hàng hóa
-                                        </a>
-                                        <span class="c_font">
-                                            <br>
-                                            Không nhận được hàng, nhận hàng không đúng mô tả, hỗ trợ hoàn tiền 100% giá trị
-                                        </span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div align="right" class="icon-gh">
-                                        <img src="../public/assests/images/ht.png"/>
+                               <td>
+                                  <div class="note-auction d-font">
+                                    <a class=" bold" href="/san-pham/ao-caro-22009.html">áo caro</a>
+                                    <p>Thời gian còn lại:&nbsp;<span class="bold a-font time-dg  hasCountdown" id="bid22009"><span class="countdown_row countdown_amount"  style="color: red">4 ngày, 14:55:24</span></span></p>
+                                    <p>Giá hiện tại:&nbsp;<span class="money-dg bold"  style="color: red">202,000 VNĐ</span></p>
+                                    <p class="bnt-nav">Số người đấu giá:&nbsp;<strong>1</strong></p>
+                                    <p class="buy-nav">Người bán:&nbsp;<span><a href="/gian-hang/iphone-5-1207.html" class="bold txtBlue">iphone 5</a></span>
+                                    </p>
+                                    <p class="c_font txtLgGray">Xếp hạng:&nbsp;<span class="txtRed ui-star-0">&nbsp;</span></p>
+                                    <p class="c_font txtLgGray">Điểm uy
+                                        tín:&nbsp;<span></span></p>
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <!-- END Hỗ trợ thanh toán -->
-            </div>
-        </div>
-        <!-- END Danh sách - Body - Hỗ trợ thanh toán -->
+            </li>
+            <script type="text/javascript">
+                $(function () {
+                    var liftoffTime1 = new Date('May 26, 2017 14:15:00 +0700');
+                    $('#bid22009').countdown({
+                        until: liftoffTime1,
+                        compact: true,
+                        serverSync: serverTime,
+                        format: 'dHMS'
+                    });
+                });
+            </script>
+        </ul>
+    </div>
+</div>
 
+<!-- {{{Phần nội dung làm ở đây}}} -->
 
-
-
-        <!--Bắt đầu phần footer của index-->
-        <div class="row">
-            <div>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td valign="top">
-                               <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                   <ul>
-                                     <li>
-                                         <h5>Về chúng tôi</h5>
-                                         <p><a href="gioi-thieu.html">Giới thiệu</a></p>
-                                         <p><a href="/#">Quy chế hoạt động Sàn Giao Dịch</a></p>
-                                         <p><a href="/#">Đề án hoạt động Sàn Giao Dịch</a></p>
-                                         <p><a href="/#">Tuyển dụng</a></p>
-                                     </li>
-
-                                 </ul>
-                             </div>
-                             <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                <ul>
-                                   <li>
-                                       <h5>Dành cho người bán</h5>
-                                       <p><a href="/#">Điều khoản bán hàng</a></p>
-                                       <p><a href="/#">Hướng dẫn mở shop bán hàng online</a></p>
-                                       <p><a href="/#">Hướng dẫn đăng SP bán trên trang Đấu giá</a></p>
-                                       <p><a href="/#">Hướng dẫn quản lý và theo dõi đơn hàng</a></p>
-                                       <p><a href="/#">Kinh nghiệm bán hàng online</a></p>
-                                   </li>            
-                               </ul>
-                           </div>
-                           <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                               <ul>
-                                   <li>
-                                    <h5>Dành cho người mua</h5>
-                                    <p><a href="/#">Hướng dẫn mua hàng và thanh toán</a></p>
-                                    <p><a href="/#">Tại sao một số sản phẩm có "Made in China"?</a></p>
-                                </li>                    
-                            </ul>
-                        </div>
-                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                            <ul>                  
-                             <li>
-                                <h5>Sản phẩm và dịch vụ khác</h5>
-                                <p><a href="/#">Điều kiện tham gia đấu giá</a></p>
-                                <p><a href="/#">Kinh nghiệm mua hàng online</a></p>
-                            </li>
-                        </ul>
-                    </div> 
+</div>
+<!-- END Body -->
+<!-- Hỗ trợ thanh toán -->
+<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-top: -115px;" >
+    <table class="table table-hover"  style="border:1px solid black">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="group-ht" style="width: 90%">
+                        <a class="bold" href="/thong-tin/thanh-toan-an-toan-3.html">
+                            Thanh toán an toàn
+                        </a>
+                        <span class="c_font">
+                            <br>
+                            Thanh toán an toàn, mua hàng bảo đảm, website bán hàng uy tín
+                        </span>
+                    </div>
                 </td>
-                <td valign="top" style="width:170px">
-                    <h5>Kết nối với chúng tôi</h5>
-                    <ul>
-                        <li><a href="https://www.facebook.com" target="_blank"><span class="iconFoo"><img src="../public/assests/images/fac.png"></span>Facebook</a></li>
-                        <li><a href="https://plus.google.com/100147235633698439422/posts" target="_blank"><span class="iconFoo"><img src="../public/assests/images/goo.png"></span>Google+</a></li>
-                        <li><a  href="" target="_blank"><span class="iconFoo"><img src="../public/assests/images/zing.png"></span>ZingMe</a></li>
-                        <li><a  href="https://www.youtube.com/channel/UCGAHV95b3Zqnmb3_H5cuFiQ/feed" target="_blank"><span class="iconFoo"><img src="../public/assests/images/youtobe.png"></span>Youtube</a></li>
-                        <li><a href="" target="_blank"><span class="iconFoo"><img src="../public/assests/images/t.png"></span>Twitter</a></li>
-                    </ul>
+
+                <td>
+                    <div class="icon-gh">
+                        <img src="../public/assests/images/tt.png"/>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="group-ht" style="width: 90%">
+                        <a class="bold" href="/thong-tin/giao-hang-tan-nguoi-mua-4.html">
+                            Giao hàng tận người mua
+                        </a>
+                        <span class="c_font">
+                            <br>
+                            Liên kết với các Công ty vận chuyển hàng đầu VN để giao hàng tận tay Quý khách
+                        </span>
+                    </div>
+                </td>
+                <td>
+                    <div class="icon-gh">
+                        <img src="../public/assests/images/gh.png"/>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="group-ht" style="width: 90%">
+                        <a class="bold" href="/thong-tin/ho-tro-rui-ro-ve-hang-hoa-5.html">
+                            Hỗ trợ rủi ro về hàng hóa
+                        </a>
+                        <span class="c_font">
+                            <br>
+                            Không nhận được hàng, nhận hàng không đúng mô tả, hỗ trợ hoàn tiền 100% giá trị
+                        </span>
+                    </div>
+                </td>
+                <td>
+                    <div align="right" class="icon-gh">
+                        <img src="../public/assests/images/ht.png"/>
+                    </div>
                 </td>
             </tr>
         </tbody>
     </table>
+
+    <table class="table table-hover" style="border:1px solid black">
+        <tbody>
+            <tr>
+                <td>
+                    <p class="icon-deal"><img src="../public/assests/images/deal.png"></p>
+                    <h2 class="padSpace40px"><a>Giá sốc mỗi ngày</a></h2>
+                    <li style="overflow: hidden; float: none; width: 270px;">
+                        <a href="/san-pham/giay-nam-polo-ralph-lauren-vaughn-fleece-fashion-sneaker-17127.html"><img src="../public/assests/images/1.jpg" style="width: 250px">
+                        </a>                    
+                        <span class="buy01" style="text-decoration: line-through;">Giá: 2,300,000 VNĐ</span><span class="buy02" style="color: red">   1,190,000VNĐ</span>                
+                        <a class="" href="/san-pham/giay-nam-polo-ralph-lauren-vaughn-fleece-fashion-sneaker-17127.html">Giày nam Polo Ralph Lauren Vaughn Fleece Fashion Sneaker
+                        </a> 
+                    </li>
+                </td>        
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-hover" style="border:1px solid black">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="right-box ui-border">
+                        <a target="_blank" href="http://chodaugia.com.vn/danh-cho-nguoi-ban/kinh-nghiem-ban-hang-online-10.html"><img src="../public/assests/images/HD-Kinh-nghiem-ban-hang-online.jpg">
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+<!-- END Hỗ trợ thanh toán -->
+</div>
+</div>
+<!-- END Danh sách - Body - Hỗ trợ thanh toán -->
+
+
+
+
+<!--Bắt đầu phần footer của index-->
+<div class="row">
+    <div>
+        <table>
+            <tbody>
+                <tr>
+                    <td valign="top">
+                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                         <ul>
+                           <li>
+                               <h5>Về chúng tôi</h5>
+                               <p><a href="gioi-thieu.html">Giới thiệu</a></p>
+                               <p><a href="/#">Quy chế hoạt động Sàn Giao Dịch</a></p>
+                               <p><a href="/#">Đề án hoạt động Sàn Giao Dịch</a></p>
+                               <p><a href="/#">Tuyển dụng</a></p>
+                           </li>
+
+                       </ul>
+                   </div>
+                   <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <ul>
+                     <li>
+                         <h5>Dành cho người bán</h5>
+                         <p><a href="/#">Điều khoản bán hàng</a></p>
+                         <p><a href="/#">Hướng dẫn mở shop bán hàng online</a></p>
+                         <p><a href="/#">Hướng dẫn đăng SP bán trên trang Đấu giá</a></p>
+                         <p><a href="/#">Hướng dẫn quản lý và theo dõi đơn hàng</a></p>
+                         <p><a href="/#">Kinh nghiệm bán hàng online</a></p>
+                     </li>            
+                 </ul>
+             </div>
+             <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                 <ul>
+                     <li>
+                        <h5>Dành cho người mua</h5>
+                        <p><a href="/#">Hướng dẫn mua hàng và thanh toán</a></p>
+                        <p><a href="/#">Tại sao một số sản phẩm có "Made in China"?</a></p>
+                    </li>                    
+                </ul>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <ul>                  
+                   <li>
+                    <h5>Sản phẩm và dịch vụ khác</h5>
+                    <p><a href="/#">Điều kiện tham gia đấu giá</a></p>
+                    <p><a href="/#">Kinh nghiệm mua hàng online</a></p>
+                </li>
+            </ul>
+        </div> 
+    </td>
+    <td valign="top" style="width:170px">
+        <h5>Kết nối với chúng tôi</h5>
+        <ul>
+            <li><a href="https://www.facebook.com" target="_blank"><span class="iconFoo"><img src="../public/assests/images/fac.png"></span>Facebook</a></li>
+            <li><a href="https://plus.google.com/100147235633698439422/posts" target="_blank"><span class="iconFoo"><img src="../public/assests/images/goo.png"></span>Google+</a></li>
+            <li><a  href="" target="_blank"><span class="iconFoo"><img src="../public/assests/images/zing.png"></span>ZingMe</a></li>
+            <li><a  href="https://www.youtube.com/channel/UCGAHV95b3Zqnmb3_H5cuFiQ/feed" target="_blank"><span class="iconFoo"><img src="../public/assests/images/youtobe.png"></span>Youtube</a></li>
+            <li><a href="" target="_blank"><span class="iconFoo"><img src="../public/assests/images/t.png"></span>Twitter</a></li>
+        </ul>
+    </td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
