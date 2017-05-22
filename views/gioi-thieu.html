@@ -5,6 +5,8 @@
             <title>
                 Giới thiệu
             </title>
+            <link href="../public/assests/otherCSS/header.css" rel="stylesheet"/>
+            <link href="../public/assests/otherCSS/journal2.css" rel="stylesheet"/>
             <link href="../public/assests/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
                 <script src="../public/assests/jquery-3.2.0.min.js" type="text/javascript">
                 </script>
@@ -61,118 +63,191 @@
     </head>
     <body>
         <div class="container-fluid">
-            <!-- Menubar -->
             <div class="row">
-                <header>
-                    <nav class="navbar navbar-default" style="background-color: #EEEEEE">
-                        <div align="right" class="nav-links">
-                            <a href="index.html">
-                                Trang chủ
-                            </a>
-                            |
-                            <a href="/ve-chung-toi.html">
-                                Giới thiệu
-                            </a>
-                            |
-                            <a href="/ho-tro.html">
-                                Hỗ trợ
-                            </a>
-                            |
-                            <a href="/hoi-dap.html">
-                                Hỏi đáp
-                            </a>
-                            |
-                            <a href="/lien-he.html">
-                                Liên hệ
-                            </a>
-                            <a class="bold nav-login" href="signup.html">
-                                Đăng ký
-                            </a>
-                            <span>
-                                hoặc
-                            </span>
-                            <a class="bold nav-login margin10h" href="signin.html">
-                                Đăng nhập
-                            </a>
-                            <a href="/basket/view.html">
-                                Giỏ hàng(0)
-                            </a>
-                        </div>
-                    </nav>
-                </header>
-            </div>
-            <!-- END Menubar -->
-            <!-- Logo và thanh tìm kiến -->
-            <div class="row ">
-                <div class="nav-top1 nav-top col-md-12">
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-md-offset">
-                        <a class="nav-logo" href="/">
-                            <img src="../public/assests/images/logo.jpg" style="width: 270px;height: 70px;">
+                <!-- Menubar -->
+                <header style="background-color: rgb(216, 242, 255);">
+                    <div class="row" style="top: 15px">
+                        <!-- Logo và thanh tìm kiến -->
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <img src="../public/assests/images/daugialogo.png" style="height: 70px;margin-left: 5px">
                             </img>
-                        </a>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                        <div class="panel panel-default" style="background-color: #CCCCCC">
-                            <div class="panel-body">
-                                <div class="input-group">
-                                    <input class="form-control" placeholder="Tìm kiếm" style="width: 90%" type="text">
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-warning" type="button">
-                                                Tìm kiếm
-                                            </button>
-                                        </span>
-                                    </input>
+                        </div>
+                        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                            <div class="panel panel-default" style="background-color: #CCCCCC">
+                                <div class="panel-body">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Tìm kiếm" style="width: 90%" type="text">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-success" type="button">
+                                                    Tìm kiếm
+                                                </button>
+                                            </span>
+                                        </input>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <!-- END Logo và thanh tìm kiến -->
+                        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style=" top: 10px;text-align: right;right: 10px">
+                            <a href="gioi-thieu.html">
+                                <i style=" font-size: 16px;">
+                                </i>
+                                <span style="color: #282525">
+                                    Giới thiệu
+                                </span>
+                            </a>
+                            <a href="hoi-dap.html">
+                                <i style=" font-size: 16px;">
+                                </i>
+                                <span style="color: #282525">
+                                    <span class="glyphicon glyphicon-triangle-right">
+                                    </span>
+                                    Hỏi đáp
+                                </span>
+                            </a>
+                            <a href="#">
+                                <i style=" font-size: 16px;">
+                                </i>
+                                <span style="color: #282525">
+                                    <span class="glyphicon glyphicon-earphone">
+                                    </span>
+                                    Liên hệ
+                                </span>
+                            </a>
+                            <br>
+                                <a href="signin.html">
+                                    <i style=" font-size: 16px;">
+                                    </i>
+                                    <span style="color: rgb(0, 153, 242)">
+                                        <span class="glyphicon glyphicon-user">
+                                        </span>
+                                        Đăng nhập
+                                    </span>
+                                </a>
+                                <a href="signup.html">
+                                    <i style=" font-size: 15px;">
+                                    </i>
+                                    <span style="color: rgb(0, 153, 242)">
+                                        <span class="glyphicon glyphicon-pencil">
+                                        </span>
+                                        Đăng Ký
+                                    </span>
+                                </a>
+                            </br>
+                        </div>
                     </div>
-                </div>
+                    <div class="xs-100 sm-100 md-100 lg-100 xl-100" style="top: 10px;">
+                        <ul class="super-menu mobile-menu menu-table" style="table-layout: auto;">
+                            <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
+                                <a href="index.html">
+                                    <i style="margin-right: 5px; font-size: 17px; top: -1px;">
+                                        <span class="glyphicon glyphicon-home">
+                                        </span>
+                                        Trang chủ
+                                    </i>
+                                </a>
+                            </li>
+                            <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
+                                <a href="#">
+                                    <i style="margin-right: 5px; font-size: 17px; top: -1px">
+                                        Thời trang
+                                    </i>
+                                </a>
+                            </li>
+                            <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
+                                <a href="#">
+                                    <i style="margin-right: 5px; font-size: 17px; top: -1px">
+                                        Điện máy
+                                    </i>
+                                </a>
+                            </li>
+                            <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
+                                <a href="#">
+                                    <i style="margin-right: 5px; font-size: 17px; top: -1px">
+                                        Tin học
+                                    </i>
+                                </a>
+                            </li>
+                            <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
+                                <a href="#">
+                                    <i style="margin-right: 5px; font-size: 17px; top: -1px">
+                                        Nội thất
+                                    </i>
+                                </a>
+                            </li>
+                            <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
+                                <a href="index.html">
+                                    <i style="margin-right: 5px; font-size: 17px; top: -1px">
+                                        Giỏ hàng
+                                        <span class="glyphicon glyphicon-shopping-cart">
+                                        </span>
+                                    </i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </header>
             </div>
-            <!-- END Logo và thanh tìm kiến -->
-            <!-- Danh sách - Body - Hỗ trợ thanh toán -->
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 50px">
-                <!-- Danh sách sản phẩm -->
-                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                <div class="group-menu no-border">
-                     <ul>
-                        <li>
-                            <a href="gioi-thieu/ve-chung-toi.html">Về chúng tôi</a>
-                        </li>
-                        <li>
-                            <a href="gioi-thieu/nguyen-tac-giao-dich.html">Nguyên tắc giao dịch</a>
-                        </li>
-                        <li>
-                            <a href="gioi-thieu/tuyen-dung.html">Tuyển dụng</a>
-                        </li>
-                    </ul>
-                </div>
-                   
-                </div>
-                <!-- END Danh sách sản phẩm -->
-                <!-- Body -->
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <a href="gioi-thieu/ve-chung-toi.html">Về chúng tôi</a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="gioi-thieu/nguyen-tac-giao-dich.html">Nguyên tắc giao dịch</a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="gioi-thieu/tuyen-dung.html">Tuyển dụng</a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- END Body -->
-                <!-- Hỗ trợ thanh toán -->
-                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                </div>
-                <!-- END Hỗ trợ thanh toán -->
-            </div>
-            <!-- END Danh sách - Body - Hỗ trợ thanh toán -->
         </div>
     </body>
 </html>
+<!-- END Menubar -->
+<!-- Danh sách - Body - Hỗ trợ thanh toán -->
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 50px">
+    <!-- Danh sách sản phẩm -->
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+        <div class="group-menu no-border">
+            <ul>
+                <li>
+                    <a href="gioi-thieu/ve-chung-toi.html">
+                        Về chúng tôi
+                    </a>
+                </li>
+                <li>
+                    <a href="gioi-thieu/nguyen-tac-giao-dich.html">
+                        Nguyên tắc giao dịch
+                    </a>
+                </li>
+                <li>
+                    <a href="gioi-thieu/tuyen-dung.html">
+                        Tuyển dụng
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- END Danh sách sản phẩm -->
+    <!-- Body -->
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a href="gioi-thieu/ve-chung-toi.html">
+                    Về chúng tôi
+                </a>
+            </li>
+            <li class="list-group-item">
+                <a href="gioi-thieu/nguyen-tac-giao-dich.html">
+                    Nguyên tắc giao dịch
+                </a>
+            </li>
+            <li class="list-group-item">
+                <a href="gioi-thieu/tuyen-dung.html">
+                    Tuyển dụng
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- END Body -->
+    <!-- Hỗ trợ thanh toán -->
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+    </div>
+    <!-- END Hỗ trợ thanh toán -->
+</div>
+<!-- END Danh sách - Body - Hỗ trợ thanh toán -->
 <script src="../public/assests/jquery-3.2.0.min.js" type="text/javascript">
 </script>
 <script src="../public/assests/bootstrap-3.3.7-dist/js/bootstrap.min.js" type="text/javascript">
