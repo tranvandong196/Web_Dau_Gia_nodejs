@@ -12,51 +12,98 @@
                 </script>
                 <script>
                     $(document).ready(function(){
-            $("#DSSP").hover(function(){
-                $(this).css("color", "red");
-            }, function(){
-                $(this).css("color", "black");
-            });
+         $("#DSSP").hover(function(){
+            $(this).css("color", "red");
+        }, function(){
+            $(this).css("color", "black");
         });
+     });
 
         $(document).ready(function(){
-            $("[data-toggle=popover]").popover({ 
-                trigger: 'manual',
-                html: true,
-                content: function() {
-                    return $(this).next('.popover').html();
-                }
-            }).on("mouseenter", function () {
-                var _this = this;
-                $(this).popover("show");
-                $(".popover").on("mouseleave", function () {
-                    $(_this).popover('hide');
-                });
-            }).on("mouseleave", function () {
-                var _this = this;
-                setTimeout(function () {
-                    if (!$(".popover:hover").length) {
-                        $(_this).popover("hide");
-                    }
-                }, 300);
-            });
-        });
+         $("[data-toggle=popover]").popover({ 
+            trigger: 'manual',
+            html: true,
+            content: function() {
+               return $(this).next('.popover').html();
+           }
+       }).on("mouseenter", function () {
+        var _this = this;
+        $(this).popover("show");
+        $(".popover").on("mouseleave", function () {
+           $(_this).popover('hide');
+       });
+    }).on("mouseleave", function () {
+        var _this = this;
+        setTimeout(function () {
+           if (!$(".popover:hover").length) {
+              $(_this).popover("hide");
+          }
+      }, 300);
+    });
+});
+
+        var count = 0;
+        var ArrayImage = [];
+
+        ArrayImage[0] ="../public/assests/images/Banner-Phu-Kien-cdg.jpg";
+        ArrayImage[1] ="../public/assests/images/Banner-T-trang-nu-cdg.jpg";
+        ArrayImage[2] ="../public/assests/images/Banner-Dong-Ho-cdg.png";
+        ArrayImage[3] ="../public/assests/images/12324.jpg";
+        ArrayImage[4] ="../public/assests/images/Banner-Fishing-cdg.jpg"
+        ArrayImage[5] ="../public/assests/images/Banner Tui Nu cdg.jpg";
+        ArrayImage[6] ="../public/assests/images/Banner-Tui-Nam-cdg.jpg";
+        ArrayImage[7] ="../public/assests/images/Banner-Giay-cdg.jpg";
+        ArrayImage[8] ="../public/assests/images/Banner-Nuoc-Hoa-cdg.jpg";
+        ArrayImage[9] ="../public/assests/images/Banner-Phu-Kien-cdg.jpg";
+
+        function next(){
+            count++;
+            if(count > 9)
+            {
+                count = 0;
+            }
+            document.images['slide'].src = ArrayImage[count];
+        }
+
+        function pre(){
+            count--;
+            if(count < 0)
+            {
+                count = 9;
+            }
+            document.images['slide'].src = ArrayImage[count];
+        }
                 </script>
                 <style type="text/css">
                     .nav-top .nav-logo {
-            position: absolute;
-            left: 0;
-            top: 0px;
-            display: inline-block;
-        }
+         position: absolute;
+         left: 0;
+         top: 0px;
+         display: inline-block;
+     }
 
-        .group-ht{
-            font-size: 10px;
-            font-weight: bold;
-        }
-        #DSSP{
-            font-weight: bold;
-        }
+     .group-ht{
+         font-size: 10px;
+         font-weight: bold;
+     }
+     #DSSP{
+         font-weight: bold;
+     }
+
+     #next{
+        text-transform: uppercase;
+        position: absolute;
+        top: 100px;
+        right: -10px;
+    }
+
+    #pre{
+        text-transform: uppercase;
+        position: absolute;
+        top: 100px;
+        left: -5px;
+
+    }
                 </style>
             </link>
         </meta>
@@ -196,58 +243,262 @@
     </body>
 </html>
 <!-- END Menubar -->
-<!-- Danh sách - Body - Hỗ trợ thanh toán -->
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 50px">
-    <!-- Danh sách sản phẩm -->
-    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-        <div class="group-menu no-border">
-            <ul>
-                <li>
-                    <a href="gioi-thieu/ve-chung-toi.html">
-                        Về chúng tôi
-                    </a>
-                </li>
-                <li>
-                    <a href="gioi-thieu/nguyen-tac-giao-dich.html">
-                        Nguyên tắc giao dịch
-                    </a>
-                </li>
-                <li>
-                    <a href="gioi-thieu/tuyen-dung.html">
-                        Tuyển dụng
-                    </a>
-                </li>
-            </ul>
+<div class="row">
+    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9" style="margin-top: 25px">
+        <div class="nav-left">
+            <!-- Danh sách - Body - Hỗ trợ thanh toán -->
+            <div class="row">
+                <!-- Danh sách sản phẩm -->
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="margin-top: 30px">
+                	<div class="group-menu no-border">
+			            <ul>
+			                <li>
+			                    <a href="gioi-thieu/ve-chung-toi.html">
+			                        Về chúng tôi
+			                    </a>
+			                </li>
+			                <li>
+			                    <a href="gioi-thieu/nguyen-tac-giao-dich.html">
+			                        Nguyên tắc giao dịch
+			                    </a>
+			                </li>
+			                <li>
+			                    <a href="gioi-thieu/tuyen-dung.html">
+			                        Tuyển dụng
+			                    </a>
+			                </li>
+			            </ul>
+			        </div>
+                </div>
+                <!-- END Danh sách sản phẩm -->
+                <!-- Body -->
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                	<ul class="list-group">
+			            <li class="list-group-item">
+			                <a href="gioi-thieu/ve-chung-toi.html">
+			                    Về chúng tôi
+			                </a>
+			            </li>
+			            <li class="list-group-item">
+			                <a href="gioi-thieu/nguyen-tac-giao-dich.html">
+			                    Nguyên tắc giao dịch
+			                </a>
+			            </li>
+			            <li class="list-group-item">
+			                <a href="gioi-thieu/tuyen-dung.html">
+			                    Tuyển dụng
+			                </a>
+			            </li>
+			        </ul>
+                </div>
+                <!-- END Body -->
+            </div>
+            <!-- END Danh sách - Body - Hỗ trợ thanh toán -->
         </div>
     </div>
-    <!-- END Danh sách sản phẩm -->
-    <!-- Body -->
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <ul class="list-group">
-            <li class="list-group-item">
-                <a href="gioi-thieu/ve-chung-toi.html">
-                    Về chúng tôi
-                </a>
-            </li>
-            <li class="list-group-item">
-                <a href="gioi-thieu/nguyen-tac-giao-dich.html">
-                    Nguyên tắc giao dịch
-                </a>
-            </li>
-            <li class="list-group-item">
-                <a href="gioi-thieu/tuyen-dung.html">
-                    Tuyển dụng
-                </a>
-            </li>
-        </ul>
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-top: 15px;">
     </div>
-    <!-- END Body -->
-    <!-- Hỗ trợ thanh toán -->
-    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-    </div>
-    <!-- END Hỗ trợ thanh toán -->
 </div>
-<!-- END Danh sách - Body - Hỗ trợ thanh toán -->
+<!-- end row main -->
+<!--Bắt đầu phần footer của index-->
+<div class="footer">
+    <div class="row">
+        <div>
+            <table>
+                <tbody>
+                    <tr>
+                        <td valign="top">
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <ul>
+                                    <li>
+                                        <h5>
+                                            Về chúng tôi
+                                        </h5>
+                                        <p>
+                                            <a href="gioi-thieu.html">
+                                                Giới thiệu
+                                            </a>
+                                        </p>
+                                        <p>
+                                            <a href="/#">
+                                                Quy chế hoạt động Sàn Giao Dịch
+                                            </a>
+                                        </p>
+                                        <p>
+                                            <a href="/#">
+                                                Đề án hoạt động Sàn Giao Dịch
+                                            </a>
+                                        </p>
+                                        <p>
+                                            <a href="/#">
+                                                Tuyển dụng
+                                            </a>
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <ul>
+                                    <li>
+                                        <h5>
+                                            Dành cho người bán
+                                        </h5>
+                                        <p>
+                                            <a href="/#">
+                                                Điều khoản bán hàng
+                                            </a>
+                                        </p>
+                                        <p>
+                                            <a href="/#">
+                                                Hướng dẫn mở shop bán hàng online
+                                            </a>
+                                        </p>
+                                        <p>
+                                            <a href="/#">
+                                                Hướng dẫn đăng SP bán trên trang Đấu giá
+                                            </a>
+                                        </p>
+                                        <p>
+                                            <a href="/#">
+                                                Hướng dẫn quản lý và theo dõi đơn hàng
+                                            </a>
+                                        </p>
+                                        <p>
+                                            <a href="/#">
+                                                Kinh nghiệm bán hàng online
+                                            </a>
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <ul>
+                                    <li>
+                                        <h5>
+                                            Dành cho người mua
+                                        </h5>
+                                        <p>
+                                            <a href="/#">
+                                                Hướng dẫn mua hàng và thanh toán
+                                            </a>
+                                        </p>
+                                        <p>
+                                            <a href="/#">
+                                                Tại sao một số sản phẩm có "Made in China"?
+                                            </a>
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <ul>
+                                    <li>
+                                        <h5>
+                                            Sản phẩm và dịch vụ khác
+                                        </h5>
+                                        <p>
+                                            <a href="/#">
+                                                Điều kiện tham gia đấu giá
+                                            </a>
+                                        </p>
+                                        <p>
+                                            <a href="/#">
+                                                Kinh nghiệm mua hàng online
+                                            </a>
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td style="width:170px" valign="top">
+                            <h5>
+                                Kết nối với chúng tôi
+                            </h5>
+                            <ul>
+                                <li>
+                                    <a href="https://www.facebook.com" target="_blank">
+                                        <span class="iconFoo">
+                                            <img src="../public/assests/images/fac.png"/>
+                                        </span>
+                                        Facebook
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://plus.google.com/100147235633698439422/posts" target="_blank">
+                                        <span class="iconFoo">
+                                            <img src="../public/assests/images/goo.png"/>
+                                        </span>
+                                        Google+
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" target="_blank">
+                                        <span class="iconFoo">
+                                            <img src="../public/assests/images/zing.png"/>
+                                        </span>
+                                        ZingMe
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.youtube.com/channel/UCGAHV95b3Zqnmb3_H5cuFiQ/feed" target="_blank">
+                                        <span class="iconFoo">
+                                            <img src="../public/assests/images/youtobe.png"/>
+                                        </span>
+                                        Youtube
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" target="_blank">
+                                        <span class="iconFoo">
+                                            <img src="../public/assests/images/t.png"/>
+                                        </span>
+                                        Twitter
+                                    </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class=" fb_reset" id="fb-root">
+            <div style="position: absolute; top: -10000px; height: 0px; width: 0px;">
+                <script>
+                    (function(d, s, id) {
+                  var js, fjs = d.getElementsByTagName(s)[0];
+                  if (d.getElementById(id)) return;
+                  js = d.createElement(s); js.id = id;
+                  js.src = "//connect.facebook.net/vi_VN/all.js#xfbml=1";
+                  fjs.parentNode.insertBefore(js, fjs);
+              }(document, 'script', 'facebook-jssdk'));
+                </script>
+            </div>
+            <div class="navFooterCol02">
+                <p class="bold">
+                    Hình thức thanh toán
+                </p>
+                <div class="FooColum02">
+                    <a class="box-ATM ui-border" href="#">
+                        <img src="../public/assests/images/paypal.jpg"/>
+                    </a>
+                    <a class="box-ATM ui-border" href="#">
+                        <img src="../public/assests/images/visa.jpg"/>
+                    </a>
+                    <a class="box-ATM ui-border" href="#">
+                        <img src="../public/assests/images/master-cart.jpg"/>
+                    </a>
+                    <a class="box-ATM ui-border" href="#">
+                        <img src="../public/assests/images/atm-online.jpg"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Kết thúc footer của index -->
+<!-- End All -->
 <script src="../public/assests/jquery-3.2.0.min.js" type="text/javascript">
 </script>
 <script src="../public/assests/bootstrap-3.3.7-dist/js/bootstrap.min.js" type="text/javascript">
