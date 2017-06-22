@@ -13,8 +13,9 @@ accountRoute.get('/login', function(req, res) {
     } else {
         res.render('account/login', {
             layoutModels: res.locals.layoutModels,
-            showError: false,
-            errorMsg: ''
+            showMsg: false,
+            error: false,
+            msg: ''
         });
     }
 });
@@ -68,8 +69,9 @@ accountRoute.post('/logout', restrict, function(req, res) {
 accountRoute.get('/register', function(req, res) {
     res.render('account/register', {
         layoutModels: res.locals.layoutModels,
-        showError: false,
-        errorMsg: ''
+        showMsg: false,
+        error: false,
+        msg: ''
     });
 });
 
@@ -77,6 +79,7 @@ accountRoute.post('/register', function(req, res) {
 
     var ePWD = crypto.createHash('md5').update(req.body.rawPWD).digest('hex');
     var nDOB = moment(req.body.dob, 'D/M/YYYY').format('YYYY-MM-DDTHH:mm');
+    
 
     var entity = {
         username: req.body.username,
@@ -91,11 +94,23 @@ accountRoute.post('/register', function(req, res) {
 
     account.insert(entity)
         .then(function(insertId) {
-            res.render('account/register', {
-                layoutModels: res.locals.layoutModels,
-                showError: true,
-                errorMsg: 'Đăng ký thành công.'
-            });
+            console.log(insertId);
+            if(insertId === -1)
+            {
+                res.render('account/register', {
+                    layoutModels: res.locals.layoutModels,
+                    showMsg: true,
+                    error: true,
+                    msg: 'Đăng ký thất bại.'
+                });
+            }
+            else
+                res.render('account/register', {
+                    layoutModels: res.locals.layoutModels,
+                    showMsg: true,
+                    error: false,
+                    msg: 'Đăng ký thành công.'
+                });
         });
 });
 

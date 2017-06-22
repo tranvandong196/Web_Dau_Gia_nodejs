@@ -6,17 +6,30 @@ var db = require('../app-helpers/dbHelper');
 exports.insert = function(entity) {
 
     var deferred = Q.defer();
+    var insertId = -1;
+    var sql = 'select * from users';
+    db.load(sql).then(function(rows)
+    {
+        var username = mustache.render('{{username}}', entity);
+        var email = mustache.render('{{email}}', entity);
+        var address = mustache.render('{{address}}', entity);
+        for (var i = 0; i < rows.length; i++) {
+            if(rows[i].Username === username || rows[i].Email === email || rows[i].Address === address)
+            {
+                deferred.resolve(insertId);
+                return;
+            }
+        }
+        sql =
+            mustache.render(
+                'insert into users (Username, Password, Name, Email, DOB, Permission, Score, Address) values ("{{username}}", "{{password}}", "{{name}}", "{{email}}", "{{dob}}", {{permission}}, {{score}}, "{{address}}")',
+                entity
+            );
 
-    var sql =
-        mustache.render(
-            'insert into users (Username, Password, Name, Email, DOB, Permission, Score, Address) values ("{{username}}", "{{password}}", "{{name}}", "{{email}}", "{{dob}}", {{permission}}, {{score}}, "{{address}}")',
-            entity
-        );
-
-    db.insert(sql).then(function(insertId) {
-        deferred.resolve(insertId);
+        db.insert(sql).then(function(insertId) {
+            deferred.resolve(insertId);
+        });
     });
-
     return deferred.promise;
 }
 
