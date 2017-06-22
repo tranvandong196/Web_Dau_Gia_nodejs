@@ -83,8 +83,10 @@ accountRoute.post('/register', function(req, res) {
         password: ePWD,
         name: req.body.name,
         email: req.body.email,
+        address: req.body.address,
         dob: nDOB,
-        permission: 0
+        permission: 0,
+        score: 0,
     };
 
     account.insert(entity)

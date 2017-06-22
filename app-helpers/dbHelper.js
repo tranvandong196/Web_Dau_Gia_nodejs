@@ -2,9 +2,9 @@ var Q = require('q');
 var mysql = require('mysql');
 
 var HOST = '127.0.0.1',
-    DB = 'qlbh',
+    DB = 'qldg',
     USER = 'root',
-    PWD = '26121996';
+    PWD = 'root';
 
 function connect() {
 

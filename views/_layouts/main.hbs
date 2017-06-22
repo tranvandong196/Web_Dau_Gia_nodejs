@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        {{{_sections.title}}}
+        <link href="/assests/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="/assests/otherCSS/header.css" rel="stylesheet"/>
+        <link href="/assests/otherCSS/journal2.css" rel="stylesheet"/>
+        {{{_sections.css}}}
+    </head>
+    <body style="min-width: 1024px">
+        {{> header this }}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9" style="margin-top: 25px">
+                    <div class="row">
+                        <!-- Danh sách sản phẩm -->
+                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="margin-top:5px">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="background-color: #0033FF">
+                                    <h3 align="center" class="panel-title" id="DSSP">
+                                        Danh sách sản phẩm
+                                    </h3>
+                                </div>
+                                {{> categories this }}
+                            </div>
+                        </div>
+                        <!-- END Danh sách sản phẩm -->
+                        <!-- body -->
+                        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                            {{{body}}}
+                        </div>
+                        <!-- Body -->
+                    </div>
+                </div>
+                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-top: 15px;">
+                    {{> support this }}
+                 </div>
+            </div>
+            <br>
+            <br>
+            <footer>
+                {{> footer this }}
+            </footer>
+        </div>
+    </body>
+    <script src="/assests/jquery-3.2.0.min.js" type="text/javascript">
+    </script>
+    <script src="/assests/bootstrap-3.3.7-dist/js/bootstrap.min.js" type="text/javascript">
+    </script>
+    {{{_sections.js}}}
+</html>

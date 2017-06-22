@@ -1,5 +1,5 @@
 {
-  "name": "QLBDD",
+  "name": "QLBDG",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -22,8 +22,8 @@
     "mysql": "^2.13.0",
     "nodemon": "^1.11.0",
     "q": "^1.5.0",
-    "serve-favicon": "^2.4.2",
     "session-file-store": "^1.0.0",
+    "serve-favicon": "^2.4.2",
     "wnumb": "^1.1.0"
   }
 }
