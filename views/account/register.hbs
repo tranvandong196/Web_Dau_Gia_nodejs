@@ -12,6 +12,18 @@
 {{/section}}
 
 {{#section 'js'}}
+    <script type="text/javascript">
+        function DrawBotBoot()
+        {
+            var a = Math.ceil(Math.random() * 10);
+            var b = Math.ceil(Math.random() * 10);    
+            var c = a + b;
+            var captcha = document.getElementById("txtCaptcha");
+            captcha.innerHTML = "What is "+ a + " + " + b + "? ";
+            document.getElementById("txtValue").value = "" + c;
+        }
+    </script>
+
     <script src="/assests/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <script src="/assests/jquery-validation-1.12.0/jquery.validate.min.js"></script>
     
@@ -46,6 +58,10 @@
                 address: {
                     required: true
                 },
+
+                captchaCode: {
+                    equalTo: '#txtValue'
+                },
             },
 
             messages: {
@@ -71,6 +87,9 @@
                 },
                 address: {
                     required: 'Vui lòng nhập địa chỉ'
+                },
+                captchaCode: {
+                    equalTo: 'Vui lòng nhập captcha đúng'
                 },
             },
 
@@ -103,7 +122,7 @@
 
 <form class="form-horizontal" method="post" action="" id="frmRegister">
     <div class="form-group">
-        <label for="txtUsername" class="col-sm-2 control-label">Tên đăng nhập</label>
+        <label for="txtUsername" class="col-sm-2 control-label">Username</label>
         <div class="col-sm-4">
             <input type="text" class="form-control" id="txtUsername" placeholder="Tên đăng nhập" name="username">
         </div>
@@ -145,9 +164,8 @@
         </div>
     </div>
     <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-6">
-            captcha
-        </div>
+        <label class="col-sm-offset-2 col-sm-3 control-label" id="txtCaptcha" name="captcha"></label>
+        <label class="hidden" id="txtValue"></label>
     </div>
     <div class="form-group">
         <label for="CaptchaCode" class="col-sm-2 control-label">Captcha</label>
@@ -161,6 +179,7 @@
             <i class="fa fa-check"></i>
             Đăng ký
             </button>
+            <button type="button" class="btn btn-success" onclick="DrawBotBoot();">Show captcha</button>
         </div>
     </div>
 </form>
