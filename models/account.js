@@ -9,7 +9,11 @@ exports.insert = function(entity) {
 
     var sql =
         mustache.render(
+
             'insert into users (f_Username, f_Password, f_Name, f_Email, f_DOB, f_Permission) values ("{{username}}", "{{password}}", "{{name}}", "{{email}}", "{{dob}}", {{permission}})',
+
+            'insert into users (Username, Password, Name, Email, DOB, Permission, Score, Address) values ("{{username}}", "{{password}}", "{{name}}", "{{email}}", "{{dob}}", {{permission}}, {{score}}, "{{address}}")',
+
             entity
         );
 
@@ -26,19 +30,34 @@ exports.login = function(entity) {
 
     var sql =
         mustache.render(
+
             'select * from users where f_Username = "{{username}}" and f_Password = "{{password}}"',
+
+            'select * from users where Username = "{{username}}" and Password = "{{password}}"',
+
             entity
         );
 
     db.load(sql).then(function(rows) {
         if (rows.length > 0) {
             var user = {
+<<<<<<< HEAD
                 id: rows[0].f_ID,
                 username: rows[0].f_Username,
                 name: rows[0].f_Name,
                 email: rows[0].f_Email,
                 dob: rows[0].f_DOB,
                 permission: rows[0].f_Permission
+
+                id: rows[0].ID,
+                username: rows[0].Username,
+                name: rows[0].Name,
+                email: rows[0].Email,
+                address: rows[0].Address,
+                score: rows[0].Score,
+                dob: rows[0].DOB,
+                permission: rows[0].Permission
+
             }
             deferred.resolve(user);
         } else {
