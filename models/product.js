@@ -111,9 +111,11 @@ exports.insert = function(entity) {
     var deferred = Q.defer();
 
      var sql = mustache.render(
-        'insert into products(ProName, TinyDes, FullDes, Price, CatID, Quantity, PriceToBuy, UserID, HandleID, TimeUp, TimeDown) values("{{proName}}", "{{tinyDes}}", "{{fullDes}}",{{price}}, {{catID}}, {{quantity}}, {{priceToBuy}}, {{userID}}, {{handleID}}, now(), {{timeDown}})',
-        entity
+        'insert into products (ProName, TinyDes, FullDes, Price, CatID, Quantity, PriceToBuy, UserID, HandleID, TimeUp, TimeDown, DeltaPrice) values ("{{proName}}", "{{tinyDes}}", "{{fullDes}}",{{price}}, {{catID}}, {{quantity}}, {{priceToBuy}}, {{userID}}, {{handleID}}, "{{timeUp}}", "{{timeDown}}", {{deltaPrice}})',
+        entity        
     );
+
+     console.log(sql);
 
     db.insert(sql).then(function(insertId) {
         deferred.resolve(insertId);

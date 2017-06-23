@@ -26,7 +26,7 @@
 			<h1>Thông tin sản phẩm</h1>
 			<div class="row">
 				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-					<form method="post" action="">
+					<form method="post" action="add/1">
 						<div class="form-group">
 							<label for="txtProName">Tên sản phẩm</label>
 							<input type="text" class="form-control" id="txtProName" placeholder="" name="proName">
@@ -48,7 +48,7 @@
 							<input type="text" class="form-control" id="txtCatID" placeholder="" name="catID">
 						</div>
 						<div class="form-group">
-							<label for="txtQuantity">Chất lượng</label>
+							<label for="txtQuantity">Số lượng</label>
 							<input type="text" class="form-control" id="txtQuantity" placeholder="0-100" name="quantity">
 						</div>
 						<div class="form-group">
@@ -59,14 +59,6 @@
 						<div class="form-group">
 							<label for="txtQuantity">Thời hạn</label>
 							<input type="text" class="form-control" id="txtTimeDown" name="timeDown">
-						</div>
-						<div class="form-group">
-							<label for="txtQuantity">ID người đăng</label>
-							<input type="text" class="form-control " id="txtUserID" name="userID" value="{{userID}}">
-						</div>
-						<div class="form-group">
-							<label for="txtQuantity">ID giữ giá</label>
-							<input type="text" class="form-control " id="txtUserID" name="handleID" value="{{userID}}">
 						</div>
 						<button type="submit" class="btn btn-success">
 							Lưu lại

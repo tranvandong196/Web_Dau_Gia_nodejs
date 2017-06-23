@@ -1,6 +1,6 @@
 var express = require('express');
 var product = require('../models/product');
-
+var moment = require('moment');
 var productRoute = express.Router();
 
 productRoute.get('/byCat/:id', function(req, res) {
@@ -65,30 +65,35 @@ productRoute.get('/detail/:id', function(req, res) {
         });
 });
 
-productRoute.get('/add/:id', function(req, res) {
+productRoute.get('/add', function(req, res) {
     //TODO
-    var ID = req.params.id
     var vm = {
-        userID: ID,
         layoutModels: res.locals.layoutModels,
     };
     res.render('product/add', vm);
 });
 
-productRoute.post('/add/:id', function(req, res) {
-    //TODO
+productRoute.post('/add/:userID', function(req, res) {
 
-    // product.insert(entity).then(function(data) {
-    //     var vm = {
-    //         userID: ID,
-    //         layoutModels: res.locals.layoutModels,
-    //     };
-    //     res.render('product/add/', vm);
-    // })
-
-
+    var id = req.params.userID;
+    var now = new Date(Date.now()).toLocaleString();
+    now = moment().format('YYYY-MM-DD HH:mm:ss');
+    console.log(id);
+    var entity = {
+        proName: req.body.proName,
+        userID: id,
+        tinyDes: req.body.tinyDes,
+        fullDes: req.body.fullDes,
+        price: req.body.price,
+        priceToBuy: req.body.priceToBuy,
+        catID: req.body.catID,
+        quantity: req.body.quantity,
+        timeUp: now,
+        timeDown: now,
+        handleID: 1,
+        deltaPrice: 0,
+    };
     product.insert(entity).then(function(insertId) {
-            console.log(insertId);
             if(insertId === -1)
             {
                 res.render('product/add', {
