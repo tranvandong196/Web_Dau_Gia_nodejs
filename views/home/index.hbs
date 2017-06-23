@@ -11,18 +11,18 @@
 	<div class="nav-section">
 	    <div class="icon-new">
 	        <h2 class="h-title">
-	            Top 5 sản phẩm có nhiều lượt ra giá nhất
+	            <label>Top 5 sản phẩm có nhiều lượt ra giá nhất</label>
 	        </h2>
 	        <div class="row">
 		        {{#each top5OfAuction }}
-		        <div class="col-md-6">
-		            <div class="thumbnail">
+		        <div class="col-md-4">
+		            <div class="thumbnail" style="min-height: 390px; max-width: 300px">
 		                <img src="/images/{{ProID}}/1_thumb.jpg" title="{{ProName}}" />
 		                <div class="caption">
 		                    <h4>{{ProName}}</h4>
 		                    <h4>Giá: {{formatNumber Price}}</h4>
 		                    <h4>Tồn: {{Quantity}}</h4>
-		                    <p style="width: 300px;
+		                    <p style="width: 250px;
 							     white-space: nowrap;
 							     overflow: hidden;
 							     text-overflow: ellipsis;">
@@ -51,18 +51,18 @@
 <div class="row">
 	<div class="nav-section">
 	    <h2 class="h-title">
-	        Top 5 sản phẩm có giá cao nhất
+	        <label>Top 5 sản phẩm có giá cao nhất</label>
 	    </h2>
 	    <div class="row">
 	    	{{#each top5OfPrice }}
-	        <div class="col-md-6">
-	            <div class="thumbnail">
+	        <div class="col-md-4">
+	            <div class="thumbnail" style="min-height: 390px; max-width: 300px">
 	                <img src="/images/{{ProID}}/1_thumb.jpg" title="{{ProName}}" />
 	                <div class="caption">
 	                    <h4>{{ProName}}</h4>
 	                    <h4>Giá: {{formatNumber Price}}</h4>
 	                    <h4>Tồn: {{Quantity}}</h4>
-	                    <p style="width: 300px;
+	                    <p style="width: 250px;
 							     white-space: nowrap;
 							     overflow: hidden;
 							     text-overflow: ellipsis;">
@@ -89,19 +89,19 @@
 	<div class="nav-section">
 	    <div class="icon-new">
 	        <h2 class="h-title">
-	            Top 5 sản phẩm gần kết thúc
+	            <label>Những sản phẩm sắp kết thúc</label>
 	        </h2>
 	        <div class="row">
 	        	{{#each top5OfTimeDown }}
-		        <div class="col-md-6">
-		            <div class="thumbnail">
+		        <div class="col-md-4">
+		            <div class="thumbnail" style="min-height: 410px; max-width: 300px">
 		                <img src="/images/{{ProID}}/1_thumb.jpg" title="{{ProName}}" />
 		                <div class="caption">
 		                    <h4>{{ProName}}</h4>
 		                    <h4>Giá: {{formatNumber Price}}</h4>
 		                    <h4>Tồn: {{Quantity}}</h4>
 		                    <h4>Thời gian hết hạn: {{TimeDown}}</h4>
-		                    <p style="width: 300px;
+		                    <p style="width: 250px;
 							     white-space: nowrap;
 							     overflow: hidden;
 							     text-overflow: ellipsis;">

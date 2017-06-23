@@ -32,7 +32,7 @@ exports.insert = function(entity) {
         }
         sql =
             mustache.render(
-                'insert into users (Username, Password, Name, Email, DOB, Permission, Score, Address) values ("{{username}}", "{{password}}", "{{name}}", "{{email}}", "{{dob}}", {{permission}}, {{score}}, "{{address}}")',
+                'insert into users (Username, Password, Name, Email, DOB, Permission, ScorePlus, ScoreMinus, Address) values ("{{username}}", "{{password}}", "{{name}}", "{{email}}", "{{dob}}", {{permission}}, {{scorePlus}}, {{scoreMinus}}, "{{address}}")',
                 entity
             );
 
@@ -61,7 +61,8 @@ exports.login = function(entity) {
                 name: rows[0].Name,
                 email: rows[0].Email,
                 address: rows[0].Address,
-                score: rows[0].Score,
+                scorePlus: rows[0].ScorePlus,
+                scoreMinus: rows[0].ScoreMinus,
                 dob: rows[0].DOB,
                 permission: rows[0].Permission
             }
@@ -87,6 +88,58 @@ exports.loadAll = function() {
             deferred.resolve(null);
         }
     });
+
+    return deferred.promise;
+}
+
+exports.getScore = function(id){
+    var deferred = Q.defer();
+
+    var sql = 'select * from users where ID = ' + id;
+
+    db.load(sql).then(function(rows) {
+        if (rows) {
+            deferred.resolve(rows[0].ScorePlus/(rows[0].ScorePlus + rows[0].Score));
+        } else {
+            deferred.resolve(null);
+        }
+    });
+
+    return deferred.promise;
+}
+
+exports.updateScore = function(id, score){
+    var deferred = Q.defer();
+
+    var sql = 'select Score from users where ID = ' + id;
+    var plus;
+    var minus;
+    db.load(sql).then(function(rows) {
+        if (rows[0]) {
+            plus = rows[0].ScorePlus + 1;
+            minus = rows[0].ScoreMinus + 1;
+        } else {
+            score = 0;
+        }
+    });
+    var sql;
+    if(score === 1)
+    {
+        sql = mustache.render(
+            'update users set SocrePlus = {{plus}}',
+            plus
+            );
+    }
+    else
+    {
+        sql = mustache.render(
+            'update users set SocreMinus = {{minus}}',
+            minus
+            );
+    }
+     db.update(sql).then(function(changedRows){
+        deferred.resolve(changedRows);
+        });
 
     return deferred.promise;
 }
