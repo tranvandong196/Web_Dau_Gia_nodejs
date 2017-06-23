@@ -59,6 +59,54 @@ exports.loadDetail = function(id) {
     return deferred.promise;
 }
 
+exports.loadTop5OfAuction = function() {
+
+    var deferred = Q.defer();
+
+    var sql = 'SELECT products.*, COUNT(*) as SoLuong FROM products INNER JOIN auctions on products.ProID = auctions.ProID GROUP BY auctions.ProID ORDER BY COUNT(*) DESC';
+    db.load(sql).then(function(rows) {
+        if (rows) {
+            deferred.resolve(rows);
+        } else {
+            deferred.resolve(null);
+        }
+    });
+
+    return deferred.promise;
+}
+
+exports.loadTop5OfPrice = function() {
+
+    var deferred = Q.defer();
+
+    var sql = 'SELECT * FROM products ORDER BY Price DESC LIMIT 5';
+    db.load(sql).then(function(rows) {
+        if (rows) {
+            deferred.resolve(rows);
+        } else {
+            deferred.resolve(null);
+        }
+    });
+
+    return deferred.promise;
+}
+
+exports.loadTop5OfTimeDown = function() {
+
+    var deferred = Q.defer();
+
+    var sql = 'SELECT * FROM products ORDER BY TimeDown ASC LIMIT 5';
+    db.load(sql).then(function(rows) {
+        if (rows) {
+            deferred.resolve(rows);
+        } else {
+            deferred.resolve(null);
+        }
+    });
+
+    return deferred.promise;
+}
+
 // exports.makeCartItem = function(id, q) {
 
 //     var deferred = Q.defer();
