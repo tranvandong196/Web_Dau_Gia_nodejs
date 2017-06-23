@@ -62,6 +62,8 @@
                             <li><a href="/account/profile">Thông tin cá nhân</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a id="upProduct" href="/product/add">Đăng sản phẩm</a></li>
                         </ul>
                     {{else}}
                          <a href="/account/login">
@@ -124,15 +126,28 @@
                             </i>
                         </a>
                     </li>
-                    <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
-                        <a href="index.html">
-                            <i style="margin-right: 5px; font-size: 17px; top: -1px">
-                                Giỏ hàng
-                                <span class="glyphicon glyphicon-shopping-cart">
-                                </span>
-                            </i>
-                        </a>
-                    </li>
+                    {{#if layoutModels.isLogged }}
+                        <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
+                            <a href="index.html">
+                                <i style="margin-right: 5px; font-size: 17px; top: -1px">
+                                    Giỏ hàng
+                                    <span class="glyphicon glyphicon-shopping-cart">
+                                        {{layoutModels.cartSumQ}}
+                                    </span>
+                                </i>
+                            </a>
+                        </li>
+                    {{else}}
+                         <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
+                            <a href="index.html">
+                                <i style="margin-right: 5px; font-size: 17px; top: -1px">
+                                    Giỏ hàng
+                                    <span class="glyphicon glyphicon-shopping-cart">
+                                    </span>
+                                </i>
+                            </a>
+                        </li>
+                    {{/if}}
                 </ul>
             </div>
         </header>
