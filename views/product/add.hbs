@@ -1,0 +1,86 @@
+{{#section 'title'}}
+    Thêm sản phẩm
+{{/section}}
+
+{{#section 'js'}}
+    
+{{/section}}
+
+{{#if showMsg }}
+    {{#if error }}
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Warning!</strong> {{ msg }}
+        </div>
+    {{else}}
+        <div class="alert alert-success alert-info" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Success!</strong> {{ msg }}
+        </div>
+    {{/if}}        
+{{/if}}
+
+{{!-- body --}}
+		<div class="container">
+			<h1>Thông tin sản phẩm</h1>
+			<div class="row">
+				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+					<form method="post" action="">
+						<div class="form-group">
+							<label for="txtProName">Tên sản phẩm</label>
+							<input type="text" class="form-control" id="txtProName" placeholder="" name="proName">
+						</div>
+						<div class="form-group">
+							<label for="txtTinyDes">Miêu tả ngắn gọn</label>
+							<input type="text" class="form-control" id="txtTinyDes" placeholder="" name="tinyDes">
+						</div>
+						<div class="form-group">
+							<label for="txtFullDes">Mô tả</label>
+							<input type="text" class="form-control" id="txtFullDes" placeholder="" name="fullDes">
+						</div>
+						<div class="form-group">
+							<label for="txtPrice">Giá</label>
+							<input type="text" class="form-control" id="txtPrice" placeholder="" name="price">
+						</div>
+						<div class="form-group">
+							<label for="txtCatID">Danh mục</label>
+							<input type="text" class="form-control" id="txtCatID" placeholder="" name="catID">
+						</div>
+						<div class="form-group">
+							<label for="txtQuantity">Chất lượng</label>
+							<input type="text" class="form-control" id="txtQuantity" placeholder="0-100" name="quantity">
+						</div>
+						<div class="form-group">
+							<label for="txtQuantity">Giá chào bán</label>
+							<input type="text" class="form-control" id="txtPriceToBuy" name="priceToBuy">
+						</div>
+						
+						<div class="form-group">
+							<label for="txtQuantity">Thời hạn</label>
+							<input type="text" class="form-control" id="txtTimeDown" name="timeDown">
+						</div>
+						<div class="form-group">
+							<label for="txtQuantity">ID người đăng</label>
+							<input type="text" class="form-control " id="txtUserID" name="userID" value="{{userID}}">
+						</div>
+						<div class="form-group">
+							<label for="txtQuantity">ID giữ giá</label>
+							<input type="text" class="form-control " id="txtUserID" name="handleID" value="{{userID}}">
+						</div>
+						<button type="submit" class="btn btn-success">
+							Lưu lại
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+{{!-- end body --}}
+
+{{#section 'css'}}
+   <!--  <style type="text/css">
+        label {
+            font-weight: normal !important;
+        }
+    </style> -->
+{{/section}}

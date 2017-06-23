@@ -106,7 +106,21 @@ exports.loadTop5OfTimeDown = function() {
 
     return deferred.promise;
 }
+exports.insert = function(entity) {
 
+    var deferred = Q.defer();
+
+     var sql = mustache.render(
+        'insert into products(ProName, TinyDes, FullDes, Price, CatID, Quantity, PriceToBuy, UserID, HandleID, TimeUp, TimeDown) values("{{proName}}", "{{tinyDes}}", "{{fullDes}}",{{price}}, {{catID}}, {{quantity}}, {{priceToBuy}}, {{userID}}, {{handleID}}, now(), {{timeDown}})',
+        entity
+    );
+
+    db.insert(sql).then(function(insertId) {
+        deferred.resolve(insertId);
+    });
+
+    return deferred.promise;
+}
 // exports.makeCartItem = function(id, q) {
 
 //     var deferred = Q.defer();
