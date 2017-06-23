@@ -54,17 +54,24 @@
                     </a>
                     <br>
                     {{#if layoutModels.isLogged }}
-
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="false" aria-expanded="true">
+                    <div class="btn-group">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Xin chào, <b>{{ layoutModels.curUser.name }}</b> <span class="caret"></span>
                         </a>
-                        <ul class="dropdown-menu" style="position: relative; left: 100px">
+                        <ul class="dropdown-menu">
                             <li><a href="/account/profile">Thông tin cá nhân</a></li>
+                            <li><a id="upProduct" href="/product/add">Đăng sản phẩm</a></li>
+                            {{#if layoutModels.isAdmin }}
+                            <li><a id="manageCategories" href="/account/manageCategories">Quản lý danh mục</a></li>
+                            <li><a id="manaUsers" href="/account/manageUsers">Quản lý người dùng</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
+                            {{else}}
                             <li role="separator" class="divider"></li>
-                            <li><a id="upProduct" href="/product/add">Đăng sản phẩm</a></li>
+                            <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
+                            {{/if}}
                         </ul>
+                    </div>
                     {{else}}
                          <a href="/account/login">
                             <i style=" font-size: 16px;">

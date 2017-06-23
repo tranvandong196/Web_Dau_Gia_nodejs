@@ -7,6 +7,9 @@ module.exports = function(req, res, next) {
     if (req.session.isLogged === undefined) {
         req.session.isLogged = false;
     }
+    if (req.session.isAdmin === undefined) {
+        req.session.isAdmin = false;
+    }
 
     Q.all([
         category.loadAll()
@@ -15,7 +18,8 @@ module.exports = function(req, res, next) {
             categories: catList,
             isLogged: req.session.isLogged,
             curUser: req.session.user,
-            cartSumQ: cart.sumQ(req.session.cart)
+            cartSumQ: cart.sumQ(req.session.cart),
+            isAdmin: req.session.isAdmin,
         };
 
         next();

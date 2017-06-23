@@ -107,11 +107,9 @@ app.use('/home', homeRoute);
 app.use('/product', productRoute);
 app.use('/account', accountRoute);
 app.use('/cart', cartRoute);
-
 app.get('/', function(req, res) {
     res.end('Welcome to my homepage!');
 });
-
 app.get('/about', function(req, res) {
     res.end('Welcome to the about page!');
 });

@@ -40,6 +40,7 @@ accountRoute.post('/login', function(req, res) {
                 });
             } else {
                 req.session.isLogged = true;
+                req.session.isAdmin = (user.permission === 1);
                 req.session.user = user;
                 req.session.cart = [];
 
