@@ -65,4 +65,47 @@ productRoute.get('/detail/:id', function(req, res) {
         });
 });
 
+productRoute.get('/add/:id', function(req, res) {
+    //TODO
+    var ID = req.params.id
+    var vm = {
+        userID: ID,
+        layoutModels: res.locals.layoutModels,
+    };
+    res.render('product/add', vm);
+});
+
+productRoute.post('/add/:id', function(req, res) {
+    //TODO
+
+    // product.insert(entity).then(function(data) {
+    //     var vm = {
+    //         userID: ID,
+    //         layoutModels: res.locals.layoutModels,
+    //     };
+    //     res.render('product/add/', vm);
+    // })
+
+
+    product.insert(entity).then(function(insertId) {
+            console.log(insertId);
+            if(insertId === -1)
+            {
+                res.render('product/add', {
+                    layoutModels: res.locals.layoutModels,
+                    showMsg: true,
+                    error: true,
+                    msg: 'Thêm thất bại.'
+                });
+            }
+            else
+                res.render('product/add', {
+                    layoutModels: res.locals.layoutModels,
+                    showMsg: true,
+                    error: false,
+                    msg: 'Thêm thành công.'
+                });
+        });
+
+});
 module.exports = productRoute;
