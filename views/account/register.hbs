@@ -36,7 +36,7 @@
         $('#frmRegister').validate({
             rules: {
                 username: {
-                    required: true
+                    required: true,
                 },
                 rawPWD: {
                     required: true,
@@ -50,7 +50,7 @@
                 },
                 email: {
                     required: true,
-                    email: true
+                    email: true,
                 },
                 dob: {
                     required: true
@@ -127,7 +127,6 @@
         </div>
     {{/if}}        
 {{/if}}
-
 <form class="form-horizontal" method="post" action="" id="frmRegister">
     <div class="form-group">
         <label for="txtUsername" class="col-sm-2 control-label">Username</label>

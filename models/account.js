@@ -14,11 +14,21 @@ exports.insert = function(entity) {
         var email = mustache.render('{{email}}', entity);
         var address = mustache.render('{{address}}', entity);
         for (var i = 0; i < rows.length; i++) {
-            if(rows[i].Username === username || rows[i].Email === email || rows[i].Address === address)
+            if(rows[i].Username === username)
             {
-                deferred.resolve(insertId);
+                deferred.resolve(-3);
                 return;
             }
+            else if(rows[i].Email === email)
+                {
+                    deferred.resolve(-2);
+                    return;
+                }
+                else if(rows[i].Address === address)
+                    {
+                        deferred.resolve(-1);
+                        return;
+                    }
         }
         sql =
             mustache.render(
@@ -56,6 +66,23 @@ exports.login = function(entity) {
                 permission: rows[0].Permission
             }
             deferred.resolve(user);
+        } else {
+            deferred.resolve(null);
+        }
+    });
+
+    return deferred.promise;
+}
+
+exports.loadAll = function() {
+
+    var deferred = Q.defer();
+
+    var sql = 'select * from users';
+
+    db.load(sql).then(function(rows) {
+        if (rows) {
+            deferred.resolve(rows);
         } else {
             deferred.resolve(null);
         }

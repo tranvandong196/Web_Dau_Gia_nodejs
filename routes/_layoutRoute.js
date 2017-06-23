@@ -3,13 +3,6 @@ var category = require('../models/category');
 var cart = require('../models/cart');
 
 module.exports = function(req, res, next) {
-    // category.loadAll().then(function(data) {
-    //     // res.locals.categories = data;
-    //     res.locals.layoutModels = {
-    //     	categories: data
-    //     };
-    //     next();
-    // });
 
     if (req.session.isLogged === undefined) {
         req.session.isLogged = false;

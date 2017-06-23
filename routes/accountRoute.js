@@ -15,7 +15,7 @@ accountRoute.get('/login', function(req, res) {
             layoutModels: res.locals.layoutModels,
             showMsg: false,
             error: false,
-            msg: ''
+            msg: '',
         });
     }
 });
@@ -67,11 +67,21 @@ accountRoute.post('/logout', restrict, function(req, res) {
 });
 
 accountRoute.get('/register', function(req, res) {
+    // account.loadAll()
+    // .then(function(rows){
+    //     res.render('account/register', {
+    //     layoutModels: res.locals.layoutModels,
+    //     showMsg: false,
+    //     error: false,
+    //     msg: '',
+    //     users: rows,
+    // });
+    // });
     res.render('account/register', {
         layoutModels: res.locals.layoutModels,
         showMsg: false,
         error: false,
-        msg: ''
+        msg: '',
     });
 });
 
@@ -94,14 +104,31 @@ accountRoute.post('/register', function(req, res) {
 
     account.insert(entity)
         .then(function(insertId) {
-            console.log(insertId);
-            if(insertId === -1)
+            if(insertId === -3)
             {
                 res.render('account/register', {
                     layoutModels: res.locals.layoutModels,
                     showMsg: true,
                     error: true,
-                    msg: 'Đăng ký thất bại.'
+                    msg: 'Tên đăng nhập đã có người sử dụng.',
+                });
+            }
+            else if(insertId === -2)
+            {
+                res.render('account/register', {
+                    layoutModels: res.locals.layoutModels,
+                    showMsg: true,
+                    error: true,
+                    msg: 'Email này đã có người sử dụng.',
+                });
+            }
+            else if(insertId === -1)
+            {
+                res.render('account/register', {
+                    layoutModels: res.locals.layoutModels,
+                    showMsg: true,
+                    error: true,
+                    msg: 'Địa chỉ này đã có người sử dụng.',
                 });
             }
             else
@@ -109,7 +136,7 @@ accountRoute.post('/register', function(req, res) {
                     layoutModels: res.locals.layoutModels,
                     showMsg: true,
                     error: false,
-                    msg: 'Đăng ký thành công.'
+                    msg: 'Đăng ký thành công.',
                 });
         });
 });

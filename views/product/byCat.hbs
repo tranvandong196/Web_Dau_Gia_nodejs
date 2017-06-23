@@ -28,7 +28,12 @@
                     <h4>{{ProName}}</h4>
                     <h4>Giá: {{formatNumber Price}}</h4>
                     <h4>Tồn: {{Quantity}}</h4>
-                    <p>{{TinyDes}}</p>
+                    <p style="width: 300px;
+                                 white-space: nowrap;
+                                 overflow: hidden;
+                                 text-overflow: ellipsis;">
+                    {{TinyDes}}
+                    </p>
                     <p>
                         <a href="/product/detail/{{ProID}}" class="btn btn-default" role="button">
                             Chi tiết
