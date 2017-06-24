@@ -2,6 +2,7 @@ var express = require('express');
 var product = require('../models/product');
 var moment = require('moment');
 var productRoute = express.Router();
+var category = require('../models/category');
 var restrict = require('../middle-wares/restrict');
 var multer  = require('multer');
 var fs = require('fs');
@@ -70,10 +71,13 @@ productRoute.get('/detail/:id', function(req, res) {
 
 productRoute.get('/add', restrict, function(req, res) {
     //TODO
-    var vm = {
-        layoutModels: res.locals.layoutModels,
-    };
-    res.render('product/add', vm);
+    category.loadAll().then(function(rows){
+        var vm = {
+            layoutModels: res.locals.layoutModels,
+            categories: rows,
+        };
+        res.render('product/add', vm);
+        });
     });
 
 productRoute.post('/add/:userID', function(req, res) {
@@ -88,56 +92,72 @@ productRoute.post('/add/:userID', function(req, res) {
             cb(null,file.originalname)
         }
     });
-    var upload = multer({storage: storage}).array('images', 3);
+    var upload = multer({storage: storage}).array('images');
     upload(req,res,function(err) {
-        console.log(req.body);
-        console.log("File: " + req.files);
-        var files = req.files;
-        var id = req.params.userID;
-        var now = new Date(Date.now()).toLocaleString();
-        now = moment().format('YYYY-MM-DD HH:mm:ss');
-        var entity = {
-            proName: req.body.proName,
-            userID: id,
-            tinyDes: req.body.tinyDes,
-            fullDes: req.body.fullDes,
-            price: req.body.price,
-            priceToBuy: req.body.priceToBuy,
-            catID: req.body.catID,
-            quantity: req.body.quantity,
-            timeUp: now,
-            timeDown: now,
-            handleID: 1,
-            deltaPrice: 0,
-        };
-        product.insert(entity).then(function(insertId) {
-            if(insertId === -1)
-            {
-                res.render('product/add', {
-                    layoutModels: res.locals.layoutModels,
-                    showMsg: true,
-                    error: true,
-                    msg: 'Thêm thất bại.'
-                });
-            }
-            else
-            {
-                var dest = dir + '/' + insertId;
-                fs.mkdirSync(dest);
-                for(var i = 1; i <= files.length; i++)
+
+        category.findIdByName(req.body.catName).then(function(row){
+            var catID = row.CatID;
+            var files = req.files;
+            var id = req.params.userID;
+            var now = new Date(Date.now()).toLocaleString();
+            now = moment().format('YYYY-MM-DD HH:mm:ss');
+            var timeDown = moment(req.body.timeDown, 'D/M/YYYY').format('YYYY-MM-DD HH:mm:ss');
+            var entity = {
+                proName: req.body.proName,
+                userID: id,
+                tinyDes: req.body.tinyDes,
+                fullDes: req.body.fullDes,
+                price: req.body.price,
+                priceToBuy: req.body.priceToBuy,
+                catID: catID,
+                quantity: req.body.quantity,
+                timeUp: now,
+                timeDown: timeDown,
+                handleID: 0,
+                deltaPrice: req.body.deltaPrice,
+            };
+
+            product.insert(entity).then(function(insertId) {
+                if(insertId === -1)
                 {
-                    fs.closeSync(fs.openSync(dest + '/' + i + '.jpg', 'w'));
-                    fs.createReadStream(dir + '/' + files[i - 1].originalname).pipe(fs.createWriteStream(dest + '/' + i + '.jpg'));
-                    fs.unlinkSync(dir + '/' + files[i - 1].originalname);
+                    res.render('product/add', {
+                        layoutModels: res.locals.layoutModels,
+                        showMsg: true,
+                        error: true,
+                        msg: 'Thêm thất bại.'
+                    });
                 }
-               
-                res.render('product/add', {
-                    layoutModels: res.locals.layoutModels,
-                    showMsg: true,
-                    error: false,
-                    msg: 'Thêm thành công.'
-                });
-            }
+                else
+                {
+                    var dest = dir + '/' + insertId;
+                    fs.mkdirSync(dest);
+                    var size = files.length;
+                    if(size > 3)
+                        size = 3;
+                    for(var i = 1; i <= size; i++)
+                    {
+                        //tạo file hình rỗng để chép sang
+                        fs.closeSync(fs.openSync(dest + '/' + i + '.jpg', 'w'));
+
+                        //copy hình sang thư mục đích
+                        fs.createReadStream(dir + '/' + files[i - 1].originalname)
+                        .pipe(fs.createWriteStream(dest + '/' + i + '.jpg'));
+                    }
+
+                    for(var i = 1; i <= files.length; i++)
+                    {
+                        //xóa file hình đã lưu tạm
+                        fs.unlinkSync(dir + '/' + files[i - 1].originalname);
+                    }
+                   
+                    res.render('product/add', {
+                        layoutModels: res.locals.layoutModels,
+                        showMsg: true,
+                        error: false,
+                        msg: 'Thêm thành công.'
+                    });
+                }
+            });
         });
     });
 });
@@ -222,7 +242,7 @@ productRoute.post('/search', function(req, res) {
             });
         }
 
-        res.render('product/byCat', {
+        res.render('product/search', {
             layoutModels: res.locals.layoutModels,
             products: data.list,
             isEmpty: data.total === 0,

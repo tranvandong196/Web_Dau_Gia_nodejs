@@ -68,3 +68,15 @@ exports.update = function(entity) {
 
     return deferred.promise;
 }
+
+exports.findIdByName = function(name) {
+
+    var deferred = Q.defer();
+    
+    var sql = 'select CatID from categories where CatName = "' + name + '"';
+    db.load(sql).then(function(rows) {
+        deferred.resolve(rows[0]);
+    });
+
+    return deferred.promise;
+}
