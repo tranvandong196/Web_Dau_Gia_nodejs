@@ -131,6 +131,7 @@ exports.deleteByCat = function(id) {
     db.delete(sql).then(function(affectedRows) {
         deferred.resolve(insertId);
     });
+}
 
 exports.findbyName = function(entity) {
 
@@ -166,8 +167,8 @@ exports.findbyCat = function(entity) {
         } else {
          deferred.resolve(null);
      }
- });
-    
+    });
+
     return deferred.promise;
 }
 
