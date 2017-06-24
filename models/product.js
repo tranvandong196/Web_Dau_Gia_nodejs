@@ -115,11 +115,6 @@ exports.insert = function(entity) {
         entity        
         );
 
-<<<<<<< HEAD
-=======
-    console.log(sql);
-
->>>>>>> a683a33474d65639f2cc11f67689e024cde33b3a
     db.insert(sql).then(function(insertId) {
         deferred.resolve(insertId);
     });
@@ -127,7 +122,6 @@ exports.insert = function(entity) {
     return deferred.promise;
 }
 
-<<<<<<< HEAD
 exports.deleteByCat = function(id) {
 
     var deferred = Q.defer();
@@ -138,7 +132,6 @@ exports.deleteByCat = function(id) {
         deferred.resolve(insertId);
     });
 
-=======
 exports.findbyName = function(entity) {
 
     var deferred = Q.defer();
@@ -174,7 +167,7 @@ exports.findbyCat = function(entity) {
          deferred.resolve(null);
      }
  });
->>>>>>> a683a33474d65639f2cc11f67689e024cde33b3a
+    
     return deferred.promise;
 }
 
