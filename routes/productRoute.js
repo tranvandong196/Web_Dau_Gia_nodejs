@@ -119,8 +119,6 @@ productRoute.post('/search', function(req, res) {
     var entity ={
        search: text
    };
-   var result;
-   var products;
    product.findbyName(entity).then(function(rows){
 
     if(rows.length === 0)
@@ -172,7 +170,7 @@ productRoute.post('/search', function(req, res) {
 
     });
     }
-    if(rows.length != 0)
+    if(rows.length !== 0)
     {
        res.render('product/search', {
         layoutModels: res.locals.layoutModels,

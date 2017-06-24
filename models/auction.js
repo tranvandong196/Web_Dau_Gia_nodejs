@@ -19,3 +19,37 @@ exports.insert = function(entity) {
 
     return deferred.promise;
 }
+
+exports.deleteByUserID = function(id) {
+
+    var deferred = Q.defer();
+
+    var sql =
+        mustache.render(
+            'delete from auctions where UserID = ' + id;
+            entity
+        );
+
+    db.delete(sql).then(function(affectedRows) {
+        deferred.resolve(affectedRows);
+    });
+
+    return deferred.promise;
+}
+
+exports.deleteByProID = function(id) {
+
+    var deferred = Q.defer();
+
+    var sql =
+        mustache.render(
+            'delete from auctions where ProID = ' + id;
+            entity
+        );
+
+    db.delete(sql).then(function(affectedRows) {
+        deferred.resolve(affectedRows);
+    });
+
+    return deferred.promise;
+}

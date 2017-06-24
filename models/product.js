@@ -126,21 +126,22 @@ exports.deleteByCat = function(id) {
 
     var deferred = Q.defer();
 
-     var sql = 'delete from products where CatID = ' + id;
+    var sql = 'delete from products where CatID = ' + id;
 
     db.delete(sql).then(function(affectedRows) {
         deferred.resolve(insertId);
     });
+    return deferred.promise;
 }
 
 exports.findbyName = function(entity) {
 
     var deferred = Q.defer();
     var sql = mustache.render(
-        'SELECT * FROM products where ProName LIKE N' + "'{{search}}%'",
+        'SELECT * FROM products where ProName LIKE "%{{search}}%"',
         entity        
         );
-
+    console.log(sql);
 
     db.load(sql).then(function(rows) {
         if (rows) {
@@ -157,7 +158,7 @@ exports.findbyCat = function(entity) {
 
     var deferred = Q.defer();
     var sql = mustache.render(
-        'SELECT CatID FROM categories where CatName LIKE N' + "'{{search}}%'",
+        'SELECT CatID FROM categories where CatName LIKE "%{{search}}%"',
         entity        
         );  
     

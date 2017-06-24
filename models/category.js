@@ -29,11 +29,11 @@ exports.load = function(id) {
 exports.delete = function(id) {
 
     var deferred = Q.defer();
-    
     var sql = 'delete from categories where CatID = ' + id;
+    var sql1 = 'delete from products where CatID = ' + id;
     Q.all([
-    	db.delete(sql)
-    ]).then(function(affectedRows){
+    	db.delete(sql), db.delete(sql1),
+    ]).then(function(affectedRows, affectedRows1){
     	deferred.resolve(affectedRows);
     });
     return deferred.promise;

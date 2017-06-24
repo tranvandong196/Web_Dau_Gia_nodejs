@@ -142,9 +142,11 @@ exports.delete = function(id){
     var deferred = Q.defer();
 
     var sql = 'delete from users where ID = ' + id;
-    db.delete(sql).then(function(affectedRows){
+    var sql1 = 'delete from products where UserID = ' + id;
+    Q.all([
+        db.delete(sql), db.delete(sql1),
+    ]).then(function(affectedRows, affectedRows1){
         deferred.resolve(affectedRows);
     });
-   
     return deferred.promise;
 }

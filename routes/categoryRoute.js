@@ -56,8 +56,12 @@ categoryRoute.post('/add', restrict, function(req, res) {
 
 categoryRoute.post('/delete', restrict, function(req, res) {
     var id = req.body.catID;
-    product.deleteByCat(id);
-    category.delete(id);
+
+     Q.all([
+        category.delete(id)
+    ]).spread(function(data1){
+        res.redirect('/account/manageCategories');
+    });
 });
 
 module.exports = categoryRoute;

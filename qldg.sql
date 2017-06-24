@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2017-06-23 23:33:25
+Date: 2017-06-24 16:13:14
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -27,9 +27,7 @@ CREATE TABLE `auctions` (
   `ProID` int(11) unsigned NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `fk_auctions_users` (`UserID`),
-  KEY `fk_auctions_products` (`ProID`),
-  CONSTRAINT `fk_auctions_products` FOREIGN KEY (`ProID`) REFERENCES `products` (`ProID`),
-  CONSTRAINT `fk_auctions_users` FOREIGN KEY (`UserID`) REFERENCES `users` (`ID`)
+  KEY `fk_auctions_products` (`ProID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
@@ -67,9 +65,7 @@ CREATE TABLE `favorites` (
   `UserID` int(11) unsigned NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `fk_favorites_users` (`UserID`),
-  KEY `fk_favorites` (`ProID`),
-  CONSTRAINT `fk_favorites` FOREIGN KEY (`ProID`) REFERENCES `products` (`ProID`),
-  CONSTRAINT `fk_favorites_users` FOREIGN KEY (`UserID`) REFERENCES `users` (`ID`)
+  KEY `fk_favorites` (`ProID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
@@ -97,10 +93,7 @@ CREATE TABLE `products` (
   PRIMARY KEY (`ProID`),
   KEY `fk_products_categories` (`CatID`),
   KEY `fk_products_users1` (`UserID`),
-  KEY `fk_products_users` (`HandleID`),
-  CONSTRAINT `fk_products_categories` FOREIGN KEY (`CatID`) REFERENCES `categories` (`CatID`),
-  CONSTRAINT `fk_products_users` FOREIGN KEY (`HandleID`) REFERENCES `users` (`ID`),
-  CONSTRAINT `fk_products_users1` FOREIGN KEY (`UserID`) REFERENCES `users` (`ID`)
+  KEY `fk_products_users` (`HandleID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
