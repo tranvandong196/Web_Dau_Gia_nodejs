@@ -1,6 +1,6 @@
 var Q = require('q');
 var mustache = require('mustache');
-
+var crypto = require('crypto');
 var db = require('../app-helpers/dbHelper');
 
 exports.insert = function(entity) {
@@ -125,11 +125,11 @@ exports.updateScore = function(id, score){
     var sql;
     if(score === 1)
     {
-        sql = 'update users set SocrePlus = ' + plus;
+        sql = 'update users set SocrePlus = ' + plus + ' where ID = ' + id;
     }
     else
     {
-        sql = 'update users set SocreMinus = ' + minus;
+        sql = 'update users set SocreMinus = ' + minus + ' where ID = ' + id;
     }
      db.update(sql).then(function(changedRows){
         deferred.resolve(changedRows);
@@ -147,6 +147,22 @@ exports.delete = function(id){
         db.delete(sql), db.delete(sql1),
     ]).then(function(affectedRows, affectedRows1){
         deferred.resolve(affectedRows);
+    });
+    return deferred.promise;
+}
+
+exports.resetPW = function(id){
+    var deferred = Q.defer();
+    var ePWD = crypto.createHash('md5').update('123456').digest('hex');
+    var entity = {
+        pw: ePWD,
+        id: id,
+    };
+    var sql = mustache.render('update users set Password = "{{pw}}" where ID = {{id}}', entity);
+    Q.all([
+        db.update(sql),
+    ]).then(function(changedRows){
+        deferred.resolve(changedRows);
     });
     return deferred.promise;
 }

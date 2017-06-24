@@ -3,7 +3,7 @@
 {{/section}}
 
 {{#section 'css'}}
-    <link href="/assets/site.css" rel="stylesheet" />
+    <link href="/assests/site.css" rel="stylesheet" />
 
     <style type="text/css">
         .padding {
@@ -13,50 +13,53 @@
 {{/section}}
 
 {{#section 'js'}}
-    <script src="/assets/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="/assests/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
     <script type="text/javascript">
         $('#txtQ').TouchSpin({
-            min: 1,
-            max: 50,
-            verticalButtons: true
+            min: $('#txtQ').val(),
+            max: 1000000000,
+            step: $('#txtStep').val(),
+            verticalButtons: true,
         });
     </script>
 {{/section}}
 
 {{#with product }}
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-sm-5">
+            <div class="caption-lg-orange">
+                <h3>{{ProName}}</h3>
+                </div>
+                <div class="padding">
+                    <h4>Giá bán: {{formatNumber Price}}</h4>
+                </div>
+                <div class="padding">
+                     <h4>Tồn kho: {{Quantity}}</h4>
+                </div>
+            <div class="padding">
+                {{{FullDes}}}
+            </div>
+            {{#if ../layoutModels.isLogged }}
+            <form class="form-horizontal padding" id="frmAddItem" method="post" action="/cart/add">
+                <div class="form-group" style="margin-top: 50px; margin-left: 10px">
+                    <input type="hidden" id="txtP" name="proId" value="{{ProID}}" />
+                    <input type="hidden" id="txtStep" value="{{DeltaPrice}}" />
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input id="txtQ" name="quantity" type="text" class="form-control" placeholder="Slg" value="{{Price}}">
+                        </div><!-- /input-group -->
+                        <div class="col-sm-6">
+                            <button class="btn btn-primary padding" type="submit">
+                                Đấu giá
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            {{/if}}
+        </div>
+        <div class="col-md-7">
             <img src="/images/{{ProID}}/1.jpg" />
         </div>
-        <div class="col-md-12 caption-lg-orange">
-            <h3>{{ProName}}</h3>
-        </div>
-        <div class="col-md-12 padding">
-            <span class="caption-lg-red">Giá bán: {{formatNumber Price}}</span>
-        </div>
-        <div class="col-md-12 padding">
-            Tồn kho: {{Quantity}}
-        </div>
-        <div class="col-md-12 padding">
-            {{{FullDes}}}
-        </div>
     </div>
-
-    {{#if ../layoutModels.isLogged }}
-        <form class="form-horizontal" id="frmAddItem" method="post" action="/cart/add">
-            <div class="form-group">
-                <div class="col-sm-4">
-                    <input type="hidden" id="txtP" name="proId" value="{{ProID}}" />
-                    <div class="input-group" style="margin-left: 24px;">
-                        <input id="txtQ" name="quantity" type="text" class="form-control" placeholder="Slg" value="1">
-                        <span class="input-group-btn">
-                            <button class="btn btn-primary" type="submit">
-                                <i class="fa fa-cart-plus"></i>
-                            </button>
-                        </span>
-                    </div><!-- /input-group -->
-                </div>
-            </div>
-        </form>
-    {{/if}}
 {{/with}}

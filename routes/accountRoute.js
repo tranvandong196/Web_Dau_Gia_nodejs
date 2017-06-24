@@ -151,40 +151,58 @@ accountRoute.get('/profile', restrict, function(req, res) {
 
 accountRoute.get('/manageUsers', restrict, function(req, res) {
     account.loadAll().then(function(rows){
+        for(var i = 0; i < rows.length; i++) {
+            // statements
+            if(rows[i].ID === res.locals.layoutModels.curUser.id || rows[i].Permission === 1)
+            {
+                rows.splice(i, 1);
+            }
+        }
         res.render('account/manageUsers', {
-        layoutModels: res.locals.layoutModels,
-        users: rows,
-        showMsg: false,
-        error: false,
-        msg: '',
-    });
+            layoutModels: res.locals.layoutModels,
+            users: rows,
+            showMsg: false,
+            error: false,
+            msg: '',
+        });
     });
 });
 
 accountRoute.post('/delete', restrict, function(req, res) {
     var id = req.body.userID;
     account.delete(id).then(function(affectedRows){
-        account.loadAll().then(function(rows){
-        res.render('account/manageUsers', {
-        layoutModels: res.locals.layoutModels,
-        users: rows,
-        showMsg: false,
-        error: false,
-        msg: '',
-    });
-    });
+        res.redirect('/account/manageUsers');
     });
 });
 
 accountRoute.get('/manageCategories', restrict, function(req, res) {
     category.loadAll().then(function(rows){
-        res.render('account/manageCategories', {
+       res.render('account/manageRequests', {
+            layoutModels: res.locals.layoutModels,
+            categories: rows,
+            showMsg: false,
+            error: false,
+            msg: '',
+        });
+    });
+});
+
+accountRoute.get('/manageRequests', restrict, function(req, res) {
+    category.loadAll().then(function(rows){
+        res.render('account/manageRequests', {
         layoutModels: res.locals.layoutModels,
         categories: rows,
         showMsg: false,
         error: false,
         msg: '',
     });
+    });
+});
+
+accountRoute.get('/resetPW/:id', restrict, function(req, res) {
+    var id = req.params.id;
+    account.resetPW(id).then(function(changedRows){
+        res.redirect('/account/manageUsers');
     });
 });
 

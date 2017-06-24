@@ -125,7 +125,7 @@ productRoute.post('/search', function(req, res) {
     {
         product.findbyCat(entity)
         .then(function(kq) {
-            var rec_per_page = 4;
+            var rec_per_page = 6;
             var curPage = req.query.page ? req.query.page : 1;
             var offset = (curPage - 1) * rec_per_page;
 
@@ -163,19 +163,51 @@ productRoute.post('/search', function(req, res) {
             });
            }
 
-           else
-           {
-            res.redirect('/home');
-        }
+           else {
+                res.render('product/search', {
+                    layoutModels: res.locals.layoutModels,
+                    isEmpty: true,
+                });
+            }
 
     });
     }
     if(rows.length !== 0)
     {
-       res.render('product/search', {
-        layoutModels: res.locals.layoutModels,
-        result: rows,
-    });
+        var rec_per_page = 6;
+        var curPage = req.query.page ? req.query.page : 1;
+        var offset = (curPage - 1) * rec_per_page;
+
+       product.loadPageByCat(kq[0].CatID, rec_per_page, offset)
+       .then(function(data) {
+
+        var number_of_pages = data.total / rec_per_page;
+        if (data.total % rec_per_page > 0) {
+            number_of_pages++;
+        }
+
+        var pages = [];
+        for (var i = 1; i <= number_of_pages; i++) {
+            pages.push({
+                pageValue: i,
+                isActive: i === +curPage
+            });
+        }
+
+        res.render('product/byCat', {
+            layoutModels: res.locals.layoutModels,
+            products: data.list,
+            isEmpty: data.total === 0,
+            catId: req.params.id,
+
+            pages: pages,
+            curPage: curPage,
+            prevPage: curPage - 1,
+            nextPage: curPage + 1,
+            showPrevPage: curPage > 1,
+            showNextPage: curPage < number_of_pages - 1,
+        });
+        });
    }
 
 
