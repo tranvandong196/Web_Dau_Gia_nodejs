@@ -3,7 +3,8 @@ var product = require('../models/product');
 var moment = require('moment');
 var productRoute = express.Router();
 var restrict = require('../middle-wares/restrict');
-
+var multer  = require('multer');
+var fs = require('fs');
 productRoute.get('/byCat/:id', function(req, res) {
 
     // product.loadAllByCat(req.params.id)
@@ -75,7 +76,7 @@ productRoute.get('/add', restrict, function(req, res) {
 });
 
 productRoute.post('/add/:userID', function(req, res) {
-
+    console.log(req.file)
     var id = req.params.userID;
     var now = new Date(Date.now()).toLocaleString();
     now = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -104,6 +105,36 @@ productRoute.post('/add/:userID', function(req, res) {
             });
         }
         else
+                var dir = './public/images/' + insertId;
+
+                if (!fs.existsSync(dir)){
+                    fs.mkdirSync(dir);
+                }
+                else
+                    console.log("Folder is exists: ./public/images/0")
+
+                var storage = multer.diskStorage({
+                    destination: function(req,file,cb){
+                        cb(null,dir)
+                    },
+                    filename: function(req,file,cb){
+                        cb(null,file.originalname)
+                    }
+                })
+                var upload = multer({storage: storage})
+                console.log(req.file)
+                upload.single(req.file)
+                //    upload(req, res, function (err) {
+                //     if (err) {
+                //       console.log("Loi upload file")
+                //       //return
+                //     }
+                //     else
+                //         console.log(req.file)
+                //   })
+                   console.log("???")
+
+
             res.render('product/add', {
                 layoutModels: res.locals.layoutModels,
                 showMsg: true,

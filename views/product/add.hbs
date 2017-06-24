@@ -26,41 +26,56 @@
 			<h1>Thông tin sản phẩm</h1>
 			<div class="row">
 				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-					<form method="post" action="/product/add/{{ layoutModels.curUser.id }}">
+					 <!--Để thì lỗi: enctype="multipart/form-data" -->
+					<form method="post" action="/product/add/{{ layoutModels.curUser.id }}" enctype="multipart/form-data">	
 						<div class="form-group">
+<<<<<<< HEAD
 							<label for="txtProName">Tên sản phẩm</label>
 							<input type="text" class="form-control" id="txtProName" placeholder="" name="proName">
+=======
+							<label for="txtProName">Tên sản phẩm{{ layoutModels.curUser.id }}</label>
+							<input type="text" class="form-control" id="txtProName" placeholder="" name="proName" value="1">
+>>>>>>> c4efe7242dd4415a5b4c7032a6f015353c01f6ff
 						</div>
 						<div class="form-group">
 							<label for="txtTinyDes">Miêu tả ngắn gọn</label>
-							<input type="text" class="form-control" id="txtTinyDes" placeholder="" name="tinyDes">
+							<input type="text" class="form-control" id="txtTinyDes" placeholder="" name="tinyDes" value="1">
 						</div>
 						<div class="form-group">
 							<label for="txtFullDes">Mô tả</label>
-							<input type="text" class="form-control" id="txtFullDes" placeholder="" name="fullDes">
+							<input type="text" class="form-control" id="txtFullDes" placeholder="" name="fullDes" value="1">
 						</div>
 						<div class="form-group">
 							<label for="txtPrice">Giá</label>
-							<input type="text" class="form-control" id="txtPrice" placeholder="" name="price">
+							<input type="text" class="form-control" id="txtPrice" placeholder="" name="price" value="1">
 						</div>
 						<div class="form-group">
 							<label for="txtCatID">Danh mục</label>
-							<input type="text" class="form-control" id="txtCatID" placeholder="" name="catID">
+							<input type="text" class="form-control" id="txtCatID" placeholder="" name="catID" value="1">
 						</div>
 						<div class="form-group">
 							<label for="txtQuantity">Số lượng</label>
-							<input type="text" class="form-control" id="txtQuantity" placeholder="0-100" name="quantity">
+							<input type="text" class="form-control" id="txtQuantity" placeholder="0-100" name="quantity" value="1">
 						</div>
 						<div class="form-group">
 							<label for="txtQuantity">Giá chào bán</label>
-							<input type="text" class="form-control" id="txtPriceToBuy" name="priceToBuy">
+							<input type="text" class="form-control" id="txtPriceToBuy" name="priceToBuy" value="1">
 						</div>
 						
 						<div class="form-group">
 							<label for="txtQuantity">Thời hạn</label>
-							<input type="text" class="form-control" id="txtTimeDown" name="timeDown">
+							<input type="text" class="form-control" id="txtTimeDown" name="timeDown" value="1">
 						</div>
-						<button type="submit" class="btn btn-success">
+
+						<!-- <form> -->
+						  <div class="form-group" >
+						    <label for="exampleInputFile">Thêm hình ảnh</label>
+						    <input type="file" name="file" multiple="multiple">
+						    <p class="help-block">Có thể upload nhiều ảnh</p>
+						  </div>
+						<!-- </form> -->
+
+						<button type="submit" value="upload" class="btn btn-success">
 							Lưu lại
 						</button>
 					</form>
