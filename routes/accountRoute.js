@@ -100,7 +100,8 @@ accountRoute.post('/register', function(req, res) {
         address: req.body.address,
         dob: nDOB,
         permission: 0,
-        score: 0,
+        scorePlus: 0,
+        scoreMinus: 0,
     };
 
     account.insert(entity)
