@@ -125,21 +125,26 @@ exports.updateScore = function(id, score){
     var sql;
     if(score === 1)
     {
-        sql = mustache.render(
-            'update users set SocrePlus = {{plus}}',
-            plus
-            );
+        sql = 'update users set SocrePlus = ' + plus;
     }
     else
     {
-        sql = mustache.render(
-            'update users set SocreMinus = {{minus}}',
-            minus
-            );
+        sql = 'update users set SocreMinus = ' + minus;
     }
      db.update(sql).then(function(changedRows){
         deferred.resolve(changedRows);
         });
 
+    return deferred.promise;
+}
+
+exports.delete = function(id){
+    var deferred = Q.defer();
+
+    var sql = 'delete from users where ID = ' + id;
+    db.delete(sql).then(function(affectedRows){
+        deferred.resolve(affectedRows);
+    });
+   
     return deferred.promise;
 }

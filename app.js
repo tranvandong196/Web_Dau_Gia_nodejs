@@ -22,6 +22,7 @@ var homeRoute = require('./routes/homeRoute');
 var productRoute = require('./routes/productRoute');
 var accountRoute = require('./routes/accountRoute');
 var cartRoute = require('./routes/cartRoute');
+var categoryRoute = require('./routes/categoryRoute');
 
 var app = express();
 
@@ -104,6 +105,7 @@ app.use(session({
 
 app.use(layoutRoute);
 app.use('/home', homeRoute);
+app.use('/category', categoryRoute);
 app.use('/product', productRoute);
 app.use('/account', accountRoute);
 app.use('/cart', cartRoute);

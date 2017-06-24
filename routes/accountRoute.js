@@ -1,7 +1,7 @@
 var express = require('express');
 var crypto = require('crypto');
 var moment = require('moment');
-
+var category = require('../models/category');
 var restrict = require('../middle-wares/restrict');
 var account = require('../models/account');
 
@@ -146,6 +146,45 @@ accountRoute.post('/register', function(req, res) {
 accountRoute.get('/profile', restrict, function(req, res) {
     res.render('account/profile', {
         layoutModels: res.locals.layoutModels
+    });
+});
+
+accountRoute.get('/manageUsers', restrict, function(req, res) {
+    account.loadAll().then(function(rows){
+        res.render('account/manageUsers', {
+        layoutModels: res.locals.layoutModels,
+        users: rows,
+        showMsg: false,
+        error: false,
+        msg: '',
+    });
+    });
+});
+
+accountRoute.post('/delete', restrict, function(req, res) {
+    var id = req.body.userID;
+    account.delete(id).then(function(affectedRows){
+        account.loadAll().then(function(rows){
+        res.render('account/manageUsers', {
+        layoutModels: res.locals.layoutModels,
+        users: rows,
+        showMsg: false,
+        error: false,
+        msg: '',
+    });
+    });
+    });
+});
+
+accountRoute.get('/manageCategories', restrict, function(req, res) {
+    category.loadAll().then(function(rows){
+        res.render('account/manageCategories', {
+        layoutModels: res.locals.layoutModels,
+        categories: rows,
+        showMsg: false,
+        error: false,
+        msg: '',
+    });
     });
 });
 

@@ -21,14 +21,14 @@
     </form>
     <div class="row">
         {{#each products }}
-        <div class="col-md-6">
-            <div class="thumbnail">
+        <div class="col-md-4">
+            <div class="thumbnail" style="min-height: 390px; max-width: 300px">
                 <img src="/images/{{ProID}}/1_thumb.jpg" title="{{ProName}}" />
                 <div class="caption">
                     <h4>{{ProName}}</h4>
                     <h4>Giá: {{formatNumber Price}}</h4>
                     <h4>Tồn: {{Quantity}}</h4>
-                    <p style="width: 300px;
+                    <p style="width: 250px;
                                  white-space: nowrap;
                                  overflow: hidden;
                                  text-overflow: ellipsis;">
@@ -41,7 +41,7 @@
                         {{#if ../layoutModels.isLogged }}
                             <a href="javascript:;" class="btn btn-success addItem" role="button" data-id="{{ProID}}">
                                 <i class="fa fa-cart-plus"></i>
-                                Đặt mua
+                                Đấu giá
                             </a>
                         {{/if}}
                     </p>

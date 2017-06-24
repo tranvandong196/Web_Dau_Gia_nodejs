@@ -110,19 +110,74 @@ exports.insert = function(entity) {
 
     var deferred = Q.defer();
 
-     var sql = mustache.render(
+    var sql = mustache.render(
         'insert into products (ProName, TinyDes, FullDes, Price, CatID, Quantity, PriceToBuy, UserID, HandleID, TimeUp, TimeDown, DeltaPrice) values ("{{proName}}", "{{tinyDes}}", "{{fullDes}}",{{price}}, {{catID}}, {{quantity}}, {{priceToBuy}}, {{userID}}, {{handleID}}, "{{timeUp}}", "{{timeDown}}", {{deltaPrice}})',
         entity        
-    );
+        );
 
-     console.log(sql);
+<<<<<<< HEAD
+=======
+    console.log(sql);
 
+>>>>>>> a683a33474d65639f2cc11f67689e024cde33b3a
     db.insert(sql).then(function(insertId) {
         deferred.resolve(insertId);
     });
 
     return deferred.promise;
 }
+
+<<<<<<< HEAD
+exports.deleteByCat = function(id) {
+
+    var deferred = Q.defer();
+
+     var sql = 'delete from products where CatID = ' + id;
+
+    db.delete(sql).then(function(affectedRows) {
+        deferred.resolve(insertId);
+    });
+
+=======
+exports.findbyName = function(entity) {
+
+    var deferred = Q.defer();
+    var sql = mustache.render(
+        'SELECT * FROM products where ProName LIKE N' + "'{{search}}%'",
+        entity        
+        );
+
+
+    db.load(sql).then(function(rows) {
+        if (rows) {
+            deferred.resolve(rows);
+        } else {
+            deferred.resolve(null);
+        }
+    });
+    
+    return deferred.promise;
+}
+
+exports.findbyCat = function(entity) {
+
+    var deferred = Q.defer();
+    var sql = mustache.render(
+        'SELECT CatID FROM categories where CatName LIKE N' + "'{{search}}%'",
+        entity        
+        );  
+    
+    db.load(sql).then(function(rows) {
+        if (rows) {
+            deferred.resolve(rows);
+        } else {
+         deferred.resolve(null);
+     }
+ });
+>>>>>>> a683a33474d65639f2cc11f67689e024cde33b3a
+    return deferred.promise;
+}
+
 // exports.makeCartItem = function(id, q) {
 
 //     var deferred = Q.defer();
