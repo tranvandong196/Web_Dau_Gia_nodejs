@@ -5,6 +5,7 @@ var productRoute = express.Router();
 var restrict = require('../middle-wares/restrict');
 var multer  = require('multer');
 var fs = require('fs');
+
 productRoute.get('/byCat/:id', function(req, res) {
 
     // product.loadAllByCat(req.params.id)
@@ -73,76 +74,72 @@ productRoute.get('/add', restrict, function(req, res) {
         layoutModels: res.locals.layoutModels,
     };
     res.render('product/add', vm);
-});
-
-productRoute.post('/add/:userID', function(req, res) {
-    console.log(req.file)
-    var id = req.params.userID;
-    var now = new Date(Date.now()).toLocaleString();
-    now = moment().format('YYYY-MM-DD HH:mm:ss');
-    var entity = {
-        proName: req.body.proName,
-        userID: id,
-        tinyDes: req.body.tinyDes,
-        fullDes: req.body.fullDes,
-        price: req.body.price,
-        priceToBuy: req.body.priceToBuy,
-        catID: req.body.catID,
-        quantity: req.body.quantity,
-        timeUp: now,
-        timeDown: now,
-        handleID: 1,
-        deltaPrice: 0,
-    };
-    product.insert(entity).then(function(insertId) {
-        if(insertId === -1)
-        {
-            res.render('product/add', {
-                layoutModels: res.locals.layoutModels,
-                showMsg: true,
-                error: true,
-                msg: 'Thêm thất bại.'
-            });
-        }
-        else
-                var dir = './public/images/' + insertId;
-
-                if (!fs.existsSync(dir)){
-                    fs.mkdirSync(dir);
-                }
-                else
-                    console.log("Folder is exists: ./public/images/0")
-
-                var storage = multer.diskStorage({
-                    destination: function(req,file,cb){
-                        cb(null,dir)
-                    },
-                    filename: function(req,file,cb){
-                        cb(null,file.originalname)
-                    }
-                })
-                var upload = multer({storage: storage})
-                console.log(req.file)
-                upload.single(req.file)
-                //    upload(req, res, function (err) {
-                //     if (err) {
-                //       console.log("Loi upload file")
-                //       //return
-                //     }
-                //     else
-                //         console.log(req.file)
-                //   })
-                   console.log("???")
-
-
-            res.render('product/add', {
-                layoutModels: res.locals.layoutModels,
-                showMsg: true,
-                error: false,
-                msg: 'Thêm thành công.'
-            });
     });
 
+productRoute.post('/add/:userID', function(req, res) {
+
+    var dir = './public/images';
+
+    var storage = multer.diskStorage({
+        destination: function(req,file,cb){
+            cb(null,dir)
+        },
+        filename: function(req,file,cb){
+            cb(null,file.originalname)
+        }
+    });
+    var upload = multer({storage: storage}).array('images', 3);
+    upload(req,res,function(err) {
+        console.log(req.body);
+        console.log("File: " + req.files);
+        var files = req.files;
+        var id = req.params.userID;
+        var now = new Date(Date.now()).toLocaleString();
+        now = moment().format('YYYY-MM-DD HH:mm:ss');
+        var entity = {
+            proName: req.body.proName,
+            userID: id,
+            tinyDes: req.body.tinyDes,
+            fullDes: req.body.fullDes,
+            price: req.body.price,
+            priceToBuy: req.body.priceToBuy,
+            catID: req.body.catID,
+            quantity: req.body.quantity,
+            timeUp: now,
+            timeDown: now,
+            handleID: 1,
+            deltaPrice: 0,
+        };
+        product.insert(entity).then(function(insertId) {
+            if(insertId === -1)
+            {
+                res.render('product/add', {
+                    layoutModels: res.locals.layoutModels,
+                    showMsg: true,
+                    error: true,
+                    msg: 'Thêm thất bại.'
+                });
+            }
+            else
+            {
+                var dest = dir + '/' + insertId;
+                fs.mkdirSync(dest);
+                for(var i = 1; i <= files.length; i++)
+                {
+                    fs.closeSync(fs.openSync(dest + '/' + i + '.jpg', 'w'));
+                    fs.createReadStream(dir + '/' + files[i - 1].originalname).pipe(fs.createWriteStream(dest + '/' + i + '.jpg'));
+                    fs.unlinkSync(dir + '/' + files[i - 1].originalname);
+                }
+               
+                res.render('product/add', {
+                    layoutModels: res.locals.layoutModels,
+                    showMsg: true,
+                    error: false,
+                    msg: 'Thêm thành công.'
+                });
+            }
+        });
+    });
 });
 
 productRoute.post('/search', function(req, res) {

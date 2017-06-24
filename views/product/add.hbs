@@ -29,13 +29,8 @@
 					 <!--Để thì lỗi: enctype="multipart/form-data" -->
 					<form method="post" action="/product/add/{{ layoutModels.curUser.id }}" enctype="multipart/form-data">	
 						<div class="form-group">
-<<<<<<< HEAD
 							<label for="txtProName">Tên sản phẩm</label>
 							<input type="text" class="form-control" id="txtProName" placeholder="" name="proName">
-=======
-							<label for="txtProName">Tên sản phẩm{{ layoutModels.curUser.id }}</label>
-							<input type="text" class="form-control" id="txtProName" placeholder="" name="proName" value="1">
->>>>>>> c4efe7242dd4415a5b4c7032a6f015353c01f6ff
 						</div>
 						<div class="form-group">
 							<label for="txtTinyDes">Miêu tả ngắn gọn</label>
@@ -69,8 +64,8 @@
 
 						<!-- <form> -->
 						  <div class="form-group" >
-						    <label for="exampleInputFile">Thêm hình ảnh</label>
-						    <input type="file" name="file" multiple="multiple">
+						    <label>Thêm hình ảnh</label>
+						    <input type="file" name="images" multiple="multiple">
 						    <p class="help-block">Có thể upload nhiều ảnh</p>
 						  </div>
 						<!-- </form> -->
