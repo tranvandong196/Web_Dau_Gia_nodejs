@@ -13,6 +13,9 @@
     <body style="min-width: 1024px">
         {{> header this }}
         <form id="frmLogout" method="post" action="/account/logout"></form>
+        <form id="frmSearch" method="post" action="/product/search">
+            <input name="search" id="textSearch" class="hidden"></input>
+        </form>
         <div class="container-fluid">
             <div class="row">
                 <div style="margin-top: 25px">
@@ -51,6 +54,12 @@
     <script type="text/javascript">
         $('#logoutLink').on('click', function () {
             $('#frmLogout').submit();
+        });
+    </script>
+     <script type="text/javascript">
+        $('#search').on('click', function () {
+            $('#textSearch').val($('#txtSearch').val());
+            $('#frmSearch').submit();
         });
     </script>
     {{{_sections.js}}}

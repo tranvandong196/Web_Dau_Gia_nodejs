@@ -113,4 +113,13 @@ productRoute.post('/add/:userID', function(req, res) {
         });
 
 });
+
+productRoute.post('/search', function(req, res) {
+    //TODO
+    var text = req.body.search;
+    res.render('product/search', {
+                    layoutModels: res.locals.layoutModels,
+                });
+});
+
 module.exports = productRoute;
