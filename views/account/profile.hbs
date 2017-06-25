@@ -9,6 +9,8 @@
     		$("#changePassword").hide();
     		$("#changeProfile").hide();
     		$("#userScore").hide();
+    		$("#inputUsername").hide();
+    		$("#spaceline").hide();
     		$("#goback").show();
     		$("#save").show();
 		});
@@ -98,7 +100,7 @@
                 </div>
                 <div  class="panel-body" style="padding-top:30px;">
                     <div class="form-horizontal col-sm-12" role="form">
-                        <div class="input-group">
+                        <div class="input-group" id="inputUsername">
                             <span class="input-group-addon">
                                 <i class="glyphicon glyphicon-user">
                                 </i>
@@ -106,7 +108,7 @@
                             <input class="form-control" placeholder="Username" type="text" name="username" >
                             </input>
                         </div>
-                        <div><br></div>
+                        <div id="spaceline"><br></div>
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <i class="glyphicon glyphicon-envelope">
