@@ -482,7 +482,7 @@ productRoute.get('/byFavorite', function(req, res) {
             products: data.list,
             isEmpty: data.total === 0,
             catId: req.params.id,
-            isLogged: userIDcurrent === -1,
+            isLoggedOut: userIDcurrent === -1,
             pages: pages,
             curPage: curPage,
             prevPage: curPage - 1,
