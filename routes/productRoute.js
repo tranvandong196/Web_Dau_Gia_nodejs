@@ -187,90 +187,14 @@ productRoute.post('/add/:userID', function(req, res) {
 
 productRoute.post('/search', function(req, res) {
     var text = req.body.search;
+    var opt = req.body.option;
     var entity ={
      search: text
  };
  var result;
  var products;
- var name = text;
-
+var name = text;
  product.findbyName(entity).then(function(rows){
-
-    if(rows.length === 0)
-    {
-        product.findbyCat(entity)
-        .then(function(kq) {
-            var rec_per_page = 4;
-            var curPage = req.query.page ? req.query.page : 1;
-            var offset = (curPage - 1) * rec_per_page;
-
-            if(kq.length)
-            {
-             product.loadPageByCat(kq[0].CatID, rec_per_page, offset)
-             .then(function(data) {
-
-                var number_of_pages = data.total / rec_per_page;
-                if (data.total % rec_per_page > 0) {
-                    number_of_pages++;
-                }
-
-                var pages = [];
-                for (var i = 1; i <= number_of_pages; i++) {
-                    pages.push({
-                        pageValue: i,
-                        isActive: i === +curPage
-                    });
-                }
-
-                res.render('product/byCat', {
-                    layoutModels: res.locals.layoutModels,
-                    products: data.list,
-                    isEmpty: data.total === 0,
-                    catId: kq[0].CatID,
-                    name : name,
-                    pages: pages,
-                    curPage: curPage,
-                    prevPage: curPage - 1,
-                    nextPage: curPage + 1,
-                    showPrevPage: curPage > 1,
-                    showNextPage: curPage < number_of_pages - 1,
-                });
-            });
-         }
-
-         else {
-            res.render('product/search', {
-                layoutModels: res.locals.layoutModels,
-                isEmpty: true,
-            });
-        }
-
-    });
-    }
-    if(rows.length != 0)
-    {
-     res.render('product/search', {
-        layoutModels: res.locals.layoutModels,
-        name:name,
-        result: rows,
-    });
- }
-
-
-});
-});
-
-
-productRoute.post('/sort', function(req, res) {
-    var text = req.body.search;
-    var opt = req.body.option;
-    var entity ={
-     search: text
- };
-     var result;
-     var products;
-    var name = text;
-    product.findbyName(entity).then(function(rows){
 
     if(rows.length === 0)
     {
@@ -337,7 +261,7 @@ productRoute.post('/sort', function(req, res) {
            }
 
            else {
-            res.render('product/sort', {
+            res.render('product/search', {
                 layoutModels: res.locals.layoutModels,
                 isEmpty: true,
             });
@@ -372,7 +296,7 @@ productRoute.post('/sort', function(req, res) {
                 }
             }
         }
-        res.render('product/sort', {
+        res.render('product/search', {
             layoutModels: res.locals.layoutModels,
             name:name,
             result: rows,
