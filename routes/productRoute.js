@@ -307,4 +307,42 @@ var name = text;
 });
 });
 
+productRoute.get('/byFavorite', function(req, res) {
+
+    var rec_per_page = 6;
+    var curPage = req.query.page ? req.query.page : 1;
+    var offset = (curPage - 1) * rec_per_page;
+    var userIDcurrent = -1;
+    if (res.locals.layoutModels.isLogged)
+        userIDcurrent = res.locals.layoutModels.curUser.id;
+    product.loadPageByFavorite(userIDcurrent, rec_per_page, offset).then(function(data) {
+        console.log("[ProductRoute] Da lay danh sach yeu thich: SoLuong = " + data.list.length)
+        var number_of_pages = data.total / rec_per_page;
+        if (data.total % rec_per_page > 0) {
+            number_of_pages++;
+        }
+
+        var pages = [];
+        for (var i = 1; i <= number_of_pages; i++) {
+            pages.push({
+                pageValue: i,
+                isActive: i === +curPage
+            });
+        }
+
+        res.render('product/byFavorite', {
+            layoutModels: res.locals.layoutModels,
+            products: data.list,
+            isEmpty: data.total === 0,
+            catId: req.params.id,
+            isLogged: userIDcurrent === -1,
+            pages: pages,
+            curPage: curPage,
+            prevPage: curPage - 1,
+            nextPage: curPage + 1,
+            showPrevPage: curPage > 1,
+            showNextPage: curPage < number_of_pages - 1,
+        });
+    });
+});
 module.exports = productRoute;
