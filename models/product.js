@@ -138,9 +138,10 @@ exports.findbyName = function(entity) {
 
     var deferred = Q.defer();
     var sql = mustache.render(
-        'SELECT * FROM products where ProName LIKE "%{{search}}%"',
+        'SELECT * FROM products where ProName LIKE N' + "'%{{search}}%'",
         entity        
         );
+
 
     db.load(sql).then(function(rows) {
         if (rows) {
@@ -157,7 +158,7 @@ exports.findbyCat = function(entity) {
 
     var deferred = Q.defer();
     var sql = mustache.render(
-        'SELECT CatID FROM categories where CatName LIKE "%{{search}}%"',
+        'SELECT CatID FROM categories where CatName LIKE N' + "'%{{search}}%'",
         entity        
         );  
     
@@ -167,11 +168,9 @@ exports.findbyCat = function(entity) {
         } else {
          deferred.resolve(null);
      }
-    });
-
+ });
     return deferred.promise;
 }
-
 // exports.makeCartItem = function(id, q) {
 
 //     var deferred = Q.defer();
