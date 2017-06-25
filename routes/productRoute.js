@@ -154,6 +154,7 @@ productRoute.post('/add/:userID', function(req, res) {
                                  thumb({
                                           source: dest + '/1.jpg',
                                           destination: dest,
+                                          width: 150,
                                         }, function(files, err, stdout, stderr) {
                                           console.log('Created thumb images!');
                                     });
@@ -266,10 +267,10 @@ productRoute.post('/sort', function(req, res) {
     var entity ={
      search: text
  };
- var result;
- var products;
-var name = text;
- product.findbyName(entity).then(function(rows){
+     var result;
+     var products;
+    var name = text;
+    product.findbyName(entity).then(function(rows){
 
     if(rows.length === 0)
     {
