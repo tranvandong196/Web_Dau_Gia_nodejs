@@ -68,16 +68,6 @@ accountRoute.post('/logout', restrict, function(req, res) {
 });
 
 accountRoute.get('/register', function(req, res) {
-    // account.loadAll()
-    // .then(function(rows){
-    //     res.render('account/register', {
-    //     layoutModels: res.locals.layoutModels,
-    //     showMsg: false,
-    //     error: false,
-    //     msg: '',
-    //     users: rows,
-    // });
-    // });
     res.render('account/register', {
         layoutModels: res.locals.layoutModels,
         showMsg: false,
@@ -102,6 +92,7 @@ accountRoute.post('/register', function(req, res) {
         permission: 0,
         scorePlus: 0,
         scoreMinus: 0,
+        score: 1,
     };
 
     account.insert(entity)
@@ -182,7 +173,7 @@ accountRoute.post('/delete', restrict, function(req, res) {
 
 accountRoute.get('/manageCategories', restrict, function(req, res) {
     category.loadAll().then(function(rows){
-       res.render('account/manageRequests', {
+       res.render('account/manageCategories', {
             layoutModels: res.locals.layoutModels,
             categories: rows,
             showMsg: false,

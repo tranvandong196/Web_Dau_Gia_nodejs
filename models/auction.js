@@ -26,7 +26,7 @@ exports.deleteByUserID = function(id) {
 
     var sql =
         mustache.render(
-            'delete from auctions where UserID = ' + id;
+            'delete from auctions where UserID = ' + id,
             entity
         );
 
@@ -43,7 +43,7 @@ exports.deleteByProID = function(id) {
 
     var sql =
         mustache.render(
-            'delete from auctions where ProID = ' + id;
+            'delete from auctions where ProID = ' + id,
             entity
         );
 
