@@ -16,6 +16,10 @@
         <form id="frmSearch" method="post" action="/product/search">
             <input name="search" id="textSearch" class="hidden"></input>
         </form>
+          <form id="frmSort" method="post" action="/product/sort">
+            <input name="search" id="textSort" class="hidden"></input>
+            <input name="option" id="textOption" class="hidden"></input>
+        </form>
         <div class="container-fluid">
             <div class="row">
                 <div style="margin-top: 25px">
@@ -60,6 +64,17 @@
         $('#search').on('click', function () {
             $('#textSearch').val($('#txtSearch').val());
             $('#frmSearch').submit();
+        });
+    </script>
+      <script type="text/javascript">
+        $('#sort1').on('click', function () {
+            $('#textOption').val("1");
+            $('#frmSort').submit();
+        });
+
+         $('#sort2').on('click', function () {
+            $('#textOption').val("2");
+            $('#frmSort').submit();
         });
     </script>
     {{{_sections.js}}}
