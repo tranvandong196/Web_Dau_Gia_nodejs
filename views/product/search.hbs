@@ -11,7 +11,7 @@
     });
 </script>
 <script type="text/javascript">
-    $('#textSort').val($('#txtname').val());
+    $('#textSearch').val($('#txtname').val());
 </script>
 {{/section}}
 
@@ -26,7 +26,7 @@ Không có sản phẩm!
     <input type="hidden" id="txtname" value="{{name}}" />
     {{#each result }}
     <div class="col-md-4">
-        <div class="thumbnail" style="min-height: 390px; max-width: 300px">
+        <div class="thumbnail">
             <img src="/images/{{ProID}}/1_thumb.jpg" title="{{ProName}}" />
             <div class="caption">
                 <h4>{{ProName}}</h4>

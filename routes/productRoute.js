@@ -214,13 +214,13 @@ productRoute.post('/add/:userID', function(req, res) {
 
 productRoute.post('/search', function(req, res) {
     var text = req.body.search;
+    var opt = req.body.option;
     var entity ={
      search: text
  };
  var result;
  var products;
- var name = text;
-
+var name = text;
  product.findbyName(entity).then(function(rows){
 
     if(rows.length === 0)
@@ -362,7 +362,7 @@ productRoute.post('/sort', function(req, res) {
            }
 
            else {
-            res.render('product/sort', {
+            res.render('product/search', {
                 layoutModels: res.locals.layoutModels,
                 isEmpty: true,
             });
@@ -397,7 +397,7 @@ productRoute.post('/sort', function(req, res) {
                 }
             }
         }
-        res.render('product/sort', {
+        res.render('product/search', {
             layoutModels: res.locals.layoutModels,
             name:name,
             result: rows,
