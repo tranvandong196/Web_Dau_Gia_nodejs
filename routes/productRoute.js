@@ -7,19 +7,9 @@ var restrict = require('../middle-wares/restrict');
 var multer  = require('multer');
 var fs = require('fs');
 var thumb = require('node-thumbnail').thumb;
+var favorite = require('../models/favorite');
 
 productRoute.get('/byCat/:id', function(req, res) {
-
-    // product.loadAllByCat(req.params.id)
-    //     .then(function(list) {
-    //         res.render('product/byCat', {
-    //             layoutModels: res.locals.layoutModels,
-    //             products: list,
-    //             isEmpty: list.length === 0,
-    //             catId: req.params.id
-    //         });
-    //     });
-
     var rec_per_page = 6;
     var curPage = req.query.page ? req.query.page : 1;
     var offset = (curPage - 1) * rec_per_page;
@@ -58,6 +48,7 @@ productRoute.get('/byCat/:id', function(req, res) {
 
 productRoute.get('/detail/:id', function(req, res) {
     var indexs = [];
+    var user = res.locals.layoutModels.curUser;
     fs.readdir('./public/images/' + req.params.id, (err, files) => {
         for(var i = 1; i < files.length; i++)
         {
@@ -69,30 +60,35 @@ productRoute.get('/detail/:id', function(req, res) {
     .then(function(pro) {
         var indexs = [];
         fs.readdir('./public/images/' + req.params.id, (err, files) => {
-            for(var i = 1; i < files.length; i++)
-            {
-                var temp = {
-                    stt: i,
-                };
-                indexs.push(temp);
-            }
-            var user = res.locals.layoutModels.curUser;
-            var score = 0;
-            if(user.score)
-                score = user.score;
-            var x = parseFloat(0.8);
-            console.log(indexs[0].stt);
-            if (pro) {
-                res.render('product/detail', {
-                    layoutModels: res.locals.layoutModels,
-                    product: pro,
-                    isPermit: score > x,
-                    indexs: indexs,
-                    proID: req.params.id,
-                });
-            } else {
-                res.redirect('/home');
-            }
+            var entity = {
+                proID: req.params.id,
+                userID: user.id,
+            };
+            favorite.isLoved(entity).then(function(isLoved){
+                for(var i = 1; i < files.length; i++)
+                {
+                    var temp = {
+                        stt: i,
+                    };
+                    indexs.push(temp);
+                }
+                var score = 0;
+                if(user.score)
+                    score = user.score;
+                var x = parseFloat(0.8);
+                if (pro) {
+                    res.render('product/detail', {
+                        layoutModels: res.locals.layoutModels,
+                        product: pro,
+                        isPermit: score > x,
+                        indexs: indexs,
+                        proID: req.params.id,
+                        isLoved: isLoved,
+                    });
+                } else {
+                    res.redirect('/home');
+                }
+            })
         });
     });
 });
@@ -105,8 +101,34 @@ productRoute.get('/add', restrict, function(req, res) {
             categories: rows,
         };
         res.render('product/add', vm);
-        });
     });
+});
+
+productRoute.get('/addLove/:id', restrict, function(req, res) {
+    //TODO
+    var id = req.params.id;
+    var user = res.locals.layoutModels.curUser;
+    var entity = {
+        proID: id,
+        userID: user.id,
+    };
+    favorite.insert(entity).then(function(insertId){
+        res.redirect('/product/detail/' + id);
+    })
+});
+
+productRoute.get('/removeLove/:id', restrict, function(req, res) {
+    //TODO
+    var id = req.params.id;
+    var user = res.locals.layoutModels.curUser;
+    var entity = {
+        proID: id,
+        userID: user.id,
+    };
+    favorite.delete(entity).then(function(affectedRows){
+        res.redirect('/product/detail/' + id);
+    })
+});
 
 productRoute.post('/add/:userID', function(req, res) {
 
@@ -284,7 +306,6 @@ var name = text;
     }
     });
 });
-
 
 productRoute.post('/sort', function(req, res) {
     var text = req.body.search;
