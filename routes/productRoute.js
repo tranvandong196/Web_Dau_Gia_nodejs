@@ -60,11 +60,38 @@ productRoute.get('/detail/:id', function(req, res) {
     .then(function(pro) {
         var indexs = [];
         fs.readdir('./public/images/' + req.params.id, (err, files) => {
-            var entity = {
-                proID: req.params.id,
-                userID: user.id,
-            };
-            favorite.isLoved(entity).then(function(isLoved){
+            if(user)
+            {
+                var entity = {
+                    proID: req.params.id,
+                    userID: user.id,
+                };
+                favorite.isLoved(entity).then(function(isLoved){
+                    for(var i = 1; i < files.length; i++)
+                    {
+                        var temp = {
+                            stt: i,
+                        };
+                        indexs.push(temp);
+                    }
+                    var score = user.score;
+                    var x = parseFloat(0.8);
+                    if (pro) {
+                        res.render('product/detail', {
+                            layoutModels: res.locals.layoutModels,
+                            product: pro,
+                            isPermit: score > x,
+                            indexs: indexs,
+                            proID: req.params.id,
+                            isLoved: isLoved,
+                        });
+                    } else {
+                        res.redirect('/home');
+                    }
+                });
+            }
+            else
+            {
                 for(var i = 1; i < files.length; i++)
                 {
                     var temp = {
@@ -73,22 +100,20 @@ productRoute.get('/detail/:id', function(req, res) {
                     indexs.push(temp);
                 }
                 var score = 0;
-                if(user.score)
-                    score = user.score;
                 var x = parseFloat(0.8);
                 if (pro) {
                     res.render('product/detail', {
                         layoutModels: res.locals.layoutModels,
                         product: pro,
-                        isPermit: score > x,
+                        isPermit: false,
                         indexs: indexs,
                         proID: req.params.id,
-                        isLoved: isLoved,
+                        isLoved: false,
                     });
                 } else {
                     res.redirect('/home');
                 }
-            })
+            }
         });
     });
 });

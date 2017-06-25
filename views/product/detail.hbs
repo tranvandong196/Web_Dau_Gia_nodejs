@@ -68,8 +68,9 @@
                 </div>
             </form>
             {{/if}}
-            {{#if ../isLoved }}
-            <div class="row">
+            {{#if ../layoutModels.isLogged }}
+             {{#if ../isLoved }}
+            <div class="row" style="margin-top: 20px">
                 <div class="col-sm-offset-2">
                   <a href="/product/removeLove/{{ProID}}" role="button" class="btn btn-danger">
                     <span class="glyphicon glyphicon-remove"></span>
@@ -78,7 +79,7 @@
                 </div>
             </div>
             {{else}}
-            <div class="row">
+            <div class="row" style="margin-top: 20px">
                 <div class="col-sm-offset-2">
                     <a href="/product/addLove/{{ProID}}" role="button" class="btn btn-danger">
                         <span class="glyphicon glyphicon-heart"></span>
@@ -86,6 +87,7 @@
                     </a>
                 </div>
             </div>
+            {{/if}}
             {{/if}}
         </div>
         <div class="col-md-7">

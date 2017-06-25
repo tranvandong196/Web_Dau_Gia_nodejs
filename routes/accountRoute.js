@@ -61,6 +61,7 @@ accountRoute.post('/login', function(req, res) {
 
 accountRoute.post('/logout', restrict, function(req, res) {
     req.session.isLogged = false;
+    req.session.isLogged = false;
     req.session.user = null;
     req.session.cart = null;
     req.session.cookie.expires = new Date(Date.now() - 1000);
