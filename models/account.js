@@ -32,7 +32,7 @@ exports.insert = function(entity) {
         }
         sql =
             mustache.render(
-                'insert into users (Username, Password, Name, Email, DOB, Permission, ScorePlus, ScoreMinus, Score, Address) values ("{{username}}", "{{password}}", "{{name}}", "{{email}}", "{{dob}}", {{permission}}, {{scorePlus}}, {{scoreMinus}}, {{score}}, "{{address}}")',
+                'insert into users (Username, Password, Name, Email, DOB, Permission, ScorePlus, ScoreMinus, Score, Address) values ("{{username}}", "{{password}}", "{{name}}", "{{email}}", "{{dOB}}", {{permission}}, {{scorePlus}}, {{scoreMinus}}, {{score}}, "{{address}}")',
                 entity
             );
 
@@ -64,8 +64,9 @@ exports.login = function(entity) {
                 scorePlus: rows[0].ScorePlus,
                 scoreMinus: rows[0].ScoreMinus,
                 score: rows[0].Score,
-                dob: rows[0].DOB,
-                permission: rows[0].Permission
+                dOB: rows[0].DOB,
+                permission: rows[0].Permission,
+                password: rows[0].Password,
             }
             deferred.resolve(user);
         } else {
@@ -156,6 +157,63 @@ exports.resetPW = function(id){
         db.update(sql),
     ]).then(function(changedRows){
         deferred.resolve(changedRows);
+    });
+    return deferred.promise;
+}
+
+exports.changeProfile = function(entity){
+    var deferred = Q.defer();
+    var sql = mustache.render('select * from users where ID != {{id}}', entity);
+    console.log(entity.dOB);
+    db.load(sql).then(function(rows)
+    {
+        var email = mustache.render('{{email}}', entity);
+        var address = mustache.render('{{address}}', entity);
+        for (var i = 0; i < rows.length; i++) {
+            if(rows[i].Email === email)
+                {
+                    deferred.resolve(-2);
+                    return;
+                }
+            else if(rows[i].Address === address)
+                {
+                    deferred.resolve(-1);
+                    return;
+                }
+        }
+        sql =
+            mustache.render(
+                'update users set Name = "{{name}}", Email = "{{email}}", DOB = "{{dOB}}", Address = "{{address}}" where ID = {{id}}',
+                entity
+            );
+
+        db.update(sql).then(function(changedRows) {
+            deferred.resolve(changedRows);
+        });
+    });
+    return deferred.promise;
+}
+
+exports.changePassword = function(entity){
+    var deferred = Q.defer();
+    var sql = 'select * from users where ID = ' + entity.id;
+    db.load(sql).then(function(rows)
+    {
+        var password = entity.password;
+        if(rows[0].Password !== password)
+            {
+                deferred.resolve(-1);
+                return;
+            }
+        sql =
+            mustache.render(
+                'update users set Password = "{{newPW}}" where ID = {{id}}',
+                entity
+            );
+
+        db.update(sql).then(function(changedRows) {
+            deferred.resolve(changedRows);
+        });
     });
     return deferred.promise;
 }

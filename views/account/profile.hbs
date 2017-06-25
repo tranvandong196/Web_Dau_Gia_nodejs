@@ -37,7 +37,7 @@
                     required: true,
                     email: true,
                 },
-                dob: {
+                dOB: {
                     required: true
                 },
                 address: {
@@ -56,7 +56,7 @@
                     required: 'Vui lòng nhập email',
                     email: 'EMail không đúng định dạng'
                 },
-                dob: {
+                dOB: {
                     required: 'Vui lòng chọn ngày sinh'
                 },
                 address: {
@@ -85,120 +85,138 @@
 {{/section}}
 {{!-- body --}}
 <!-- Body -->
-    <form id="frmchangeProfile" method="post" action="" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="margin-bottom: 20px">
-        <div class="mainbox" id="loginbox">
-            <div class="panel panel-info">
-                <div class="panel-heading ">
-                    <div class="panel-title">
-                        Thông tin cá nhân
-                    </div>
-                    <div style="float:right; font-size: 80%; position: relative; top:-20px">
-                        <button  id="changeProfile" type="button"  class="btn btn-default btn-xs">
-                            Chỉnh sửa thông tin cá nhân
-                        </button>
-                    </div>
+{{#if showMsg }}
+    {{#if error }}
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Warning!</strong> {{ msg }}
+        </div>
+    {{else}}
+        <div class="alert alert-success alert-info" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Success!</strong> {{ msg }}
+        </div>
+    {{/if}}        
+{{/if}}
+<form id="frmchangeProfile" method="post" action="/account/profile" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="margin-bottom: 20px">
+    <div class="mainbox" id="loginbox">
+        <div class="panel panel-info">
+            <div class="panel-heading ">
+                <div class="panel-title">
+                    Thông tin cá nhân
                 </div>
-                <div  class="panel-body" style="padding-top:30px;">
-                    <div class="form-horizontal col-sm-12" role="form">
-                        <div class="input-group" id="inputUsername">
-                            <span class="input-group-addon">
-                                <i class="glyphicon glyphicon-user">
-                                </i>
-                            </span>
-                            <input class="form-control" placeholder="Username" type="text" name="username" >
-                            </input>
+                <div style="float:right; font-size: 80%; position: relative; top:-20px">
+                    <button  id="changeProfile" type="button"  class="btn btn-default btn-xs">
+                        Chỉnh sửa thông tin cá nhân
+                    </button>
+                </div>
+            </div>
+            {{#with layoutModels.curUser}}
+            <div  class="panel-body" style="padding-top:30px;">
+                <div class="form-horizontal col-sm-12" role="form">
+                    <div class="input-group" id="inputUsername">
+                        <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-user">
+                            </i>
+                        </span>
+                        <input class="form-control" placeholder="Username" type="text" name="username" value="{{username}}">
+                        </input>
+                    </div>
+                    <div id="spaceline"><br></div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-envelope">
+                            </i>
+                        </span>
+                        <input class="form-control" placeholder="Your Email" type="text" name="email" value="{{email}}">
+                        </input>
+                    </div>
+                    <div><br></div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-tag">
+                            </i>
+                        </span>
+                        <input class="form-control" type="text" placeholder="Your Fullname" name="name" value="{{name}}">
+                        </input>
+                    </div>
+                    <div><br></div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-calendar">
+                            </i>
+                        </span>
+                        <input class="form-control datepicker" type="text" placeholder="Your Birthday" name="dOB" value="{{dOB}}">
+                        </input>
+                    </div>
+                    <div><br></div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-map-marker">
+                            </i>
+                        </span>
+                        <input class="form-control" placeholder="Your Address" type="text" name="address" value="{{address}}">
+                        </input>
+                    </div>
+                    <div><br></div>
+                    <!-- Điểm đánh giá  -->
+                    <div class="row form-horizontal" id="userScore">
+                    	<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <label class="control-label">Điểm đánh giá</label>
                         </div>
-                        <div id="spaceline"><br></div>
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <i class="glyphicon glyphicon-envelope">
-                                </i>
-                            </span>
-                            <input class="form-control" placeholder="Your Email" type="text" name="email" >
-                            </input>
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <div class="form-group has-success has-feedback">		  	
+							  <div class="input-group">
+							    <span class="input-group-addon">
+							    	<i class="glyphicon glyphicon-plus-sign">
+                                	</i>
+							    </span>
+							    <input type="text" class="form-control" name="scorePlus" value="{{scorePlus}}">
+                                </inpput>
+							  </div>
+							</div>
                         </div>
-                        <div><br></div>
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <i class="glyphicon glyphicon-tag">
-                                </i>
-                            </span>
-                            <input class="form-control" type="text" placeholder="Your Fullname" name="name"  >
-                            </input>
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-left: 10px">
+                            <div class="form-group has-error has-feedback">
+							  <div class="input-group">
+							    <span class="input-group-addon">
+							    	<i class="glyphicon glyphicon-minus-sign">
+                                	</i>
+							    </span>
+							    <input type="text" class="form-control" name="scoreMinus" value="{{scoreMinus}}">
+                                </inpput>
+							  </div>
+							</div>
                         </div>
-                        <div><br></div>
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <i class="glyphicon glyphicon-calendar">
-                                </i>
-                            </span>
-                            <input class="form-control datepicker" type="text" placeholder="Your Birthday" name="dob"  >
-                            </input>
-                        </div>
-                        <div><br></div>
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <i class="glyphicon glyphicon-map-marker">
-                                </i>
-                            </span>
-                            <input class="form-control" placeholder="Your Address" type="text" name="address"  >
-                            </input>
-                        </div>
-                        <div><br></div>
-                        <!-- Điểm đánh giá  -->
-                        <div class="row form-horizontal" id="userScore">
-                        	<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                <label class="control-label">Điểm đánh giá</label>
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                <div class="form-group has-success has-feedback">		  	
-								  <div class="input-group">
-								    <span class="input-group-addon">
-								    	<i class="glyphicon glyphicon-plus-sign">
-                                    	</i>
-								    </span>
-								    <input type="text" class="form-control" name="scorePlus" >
-								  </div>
-								</div>
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-left: 10px">
-                                <div class="form-group has-error has-feedback">
-								  <div class="input-group">
-								    <span class="input-group-addon">
-								    	<i class="glyphicon glyphicon-minus-sign">
-                                    	</i>
-								    </span>
-								    <input type="text" class="form-control" name="scoreMinus">
-								  </div>
-								</div>
-                            </div>
-                        </div>
-                        <!-- End điểm đánh giá -->
-                        <div class="form-group">
-                            <div class="col-md-12 control">
-                                <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
-	                                <div class="row">
-                                        <div class="col-md-2" id="goback" hidden>
-                                            <a href="/account/profile">Trở về</a>  
-                                        </div>
-
-                                        <div class="col-md-2 col-md-offset-7">
-    										<button type="submit" class="btn btn-success" id="save" hidden>
-											Lưu thay đổi
-											</button>	
-    									</div>
+                    </div>
+                    <!-- End điểm đánh giá -->
+                    <div class="form-group">
+                        <div class="col-md-12 control">
+                            <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
+                                <div class="row">
+                                    <div class="col-md-2" id="goback" hidden>
+                                        <a href="/account/profile">Trở về</a>  
                                     </div>
-                                    <a  id="changePassword" href="/account/changePassword">
-                                        Đổi mật khẩu
-                                    </a>
+
+                                    <div class="col-md-2 col-md-offset-7">
+										<button type="submit" class="btn btn-success" id="save" hidden>
+										Lưu thay đổi
+										</button>	
+									</div>
                                 </div>
+                                <a  id="changePassword" href="/account/changePassword">
+                                    Đổi mật khẩu
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {{/with}}
         </div>
-    </form>
+    </div>
+</form>
     <!-- END Body -->
 {{!-- end body --}}
 

@@ -61,7 +61,7 @@ accountRoute.post('/login', function(req, res) {
 
 accountRoute.post('/logout', restrict, function(req, res) {
     req.session.isLogged = false;
-    req.session.isLogged = false;
+    req.session.isAdmin = false;
     req.session.user = null;
     req.session.cart = null;
     req.session.cookie.expires = new Date(Date.now() - 1000);
@@ -80,8 +80,7 @@ accountRoute.get('/register', function(req, res) {
 accountRoute.post('/register', function(req, res) {
 
     var ePWD = crypto.createHash('md5').update(req.body.rawPWD).digest('hex');
-    var nDOB = moment(req.body.dob, 'D/M/YYYY').format('YYYY-MM-DDTHH:mm');
-    
+    var nDOB = moment(req.body.dOB, 'D/M/YYYY').format('YYYY-MM-DDTHH:mm');
 
     var entity = {
         username: req.body.username,
@@ -89,7 +88,7 @@ accountRoute.post('/register', function(req, res) {
         name: req.body.name,
         email: req.body.email,
         address: req.body.address,
-        dob: nDOB,
+        dOB: nDOB,
         permission: 0,
         scorePlus: 0,
         scoreMinus: 0,
@@ -131,8 +130,8 @@ accountRoute.post('/register', function(req, res) {
                     showMsg: true,
                     error: false,
                     msg: 'Đăng ký thành công.',
-                });
         });
+    });
 });
 
 accountRoute.get('/profile', restrict, function(req, res) {
@@ -146,6 +145,85 @@ accountRoute.get('/changePassword', restrict, function(req, res) {
         layoutModels: res.locals.layoutModels
     });
 });
+
+accountRoute.post('/profile', restrict, function(req, res) {
+    var nDOB = moment(req.body.dOB).format('YYYY-MM-DDTHH:mm');
+    var entity = {
+        id: res.locals.layoutModels.curUser.id,
+        name: req.body.name,
+        email: req.body.email,
+        address: req.body.address,
+        dOB: nDOB,
+        password: res.locals.layoutModels.curUser.password,
+        username: res.locals.layoutModels.curUser.username,
+    };
+    account.changeProfile(entity)
+    .then(function(rs) {
+        if(rs === -2)
+        {
+            res.render('account/profile', {
+                layoutModels: res.locals.layoutModels,
+                showMsg: true,
+                error: true,
+                msg: 'Email này đã có người sử dụng.',
+            });
+        }
+        else if(rs === -1)
+        {
+            res.render('account/profile', {
+                layoutModels: res.locals.layoutModels,
+                showMsg: true,
+                error: true,
+                msg: 'Địa chỉ này đã có người sử dụng.',
+            });
+        }
+        else
+        {
+            account.login(entity).then(function(user){
+                res.locals.layoutModels.curUser = user;
+                req.session.user = user;
+
+                res.render('account/profile', {
+                    layoutModels: res.locals.layoutModels,
+                    showMsg: true,
+                    error: false,
+                    msg: 'Thông tin đã được thay đổi.',
+                });
+            })
+        }
+    });
+});
+
+accountRoute.post('/changePassword', restrict, function(req, res) {
+    var ePWD = crypto.createHash('md5').update(req.body.rawPWDnew1).digest('hex');
+    var PW = crypto.createHash('md5').update(req.body.rawPWDold).digest('hex');
+    var entity = {
+        id: res.locals.layoutModels.curUser.id,
+        password: PW,
+        newPW: ePWD,
+    };
+    account.changePassword(entity).then(function(rs){
+        if(rs === -1)
+        {
+            res.render('account/changePassword', {
+                layoutModels: res.locals.layoutModels,
+                showMsg: true,
+                error: true,
+                msg: 'Mật khẩu cũ không đúng.',
+            });
+        }
+        else
+        {
+            res.render('account/changePassword', {
+                layoutModels: res.locals.layoutModels,
+                showMsg: true,
+                error: false,
+                msg: 'Mật khẩu đã được đổi thành công.',
+            });
+        }
+    });
+});
+
 accountRoute.get('/manageUsers', restrict, function(req, res) {
     account.loadAll().then(function(rows){
         for(var i = 0; i < rows.length; i++) {
