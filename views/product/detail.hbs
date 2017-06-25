@@ -22,6 +22,17 @@
             verticalButtons: true,
         });
     </script>
+    <script type="text/javascript">
+        $('#img2').on('click', function() {
+            $('#img0').attr('src', $('#img2').attr('src'));
+        });
+        $('#img1').on('click', function() {
+            $('#img0').attr('src', $('#img1').attr('src'));
+        });
+        $('#img3').on('click', function() {
+            $('#img0').attr('src', $('#img3').attr('src'));
+        });
+    </script>
 {{/section}}
 
 {{#with product }}
@@ -39,14 +50,14 @@
             <div class="padding">
                 {{{FullDes}}}
             </div>
-            {{#if ../layoutModels.isLogged }}
-            <form class="form-horizontal padding" id="frmAddItem" method="post" action="/cart/add">
+            {{#if ../isPermit }}
+            <form class="form-horizontal padding" id="frmAddItem" method="post" action="/auction/add">
                 <div class="form-group" style="margin-top: 50px; margin-left: 10px">
-                    <input type="hidden" id="txtP" name="proId" value="{{ProID}}" />
+                    <input type="hidden" id="txtP" name="proID" value="{{ProID}}" />
                     <input type="hidden" id="txtStep" value="{{DeltaPrice}}" />
                     <div class="row">
                         <div class="col-sm-6">
-                            <input id="txtQ" name="quantity" type="text" class="form-control" placeholder="Slg" value="{{Price}}">
+                            <input id="txtQ" name="price" type="text" class="form-control" placeholder="" value="{{Price}}">
                         </div><!-- /input-group -->
                         <div class="col-sm-6">
                             <button class="btn btn-primary padding" type="submit">
@@ -59,7 +70,17 @@
             {{/if}}
         </div>
         <div class="col-md-7">
-            <img src="/images/{{ProID}}/1.jpg" style="max-width: 500px; max-height: 400px" />
+            <img src="/images/{{ProID}}/1.jpg" id="img0" height="450" width="500"/>
+            <div class="row">
+                <div class="col-sm-3">
+                    
+                </div>
+                {{#each ../indexs}}
+                <div class="col-sm-2">
+                    <img src="/images/{{../../proID}}/{{stt}}.jpg" id="img{{stt}}" height="50" width="50"/>
+                </div>
+                {{/each}}
+            </div>
         </div>
     </div>
 {{/with}}

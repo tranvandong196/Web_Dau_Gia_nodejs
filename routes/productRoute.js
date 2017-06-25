@@ -57,16 +57,43 @@ productRoute.get('/byCat/:id', function(req, res) {
 });
 
 productRoute.get('/detail/:id', function(req, res) {
+    var indexs = [];
+    fs.readdir('./public/images/' + req.params.id, (err, files) => {
+        for(var i = 1; i < files.length; i++)
+        {
+            var temp = {index: i,};
+            indexs.push(temp);
+        }
+    });
     product.loadDetail(req.params.id)
     .then(function(pro) {
-        if (pro) {
-            res.render('product/detail', {
-                layoutModels: res.locals.layoutModels,
-                product: pro,
-            });
-        } else {
-            res.redirect('/home');
-        }
+        var indexs = [];
+        fs.readdir('./public/images/' + req.params.id, (err, files) => {
+            for(var i = 1; i < files.length; i++)
+            {
+                var temp = {
+                    stt: i,
+                };
+                indexs.push(temp);
+            }
+            var user = res.locals.layoutModels.curUser;
+            var score = 0;
+            if(user.score)
+                score = user.score;
+            var x = parseFloat(0.8);
+            console.log(indexs[0].stt);
+            if (pro) {
+                res.render('product/detail', {
+                    layoutModels: res.locals.layoutModels,
+                    product: pro,
+                    isPermit: score > x,
+                    indexs: indexs,
+                    proID: req.params.id,
+                });
+            } else {
+                res.redirect('/home');
+            }
+        });
     });
 });
 
@@ -88,10 +115,10 @@ productRoute.post('/add/:userID', function(req, res) {
         fs.mkdirSync(dir + '/temp');
     var storage = multer.diskStorage({
         destination: function(req,file,cb){
-            cb(null,dir + '/temp')
+            cb(null, dir + '/temp')
         },
         filename: function(req,file,cb){
-            cb(null,file.originalname)
+            cb(null, file.originalname)
         }
     });
     var files;
@@ -249,15 +276,13 @@ productRoute.post('/search', function(req, res) {
     }
     if(rows.length != 0)
     {
-     res.render('product/search', {
-        layoutModels: res.locals.layoutModels,
-        name:name,
-        result: rows,
+         res.render('product/search', {
+            layoutModels: res.locals.layoutModels,
+            name:name,
+            result: rows,
+        });
+    }
     });
- }
-
-
-});
 });
 
 
