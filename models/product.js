@@ -1,6 +1,7 @@
 var Q = require('q');
 var mustache = require('mustache');
 var db = require('../app-helpers/dbHelper');
+var fs = require('fs');
 
 exports.loadPageByCat = function(id, limit, offset) {
 
@@ -114,7 +115,6 @@ exports.insert = function(entity) {
         'insert into products (ProName, TinyDes, FullDes, Price, CatID, Quantity, PriceToBuy, UserID, HandleID, TimeUp, TimeDown, DeltaPrice) values ("{{proName}}", "{{tinyDes}}", "{{fullDes}}",{{price}}, {{catID}}, {{quantity}}, {{priceToBuy}}, {{userID}}, {{handleID}}, "{{timeUp}}", "{{timeDown}}", {{deltaPrice}})',
         entity        
         );
-    console.log(sql);
     db.insert(sql).then(function(insertId) {
         deferred.resolve(insertId);
     });
@@ -171,6 +171,7 @@ exports.findbyCat = function(entity) {
 
     return deferred.promise;
 }
+
 
 // exports.makeCartItem = function(id, q) {
 

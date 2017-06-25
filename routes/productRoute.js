@@ -6,6 +6,7 @@ var category = require('../models/category');
 var restrict = require('../middle-wares/restrict');
 var multer  = require('multer');
 var fs = require('fs');
+var thumb = require('node-thumbnail').thumb;
 
 productRoute.get('/byCat/:id', function(req, res) {
 
@@ -83,21 +84,24 @@ productRoute.get('/add', restrict, function(req, res) {
 productRoute.post('/add/:userID', function(req, res) {
 
     var dir = './public/images';
-
+    if(!fs.existsSync(dir + '/temp'))
+        fs.mkdirSync(dir + '/temp');
     var storage = multer.diskStorage({
         destination: function(req,file,cb){
-            cb(null,dir)
+            cb(null,dir + '/temp')
         },
         filename: function(req,file,cb){
             cb(null,file.originalname)
         }
     });
+    var files;
+    var dest;
     var upload = multer({storage: storage}).array('images');
     upload(req,res,function(err) {
 
         category.findIdByName(req.body.catName).then(function(row){
             var catID = row.CatID;
-            var files = req.files;
+            files = req.files;
             var id = req.params.userID;
             var now = new Date(Date.now()).toLocaleString();
             now = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -129,8 +133,9 @@ productRoute.post('/add/:userID', function(req, res) {
                 }
                 else
                 {
-                    var dest = dir + '/' + insertId;
-                    fs.mkdirSync(dest);
+                    dest = dir + '/' + insertId;
+                    if(!fs.existsSync(dest))
+                        fs.mkdirSync(dest);
                     var size = files.length;
                     if(size > 3)
                         size = 3;
@@ -140,22 +145,39 @@ productRoute.post('/add/:userID', function(req, res) {
                         fs.closeSync(fs.openSync(dest + '/' + i + '.jpg', 'w'));
 
                         //copy hình sang thư mục đích
-                        fs.createReadStream(dir + '/' + files[i - 1].originalname)
-                        .pipe(fs.createWriteStream(dest + '/' + i + '.jpg'));
+                        var stream = fs.createWriteStream(dest + '/' + i + '.jpg');
+                        if(i === 1)
+                        {
+                            fs.createReadStream(dir + '/temp/' + files[i - 1].originalname)
+                            .pipe(stream).on('finish', function () {
+                                //tạo thumbnail.jpg
+                                 thumb({
+                                          source: dest + '/1.jpg',
+                                          destination: dest,
+                                        }, function(files, err, stdout, stderr) {
+                                          console.log('Created thumb images!');
+                                    });
+                            });
+                        }
+                        else
+                        {
+                            fs.createReadStream(dir + '/temp/' + files[i - 1].originalname)
+                            .pipe(stream).on('finish', function () {
+                            });
+                        }
                     }
-
+       
                     for(var i = 1; i <= files.length; i++)
                     {
                         //xóa file hình đã lưu tạm
-                        fs.unlinkSync(dir + '/' + files[i - 1].originalname);
-                    }
-                   
+                        fs.unlinkSync(dir + '/temp/' + files[i - 1].originalname);
+                    }          
                     res.render('product/add', {
                         layoutModels: res.locals.layoutModels,
                         showMsg: true,
                         error: false,
                         msg: 'Thêm thành công.'
-                    });
+                    });     
                 }
             });
         });
