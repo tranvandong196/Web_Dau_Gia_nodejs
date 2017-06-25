@@ -74,24 +74,24 @@
                         </ul>
                     </div>
                     {{else}}
-                         <a href="/account/login">
-                            <i style=" font-size: 16px;">
-                            </i>
-                            <span style="color: rgb(0, 153, 242)">
-                                <span class="glyphicon glyphicon-user">
-                                </span>
-                                Đăng nhập
+                    <a href="/account/login">
+                        <i style=" font-size: 16px;">
+                        </i>
+                        <span style="color: rgb(0, 153, 242)">
+                            <span class="glyphicon glyphicon-user">
                             </span>
-                        </a>
-                        <a href="/account/register">
-                            <i style=" font-size: 15px;">
-                            </i>
-                            <span style="color: rgb(0, 153, 242)">
-                                <span class="glyphicon glyphicon-pencil">
-                                </span>
-                                Đăng Ký
+                            Đăng nhập
+                        </span>
+                    </a>
+                    <a href="/account/register">
+                        <i style=" font-size: 15px;">
+                        </i>
+                        <span style="color: rgb(0, 153, 242)">
+                            <span class="glyphicon glyphicon-pencil">
                             </span>
-                        </a>
+                            Đăng Ký
+                        </span>
+                    </a>
                     {{/if}}
                 </div>
             </div>
@@ -128,37 +128,40 @@
                         </a>
                     </li>
                     <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
-                        <a href="#">
-                            <i style="margin-right: 5px; font-size: 17px; top: -1px">
-                                Nội thất
-                            </i>
-                        </a>
-                    </li>
-                    {{#if layoutModels.isLogged }}
-                        <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
-                            <a href="index.html">
-                                <i style="margin-right: 5px; font-size: 17px; top: -1px">
-                                    Giỏ hàng
-                                    <span class="glyphicon glyphicon-shopping-cart">
-                                        {{layoutModels.cartSumQ}}
-                                    </span>
-                                </i>
-                            </a>
-                        </li>
-                    {{else}}
-                         <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
-                            <a href="index.html">
-                                <i style="margin-right: 5px; font-size: 17px; top: -1px">
-                                    Giỏ hàng
-                                    <span class="glyphicon glyphicon-shopping-cart">
-                                        {{layoutModels.cartSumQ}}
-                                    </span>
-                                </i>
-                            </a>
-                        </li>
-                    {{/if}}
-                </ul>
-            </div>
-        </header>
-    </div>
+                     <div class="dropdown">
+                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:100%">Sắp Xếp
+                          <span class="caret"></span></button>
+                          <ul class="dropdown-menu">
+                            <li><a href="#" id="sort1">Giá tăng dần</a></li>
+                            <li><a href="#" id="sort2">Thời gian kết thúc giảm dần</a></li>
+                        </ul>
+                    </div>
+                </li>
+                {{#if layoutModels.isLogged }}
+                <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
+                    <a href="index.html">
+                        <i style="margin-right: 5px; font-size: 17px; top: -1px">
+                            Giỏ hàng
+                            <span class="glyphicon glyphicon-shopping-cart">
+                                {{layoutModels.cartSumQ}}
+                            </span>
+                        </i>
+                    </a>
+                </li>
+                {{else}}
+                <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
+                    <a href="index.html">
+                        <i style="margin-right: 5px; font-size: 17px; top: -1px">
+                            Giỏ hàng
+                            <span class="glyphicon glyphicon-shopping-cart">
+                                {{layoutModels.cartSumQ}}
+                            </span>
+                        </i>
+                    </a>
+                </li>
+                {{/if}}
+            </ul>
+        </div>
+    </header>
+</div>
 </div>

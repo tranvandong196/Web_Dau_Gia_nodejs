@@ -149,6 +149,11 @@ accountRoute.get('/profile', restrict, function(req, res) {
     });
 });
 
+accountRoute.get('/changePassword', restrict, function(req, res) {
+    res.render('account/changePassword', {
+        layoutModels: res.locals.layoutModels
+    });
+});
 accountRoute.get('/manageUsers', restrict, function(req, res) {
     account.loadAll().then(function(rows){
         for(var i = 0; i < rows.length; i++) {
