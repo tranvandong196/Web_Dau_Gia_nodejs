@@ -53,3 +53,18 @@ exports.deleteByProID = function(id) {
 
     return deferred.promise;
 }
+
+exports.findHandlePrice = function(ProID) {
+
+    var deferred = Q.defer();
+
+    var sql =
+            'select * from users, (select UserID, Price from auctions WHERE ProID = ' + ProID + ' GROUP BY '
+             + 'ProID HAVING Price = MAX(Price)) as temp where ID = temp.UserID ';
+
+    db.load(sql).then(function(rows) {
+        deferred.resolve(rows[0].UserID);
+    });
+
+    return deferred.promise;
+}

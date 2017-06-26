@@ -19,7 +19,10 @@ auctionRoute.post('/add', restrict, function(req, res) {
             date: now,
         };
         auction.insert(entity).then(function(insertId){
-            if(req.body.price >= pro.PriceToBuy)
+            var price2Buy = -1;
+            if(pro.priceToBuy)
+                price2Buy = pro.priceToBuy;
+            if(price2Buy !== -1 && req.body.price >= price2Buy)
             {
                 var item = {
                 product: {

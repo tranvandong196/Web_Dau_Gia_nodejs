@@ -16,11 +16,11 @@
 	        <div class="row">
 		        {{#each top5OfAuction }}
 		        <div class="col-md-4">
-		            <div class="thumbnail" style="min-height: 390px; max-width: 300px">
-		                <img src="/images/{{ProID}}/1_thumb.jpg" title="{{ProName}}" />
-		                <div class="caption">
-		                    <h4>{{ProName}}</h4>
-		                    <h4>Giá: {{formatNumber Price}}</h4>
+		            <div class="thumbnail" style="min-height: 340px; max-width: 300px">
+			           <a href="/product/detail/{{ProID}}"><img src="/images/{{ProID}}/1_thumb.jpg" title="{{ProName}}"/></a>
+		            	<div class="caption">
+			                <a href="/product/detail/{{ProID}}"><h4>{{ProName}}</h4></a>
+		                    <h4>Giá: {{formatNumber Price}} vnđ</h4>
 		                    <h4>Tồn: {{Quantity}}</h4>
 		                    <p style="width: 250px;
 							     white-space: nowrap;
@@ -28,11 +28,6 @@
 							     text-overflow: ellipsis;">
 							     {{TinyDes}}</p>
 	                    	<p>
-		                    <p>
-		                        <a href="/product/detail/{{ProID}}" class="btn btn-default" role="button">
-		                            Chi tiết
-		                        </a>
-		                    </p>
 		                </div>
 		            </div>
 		        </div>
@@ -50,28 +45,17 @@
 	    <div class="row">
 	    	{{#each top5OfPrice }}
 	        <div class="col-md-4">
-	            <div class="thumbnail" style="min-height: 390px; max-width: 300px">
-	                <img src="/images/{{ProID}}/1_thumb.jpg" title="{{ProName}}" />
-	                <div class="caption">
-	                    <h4>{{ProName}}</h4>
-	                    <h4>Giá: {{formatNumber Price}}</h4>
+	            <div class="thumbnail" style="min-height: 340px; max-width: 300px">
+		           <a href="/product/detail/{{product.ProID}}"><img src="/images/{{ProID}}/1_thumb.jpg" title="{{ProName}}"/></a>
+	            	<div class="caption">
+		                <a href="/product/detail/{{ProID}}"><h4>{{ProName}}</h4></a>
+	                    <h4>Giá: {{formatNumber Price}} vnđ</h4>
 	                    <h4>Tồn: {{Quantity}}</h4>
 	                    <p style="width: 250px;
 							     white-space: nowrap;
 							     overflow: hidden;
 							     text-overflow: ellipsis;">
 							     {{TinyDes}}</p>
-	                    <p>
-	                        <a href="/product/detail/{{ProID}}" class="btn btn-default" role="button">
-	                            Chi tiết
-	                        </a>
-	                        {{#if ../layoutModels.isLogged }}
-	                            <a href="javascript:;" class="btn btn-success addItem" role="button" data-id="{{ProID}}">
-	                                <i class="fa fa-cart-plus"></i>
-	                                Đấu giá
-	                            </a>
-	                        {{/if}}
-	                    </p>
 	                </div>
 	            </div>
 	        </div>
@@ -88,11 +72,11 @@
 	        <div class="row">
 	        	{{#each top5OfTimeDown }}
 		        <div class="col-md-4">
-		            <div class="thumbnail" style="min-height: 410px; max-width: 300px">
-		                <img src="/images/{{ProID}}/1_thumb.jpg" title="{{ProName}}" />
-		                <div class="caption">
-		                    <h4>{{ProName}}</h4>
-		                    <h4>Giá: {{formatNumber Price}}</h4>
+		            <div class="thumbnail" style="min-height: 360px; max-width: 300px">
+			           <a href="/product/detail/{{product.ProID}}"><img src="/images/{{ProID}}/1_thumb.jpg" title="{{ProName}}" href="/product/detail/{{ProID}}"/></a>
+		            	<div class="caption">
+			                <a href="/product/detail/{{ProID}}"><h4>{{ProName}}</h4></a>
+		                    <h4>Giá: {{formatNumber Price}} vnđ</h4>
 		                    <h4>Tồn: {{Quantity}}</h4>
 		                    <h4>Thời gian hết hạn: {{TimeDown}}</h4>
 		                    <p style="width: 250px;
@@ -101,17 +85,6 @@
 							     text-overflow: ellipsis;">
 							     {{TinyDes}}</p>
 	                    	<p>
-		                    <p>
-		                        <a href="/product/detail/{{ProID}}" class="btn btn-default" role="button">
-		                            Chi tiết
-		                        </a>
-		                        {{#if ../layoutModels.isLogged }}
-		                            <a href="javascript:;" class="btn btn-success addItem" role="button" data-id="{{ProID}}">
-		                                <i class="fa fa-cart-plus"></i>
-		                                Đặt mua
-		                            </a>
-		                        {{/if}}
-		                    </p>
 		                </div>
 		            </div>
 		        </div>

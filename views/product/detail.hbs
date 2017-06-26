@@ -16,11 +16,12 @@
     <script src="/assests/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
     <script type="text/javascript">
         $('#txtQ').TouchSpin({
-            min: $('#txtQ').val(),
-            max: 1000000000,
+            min: $('#txtQd').val(),
+            max: 100000000,
             step: $('#txtStep').val(),
-            verticalButtons: true,
+            verticalButtons: true
         });
+
     </script>
     <script type="text/javascript">
         $('#img2').on('click', function() {
@@ -33,6 +34,15 @@
             $('#img0').attr('src', $('#img3').attr('src'));
         });
     </script>
+    <script type="text/javascript">
+        $('#btnDG').on('click', function () {
+            var rs = confirm('Bạn có chắc ra giá sản phẩm này với giá là ' + $('#txtQ').val() + ' không?');
+            if(rs == true)
+            {
+                $('#frmAddItem').submit();
+            }
+        });
+    </script>
 {{/section}}
 
 {{#with product }}
@@ -42,25 +52,25 @@
                 <h3>{{ProName}}</h3>
                 </div>
                 <div class="padding">
-                    <h4>Giá bán: {{formatNumber Price}}</h4>
+                    <h4>Giá bán: {{formatNumber Price}} vnđ</h4>
                 </div>
                 <div class="padding">
                      <h4>Tồn kho: {{Quantity}}</h4>
                 </div>
             <div class="padding">
-                {{{FullDes}}}
+                {{FullDes}}
             </div>
             {{#if ../isPermit }}
             <form class="form-horizontal padding" id="frmAddItem" method="post" action="/auction/add">
                 <div class="form-group" style="margin-top: 50px; margin-left: 10px">
-                    <input type="hidden" id="txtP" name="proID" value="{{ProID}}" />
-                    <input type="hidden" id="txtStep" value="{{DeltaPrice}}" />
+                    <input type="hidden" id="txtP" name="proID" value="{{ProID}}">
+                    <input type="hidden" id="txtStep" value="{{DeltaPrice}}">
                     <div class="row">
+                        <div class="col-sm-6" class="input-group">
+                            <input type="text" id="txtQ" name="price" class="form-control" value="{{Price}}">
+                        </div>
                         <div class="col-sm-6">
-                            <input id="txtQ" name="price" type="text" class="form-control" placeholder="" value="{{Price}}">
-                        </div><!-- /input-group -->
-                        <div class="col-sm-6">
-                            <button class="btn btn-primary padding" type="submit">
+                            <button class="btn btn-primary padding" id="btnDG">
                                 Đấu giá
                             </button>
                         </div>
@@ -69,7 +79,7 @@
             </form>
             {{/if}}
             {{#if ../layoutModels.isLogged }}
-             {{#if ../isLoved }}
+            {{#if ../isLoved }}
             <div class="row" style="margin-top: 20px">
                 <div class="col-sm-offset-2">
                   <a href="/product/removeLove/{{ProID}}" role="button" class="btn btn-danger">

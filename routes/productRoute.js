@@ -8,6 +8,7 @@ var multer  = require('multer');
 var fs = require('fs');
 var thumb = require('node-thumbnail').thumb;
 var favorite = require('../models/favorite');
+var Q = require('q');
 
 productRoute.get('/byCat/:id', function(req, res) {
     var rec_per_page = 6;
@@ -204,13 +205,18 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                 });
             }
 
-            product.loadAllByFavorite(res.locals.layoutModels.curUser.id).then(function(rows){
-                var box = [];   
+            product.loadAllByFavorite(UserID).then(function(rows){
+                var box = [];
+                var promise = [];
                 for (var i = 0; i < data.list.length; i++) {
-                    var bool = rows.findIndex(function(element){
-                        return element.ProID === data.list[i].ProID;
-                    });
-
+                    var bool = -1;
+                    if(rows)
+                    {
+                        bool = rows.findIndex(function(element){
+                            return element.ProID === data.list[i].ProID;
+                        });
+                    }
+                    promise.push(product.getNumberOfAuction(data.list[i].ProID));
                     var isLoved = false;
                     if(bool !== -1)
                     {
@@ -219,24 +225,33 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                     var temp = {
                         product: data.list[i],
                         isLoved: isLoved,
+                        restTime: 0,
+                        numberOfAuctions: 0,
+                        handlePrice: -1,
                     }
                     box.push(temp);
                 }
-                res.render('product/search', {
-                    layoutModels: res.locals.layoutModels,
-                    box: box,
-                    isEmpty: data.total === 0,
-                    text: text,
-                    findBy: findBy,
-                    arrange: arrange,
-                    length: products.length,
+                Q.all(promise).then(function(rs){
+                    for(var i = 0; i < box.length; i++)
+                    {
+                        box[i].numberOfAuctions = rs[i];
+                    }
+                    res.render('product/search', {
+                        layoutModels: res.locals.layoutModels,
+                        box: box,
+                        isEmpty: data.total === 0,
+                        text: text,
+                        findBy: findBy,
+                        arrange: arrange,
+                        length: products.length,
 
-                    pages: pages,
-                    curPage: curPage,
-                    prevPage: curPage - 1,
-                    nextPage: curPage + 1,
-                    showPrevPage: curPage > 1,
-                    showNextPage: curPage < number_of_pages - 1,
+                        pages: pages,
+                        curPage: curPage,
+                        prevPage: curPage - 1,
+                        nextPage: curPage + 1,
+                        showPrevPage: curPage > 1,
+                        showNextPage: curPage < number_of_pages - 1,
+                    });
                 });
             });
         });
@@ -292,14 +307,18 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                     isActive: i === +curPage
                 });
             }
-
-            product.loadAllByFavorite(res.locals.layoutModels.curUser.id).then(function(rows){
-                var box = [];   
+            product.loadAllByFavorite(UserID).then(function(rows){
+                var box = [];
+                var promise = [];
                 for (var i = 0; i < data.list.length; i++) {
-                    var bool = rows.findIndex(function(element){
-                        return element.ProID === data.list[i].ProID;
-                    });
-
+                    var bool = -1;
+                    if(rows)
+                    {
+                        bool = rows.findIndex(function(element){
+                            return element.ProID === data.list[i].ProID;
+                        });
+                    }
+                    promise.push(product.getNumberOfAuction(data.list[i].ProID));
                     var isLoved = false;
                     if(bool !== -1)
                     {
@@ -308,26 +327,37 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                     var temp = {
                         product: data.list[i],
                         isLoved: isLoved,
+                        restTime: 0,
+                        numberOfAuctions: 0,
+                        handlePrice: -1,
                     }
                     box.push(temp);
                 }
-                res.render('product/search', {
-                    layoutModels: res.locals.layoutModels,
-                    box: box,
-                    isEmpty: data.total === 0,
-                    text: text,
-                    findBy: findBy,
-                    arrange: arrange,
-                    length: products.length,
+                Q.all(promise).then(function(rs){
+                    for(var i = 0; i < box.length; i++)
+                    {
+                        box[i].numberOfAuctions = rs[i];
+                    }
+                    res.render('product/search', {
+                        layoutModels: res.locals.layoutModels,
+                        box: box,
+                        isEmpty: data.total === 0,
+                        text: text,
+                        findBy: findBy,
+                        arrange: arrange,
+                        length: products.length,
 
-                    pages: pages,
-                    curPage: curPage,
-                    prevPage: curPage - 1,
-                    nextPage: curPage + 1,
-                    showPrevPage: curPage > 1,
-                    showNextPage: curPage < number_of_pages - 1,
+                        pages: pages,
+                        curPage: curPage,
+                        prevPage: curPage - 1,
+                        nextPage: curPage + 1,
+                        showPrevPage: curPage > 1,
+                        showNextPage: curPage < number_of_pages - 1,
+                    });
                 });
             });
+
+
         });
     });
 });
@@ -443,6 +473,8 @@ productRoute.post('/search', function(req, res) {
     var text = req.body.search;
     var findBy = req.body.findBy;
     var arrange = req.body.arrange;
+    var now = new Date(Date.now()).toLocaleString();
+    now = moment().format('YYYY-MM-DD HH:mm:ss');
 
     var entity ={
          text: text,
@@ -473,16 +505,24 @@ productRoute.post('/search', function(req, res) {
         for (var i = 1; i <= number_of_pages; i++) {
             pages.push({
                 pageValue: i,
-                isActive: i === +curPage
+                isActive: i === +curPage,
             });
         }
-        product.loadAllByFavorite(res.locals.layoutModels.curUser.id).then(function(rows){
-            var box = [];   
+        var UserID;
+        if(res.locals.layoutModels.curUser)
+            UserID = res.locals.layoutModels.curUser.id;
+        product.loadAllByFavorite(UserID).then(function(rows){
+            var box = [];
+            var promise = [];
             for (var i = 0; i < data.list.length; i++) {
-                var bool = rows.findIndex(function(element){
-                    return element.ProID === data.list[i].ProID;
-                });
-
+                var bool = -1;
+                if(rows)
+                {
+                    bool = rows.findIndex(function(element){
+                        return element.ProID === data.list[i].ProID;
+                    });
+                }
+                promise.push(product.getNumberOfAuction(data.list[i].ProID));
                 var isLoved = false;
                 if(bool !== -1)
                 {
@@ -491,24 +531,33 @@ productRoute.post('/search', function(req, res) {
                 var temp = {
                     product: data.list[i],
                     isLoved: isLoved,
+                    restTime: 0,
+                    numberOfAuctions: 0,
+                    handlePrice: -1,
                 }
                 box.push(temp);
             }
-            res.render('product/search', {
-                layoutModels: res.locals.layoutModels,
-                box: box,
-                isEmpty: data.total === 0,
-                text: text,
-                findBy: findBy,
-                arrange: arrange,
-                length: products.length,
+            Q.all(promise).then(function(rs){
+                for(var i = 0; i < box.length; i++)
+                {
+                    box[i].numberOfAuctions = rs[i];
+                }
+                res.render('product/search', {
+                    layoutModels: res.locals.layoutModels,
+                    box: box,
+                    isEmpty: data.total === 0,
+                    text: text,
+                    findBy: findBy,
+                    arrange: arrange,
+                    length: products.length,
 
-                pages: pages,
-                curPage: curPage,
-                prevPage: curPage - 1,
-                nextPage: curPage + 1,
-                showPrevPage: curPage > 1,
-                showNextPage: curPage < number_of_pages - 1,
+                    pages: pages,
+                    curPage: curPage,
+                    prevPage: curPage - 1,
+                    nextPage: curPage + 1,
+                    showPrevPage: curPage > 1,
+                    showNextPage: curPage < number_of_pages - 1,
+                });
             });
         });
     });
@@ -518,7 +567,6 @@ productRoute.get('/search', function(req, res) {
     var rec_per_page = 6;
     var curPage = req.query.page ? req.query.page : 1;
     var offset = (curPage - 1) * rec_per_page;
-    console.log('offset: ' + offset);
     var text = req.query.text;
     var findBy = req.query.findBy;
     var arrange = req.query.arrange;
@@ -555,13 +603,21 @@ productRoute.get('/search', function(req, res) {
             });
         }
 
-        product.loadAllByFavorite(res.locals.layoutModels.curUser.id).then(function(rows){
-            var box = [];   
+        var UserID;
+        if(res.locals.layoutModels.curUser)
+            UserID = res.locals.layoutModels.curUser.id;
+        product.loadAllByFavorite(UserID).then(function(rows){
+            var box = [];
+            var promise = [];
             for (var i = 0; i < data.list.length; i++) {
-                var bool = rows.findIndex(function(element){
-                    return element.ProID === data.list[i].ProID;
-                });
-
+                var bool = -1;
+                if(rows)
+                {
+                    bool = rows.findIndex(function(element){
+                        return element.ProID === data.list[i].ProID;
+                    });
+                }
+                promise.push(product.getNumberOfAuction(data.list[i].ProID));
                 var isLoved = false;
                 if(bool !== -1)
                 {
@@ -570,24 +626,33 @@ productRoute.get('/search', function(req, res) {
                 var temp = {
                     product: data.list[i],
                     isLoved: isLoved,
+                    restTime: 0,
+                    numberOfAuctions: 0,
+                    handlePrice: -1,
                 }
                 box.push(temp);
             }
-            res.render('product/search', {
-                layoutModels: res.locals.layoutModels,
-                box: box,
-                isEmpty: data.total === 0,
-                text: text,
-                findBy: findBy,
-                arrange: arrange,
-                length: products.length,
+            Q.all(promise).then(function(rs){
+                for(var i = 0; i < box.length; i++)
+                {
+                    box[i].numberOfAuctions = rs[i];
+                }
+                res.render('product/search', {
+                    layoutModels: res.locals.layoutModels,
+                    box: box,
+                    isEmpty: data.total === 0,
+                    text: text,
+                    findBy: findBy,
+                    arrange: arrange,
+                    length: products.length,
 
-                pages: pages,
-                curPage: curPage,
-                prevPage: curPage - 1,
-                nextPage: curPage + 1,
-                showPrevPage: curPage > 1,
-                showNextPage: curPage < number_of_pages - 1,
+                    pages: pages,
+                    curPage: curPage,
+                    prevPage: curPage - 1,
+                    nextPage: curPage + 1,
+                    showPrevPage: curPage > 1,
+                    showNextPage: curPage < number_of_pages - 1,
+                });
             });
         });
     });

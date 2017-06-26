@@ -32,7 +32,8 @@ exports.insert = function(entity) {
         }
         sql =
             mustache.render(
-                'insert into users (Username, Password, Name, Email, DOB, Permission, ScorePlus, ScoreMinus, Score, Address) values ("{{username}}", "{{password}}", "{{name}}", "{{email}}", "{{dOB}}", {{permission}}, {{scorePlus}}, {{scoreMinus}}, {{score}}, "{{address}}")',
+                'insert into users (Username, Password, Name, Email, DOB, Permission, ScorePlus, ScoreMinus, Score, Address) values ("{{username}}", '
+                + '"{{password}}", "{{name}}", "{{email}}", "{{dOB}}", {{permission}}, {{scorePlus}}, {{scoreMinus}}, {{score}}, "{{address}}")',
                 entity
             );
 

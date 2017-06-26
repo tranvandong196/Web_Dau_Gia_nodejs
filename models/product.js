@@ -135,15 +135,20 @@ exports.deleteByCat = function(id) {
 }
 
 exports.loadAllByFavorite = function(userid) {
-
     var deferred = Q.defer();
 
+    if(!userid)
+    {
+        deferred.resolve(null);
+        return deferred.promise;
+    }
     var sql = 'SELECT * FROM products WHERE ProID IN (SELECT ProID From favorites WHERE UserID = ' + userid + ')';
     db.load(sql).then(function(rows) {
         deferred.resolve(rows);
     });
     return deferred.promise;
 }
+
 exports.loadPageByFavorite = function(userid, limit, offset) {
 
     var deferred = Q.defer();
@@ -203,26 +208,6 @@ exports.loadPageByAuction = function(userid, limit, offset) {
     
     return deferred.promise;
 }
-// exports.makeCartItem = function(id, q) {
-
-//     var deferred = Q.defer();
-
-//     var sql = 'select * from products where ProID = ' + id;
-//     db.load(sql).then(function(rows) {
-//         if (rows) {
-//             var ret = {
-//                 Product: rows[0],
-//                 Quantity: q,
-//                 Amount: rows[0].Price * q
-//             }
-//             deferred.resolve(ret);
-//         } else {
-//             deferred.resolve(null);
-//         }
-//     });
-
-//     return deferred.promise;
-// }
 
 exports.search = function(entity){
     var deferred = Q.defer();
@@ -266,5 +251,23 @@ exports.search = function(entity){
         deferred.resolve(rows);
     })
 
+    return deferred.promise;
+}
+
+exports.getNumberOfAuction = function(ProID) {
+    var deferred = Q.defer();
+
+    if(!ProID)
+    {
+        deferred.resolve(null);
+        return deferred.promise;
+    }
+    var sql = 'SELECT count(*) as number FROM auctions WHERE ProID = ' + ProID + ' group by ProID';
+    db.load(sql).then(function(rows) {
+        if(rows[0])
+            deferred.resolve(rows[0].number);
+        else
+            deferred.resolve(0);
+    });
     return deferred.promise;
 }

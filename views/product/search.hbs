@@ -30,9 +30,9 @@ Không có sản phẩm!
     <div class="col-md-12">
         <div class="thumbnail" style="min-height: 200px; max-width: ">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-3" style="top: 20px; left: 10px">
                             {{#if ../layoutModels.isLogged }}
                             {{#if isLoved }}
                                 <a href="/product/search/removeLove/{{product.ProID}}?page={{../curPage}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}" role="button">
@@ -45,7 +45,7 @@ Không có sản phẩm!
                             {{/if}}
                             {{/if}}
                         </div>
-                        <a href="/product/detail/{{product.ProID}}" class="col-md-8">
+                        <a href="/product/detail/{{product.ProID}}" class="col-md-8" style="top: 20px;">
                             <img src="/images/{{product.ProID}}/1_thumb.jpg" title="{{product.ProName}}" href="/product/detail/{{product.ProID}}"/>
                         </a>
                     </div>
@@ -53,18 +53,18 @@ Không có sản phẩm!
                 <div class="col-md-6">
                     <div class="caption">
                         <a href="/product/detail/{{product.ProID}}"><h4>{{product.ProName}}</h4></a>
-                        <h4>Giá: {{formatNumber product.Price}}</h4>
+                        <h4>Giá: {{formatNumber product.Price}} vnđ</h4>
+                        <h4>Giá mua ngay: {{formatNumber product.PriceToBuy}} vnđ</h4>
                         <h4>Tồn: {{product.Quantity}}</h4>
-                        <p style="width: 250px;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;">
+                        <p>
                         {{product.TinyDes}}
                         </p>
                     </div>
                 </div>
-                <div class="col-md-2">
-                    
+                <div class="col-md-3">
+                    <h4>Số lượt đấu giá: {{numberOfAuctions}}</h4>
+                    <h4>Thời gian còn lại: {{restTime}}</h4>
+                    <h4>Người đang giữ giá: {{handlePrice}}</h4>
                 </div>
             </div>
         </div>
