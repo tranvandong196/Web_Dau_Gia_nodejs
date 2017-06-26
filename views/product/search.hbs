@@ -27,38 +27,45 @@ Không có sản phẩm!
     <h4>#{{findBy}}</h4>
     <h4>#{{arrange}}</h4>
     {{#each box }}
-    <div class="col-md-4">
-        <div class="thumbnail" style="min-height: 340px; max-width: 300px">
-            <a href="/product/detail/{{product.ProID}}"><img src="/images/{{product.ProID}}/1_thumb.jpg" title="{{product.ProName}}" href="/product/detail/{{product.ProID}}"/></a>
-            
-            <div class="caption">
-                <a href="/product/detail/{{product.ProID}}"><h4>{{product.ProName}}</h4></a>
-                <div class="row">
-                    <div class="col-sm-8">
-                        <h4>Giá: {{formatNumber product.Price}}</h4>
-                        <h4>Tồn: {{product.Quantity}}</h4>
-                    </div>
-                    <div class="col-sm-offset-1 col-sm-3">
-                    {{#if ../layoutModels.isLogged }}
-                    {{#if isLoved }}
-                        <a href="/product/search/removeLove/{{product.ProID}}?page={{../curPage}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}" role="button">
-                            <img src="/images/others/heart.jpg" width="30" height="30">
+    <div class="col-md-12">
+        <div class="thumbnail" style="min-height: 200px; max-width: ">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{#if ../layoutModels.isLogged }}
+                            {{#if isLoved }}
+                                <a href="/product/search/removeLove/{{product.ProID}}?page={{../curPage}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}" role="button">
+                                    <img src="/images/others/heart.jpg" width="30" height="30">
+                                </a>
+                            {{else}}
+                                <a href="/product/search/addLove/{{product.ProID}}?page={{../curPage}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}" role="button" >
+                                    <img src="/images/others/heart-empty.png" width="30" height="30">
+                                </a>
+                            {{/if}}
+                            {{/if}}
+                        </div>
+                        <a href="/product/detail/{{product.ProID}}" class="col-md-8">
+                            <img src="/images/{{product.ProID}}/1_thumb.jpg" title="{{product.ProName}}" href="/product/detail/{{product.ProID}}"/>
                         </a>
-                    {{else}}
-                        <a href="/product/search/addLove/{{product.ProID}}?page={{../curPage}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}" role="button" >
-                            <img src="/images/others/heart-empty.png" width="30" height="30">
-                        </a>
-                    {{/if}}
-                    {{/if}}
-                        
                     </div>
                 </div>
-                <p style="width: 250px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;">
-                {{product.TinyDes}}
-                </p>
+                <div class="col-md-6">
+                    <div class="caption">
+                        <a href="/product/detail/{{product.ProID}}"><h4>{{product.ProName}}</h4></a>
+                        <h4>Giá: {{formatNumber product.Price}}</h4>
+                        <h4>Tồn: {{product.Quantity}}</h4>
+                        <p style="width: 250px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;">
+                        {{product.TinyDes}}
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    
+                </div>
             </div>
         </div>
     </div>

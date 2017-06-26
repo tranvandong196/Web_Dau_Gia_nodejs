@@ -65,7 +65,7 @@ accountRoute.post('/logout', restrict, function(req, res) {
     req.session.user = null;
     req.session.cart = null;
     req.session.cookie.expires = new Date(Date.now() - 1000);
-    res.redirect(req.headers.referer);
+    res.redirect("/home");
 });
 
 accountRoute.get('/register', function(req, res) {
