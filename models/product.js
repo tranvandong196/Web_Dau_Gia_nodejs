@@ -134,44 +134,6 @@ exports.deleteByCat = function(id) {
     return deferred.promise;
 }
 
-// exports.findbyName = function(entity) {
-
-//     var deferred = Q.defer();
-//     var sql = mustache.render(
-//         'SELECT * FROM products where ProName LIKE N' + "'%{{search}}%'",
-//         entity        
-//         );
-
-
-//     db.load(sql).then(function(rows) {
-//         if (rows) {
-//             deferred.resolve(rows);
-//         } else {
-//             deferred.resolve(null);
-//         }
-//     });
-    
-//     return deferred.promise;
-// }
-
-// exports.findbyCat = function(entity) {
-
-//     var deferred = Q.defer();
-//     var sql = mustache.render(
-//         'SELECT CatID FROM categories where CatName LIKE N' + "'%{{search}}%'",
-//         entity        
-//         );  
-    
-//     db.load(sql).then(function(rows) {
-//         if (rows) {
-//             deferred.resolve(rows);
-//         } else {
-//          deferred.resolve(null);
-//      }
-//  });
-//     return deferred.promise;
-// }
-
 exports.loadAllByFavorite = function(userid) {
 
     var deferred = Q.defer();
@@ -214,6 +176,35 @@ exports.loadPageByFavorite = function(userid, limit, offset) {
     return deferred.promise;
 }
 
+exports.loadPageByAuction = function(userid, limit, offset) {
+
+    var deferred = Q.defer();
+
+    var promises = [];
+
+    var view = {
+        userid: userid,
+        limit: limit,
+        offset: offset
+    };
+
+    var sqlCount = mustache.render('SELECT COUNT(*) as total FROM products WHERE ProID IN (SELECT ProID From auctions WHERE UserID = {{userid}} GROUP BY UserID) AND NOW() < TimeDown', view);
+    promises.push(db.load(sqlCount));
+
+    var sql = mustache.render('SELECT * FROM products WHERE ProID IN (SELECT ProID From auctions WHERE UserID = {{userid}} GROUP BY UserID) AND NOW() < TimeDown limit {{limit}} offset {{offset}}', view);
+    promises.push(db.load(sql));
+
+    Q.all(promises).spread(function(totalRow, rows) {
+        var data = {
+            total: totalRow[0].total,
+            list: rows
+        }
+        console.log("[Product] Da lay danh sach dang dau gia userID: " + userid + ", SoLuong = " + rows.length)
+        deferred.resolve(data);
+    });
+    
+    return deferred.promise;
+}
 // exports.makeCartItem = function(id, q) {
 
 //     var deferred = Q.defer();
