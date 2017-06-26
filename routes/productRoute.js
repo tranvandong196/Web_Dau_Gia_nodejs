@@ -615,14 +615,20 @@ productRoute.get('/byFavorite', function(req, res) {
                 isActive: i === +curPage
             });
         }
-
+        var box = [];   
+        for (var i = 0; i < data.list.length; i++) {
+            var temp = {
+                product: data.list[i],
+                isInFavoriteSite: true,
+            }
+            box.push(temp);
+        }
         res.render('product/byUser', {
             layoutModels: res.locals.layoutModels,
-            products: data.list,
+            box: box,
             isEmpty: data.total === 0,
             catId: req.params.id,
-            isLoggedOut: userIDcurrent === -1,
-            isInListWinAuction: false,
+            Tile: 'Sản phẩm yêu thích',
             pages: pages,
             curPage: curPage,
             prevPage: curPage - 1,
@@ -655,14 +661,20 @@ productRoute.get('/byAuction', function(req, res) {
                 isActive: i === +curPage
             });
         }
-
+        var box = [];   
+        for (var i = 0; i < data.list.length; i++) {
+            var temp = {
+                product: data.list[i],
+                isInFavoriteSite: false,
+            }
+            box.push(temp);
+        }
         res.render('product/byUser', {
             layoutModels: res.locals.layoutModels,
-            products: data.list,
+            box: box,
             isEmpty: data.total === 0,
             catId: req.params.id,
-            isLoggedOut: userIDcurrent === -1,
-            isInListWinAuction: false,
+            Tile: 'Sản phẩm đang đấu giá',
             pages: pages,
             curPage: curPage,
             prevPage: curPage - 1,
