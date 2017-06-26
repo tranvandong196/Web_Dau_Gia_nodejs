@@ -168,7 +168,6 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
         var rec_per_page = 6;
         var curPage = req.query.page ? req.query.page : 1;
         var offset = (curPage - 1) * rec_per_page;
-        console.log('offset: ' + offset);
         var text = req.query.text;
         var findBy = req.query.findBy;
         var arrange = req.query.arrange;
@@ -204,7 +203,9 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                     isActive: i === +curPage
                 });
             }
-
+            var UserID;
+            if(res.locals.layoutModels.curUser)
+                UserID = res.locals.layoutModels.curUser.id;
             product.loadAllByFavorite(UserID).then(function(rows){
                 var box = [];
                 var promise = [];
@@ -271,7 +272,6 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
         var rec_per_page = 6;
         var curPage = req.query.page ? req.query.page : 1;
         var offset = (curPage - 1) * rec_per_page;
-        console.log('offset: ' + offset);
         var text = req.query.text;
         var findBy = req.query.findBy;
         var arrange = req.query.arrange;
@@ -307,6 +307,9 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                     isActive: i === +curPage
                 });
             }
+            var UserID;
+            if(res.locals.layoutModels.curUser)
+                UserID = res.locals.layoutModels.curUser.id;
             product.loadAllByFavorite(UserID).then(function(rows){
                 var box = [];
                 var promise = [];
@@ -356,8 +359,6 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                     });
                 });
             });
-
-
         });
     });
 });
