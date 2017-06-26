@@ -140,10 +140,8 @@ exports.loadAllByFavorite = function(userid) {
 
     var sql = 'SELECT * FROM products WHERE ProID IN (SELECT ProID From favorites WHERE UserID = ' + userid + ')';
     db.load(sql).then(function(rows) {
-        console.log("So luong san pham: " + rows.length)
         deferred.resolve(rows);
     });
-    console.log(sql)
     return deferred.promise;
 }
 exports.loadPageByFavorite = function(userid, limit, offset) {
