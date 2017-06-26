@@ -667,7 +667,7 @@ productRoute.get('/byFavorite', function(req, res) {
     if (res.locals.layoutModels.isLogged)
         userIDcurrent = res.locals.layoutModels.curUser.id;
     product.loadPageByFavorite(userIDcurrent, rec_per_page, offset).then(function(data) {
-        console.log("[ProductRoute] Da lay danh sach yeu thich: SoLuong = " + data.list.length)
+        console.log("[ProductRoute] Da lay danh sach SP yeu thich: SoLuong = " + data.list.length)
         var number_of_pages = data.total / rec_per_page;
         if (data.total % rec_per_page > 0) {
             number_of_pages++;
@@ -680,14 +680,20 @@ productRoute.get('/byFavorite', function(req, res) {
                 isActive: i === +curPage
             });
         }
-
+        var box = [];   
+        for (var i = 0; i < data.list.length; i++) {
+            var temp = {
+                product: data.list[i],
+                isInFavoriteSite: true,
+            }
+            box.push(temp);
+        }
         res.render('product/byUser', {
             layoutModels: res.locals.layoutModels,
-            products: data.list,
+            box: box,
             isEmpty: data.total === 0,
             catId: req.params.id,
-            isLoggedOut: userIDcurrent === -1,
-            isInListWinAuction: false,
+            Tile: 'Sản phẩm yêu thích (' + data.list.length + ')',
             pages: pages,
             curPage: curPage,
             prevPage: curPage - 1,
@@ -707,7 +713,7 @@ productRoute.get('/byAuction', function(req, res) {
     if (res.locals.layoutModels.isLogged)
         userIDcurrent = res.locals.layoutModels.curUser.id;
     product.loadPageByAuction(userIDcurrent, rec_per_page, offset).then(function(data) {
-        console.log("[ProductRoute] Da lay danh sach yeu thich: SoLuong = " + data.list.length)
+        console.log("[ProductRoute] Da lay danh sach SP dang dau gia: SoLuong = " + data.list.length)
         var number_of_pages = data.total / rec_per_page;
         if (data.total % rec_per_page > 0) {
             number_of_pages++;
@@ -720,14 +726,20 @@ productRoute.get('/byAuction', function(req, res) {
                 isActive: i === +curPage
             });
         }
-
+        var box = [];   
+        for (var i = 0; i < data.list.length; i++) {
+            var temp = {
+                product: data.list[i],
+                isInFavoriteSite: false,
+            }
+            box.push(temp);
+        }
         res.render('product/byUser', {
             layoutModels: res.locals.layoutModels,
-            products: data.list,
+            box: box,
             isEmpty: data.total === 0,
             catId: req.params.id,
-            isLoggedOut: userIDcurrent === -1,
-            isInListWinAuction: false,
+            Tile: 'Sản phẩm đang đấu giá ('+ data.list.length + ')',
             pages: pages,
             curPage: curPage,
             prevPage: curPage - 1,
@@ -737,5 +749,49 @@ productRoute.get('/byAuction', function(req, res) {
         });
     });
 });
+productRoute.get('/byBasket', function(req, res) {
 
+    var rec_per_page = 6;
+    var curPage = req.query.page ? req.query.page : 1;
+    var offset = (curPage - 1) * rec_per_page;
+    var userIDcurrent = -1;
+    if (res.locals.layoutModels.isLogged)
+        userIDcurrent = res.locals.layoutModels.curUser.id;
+    product.loadPageByBasket(userIDcurrent, rec_per_page, offset).then(function(data) {
+        console.log("[ProductRoute] Da lay danh sach SP thang dau gia: SoLuong = " + data.list.length)
+        var number_of_pages = data.total / rec_per_page;
+        if (data.total % rec_per_page > 0) {
+            number_of_pages++;
+        }
+
+        var pages = [];
+        for (var i = 1; i <= number_of_pages; i++) {
+            pages.push({
+                pageValue: i,
+                isActive: i === +curPage
+            });
+        }
+        var box = [];   
+        for (var i = 0; i < data.list.length; i++) {
+            var temp = {
+                product: data.list[i],
+                isInFavoriteSite: false,
+            }
+            box.push(temp);
+        }
+        res.render('product/byUser', {
+            layoutModels: res.locals.layoutModels,
+            box: box,
+            isEmpty: data.total === 0,
+            catId: req.params.id,
+            Tile: 'Sản phẩm thắng đấu giá - giỏ hàng (' + data.list.length + ')',
+            pages: pages,
+            curPage: curPage,
+            prevPage: curPage - 1,
+            nextPage: curPage + 1,
+            showPrevPage: curPage > 1,
+            showNextPage: curPage < number_of_pages - 1,
+        });
+    });
+});
 module.exports = productRoute;

@@ -1,5 +1,5 @@
 {{#section 'title'}}
-Danh sách sản phẩm
+    Kết quả tìm kiếm
 {{/section}}
 
 {{#section 'js'}}
@@ -14,17 +14,14 @@ Danh sách sản phẩm
     $('#textSearch').val($('#txtname').val());
 </script>
 {{/section}}
-{{#if isLoggedOut }}
-    <meta http-equiv="refresh" 
-   content="0; url=/home">
-{{/if}}
+
 {{#if isEmpty }}
 Không có sản phẩm!
 {{else}}
 <form id="frmAddToCart" method="post" action="/cart/add1">
     <input type="hidden" id="txtP" name="proId" />
-    <input type="hidden" id="txtC" name="catId" value="{{catId}}" />
 </form>
+<h4>{{Tile}}</h4>
 <div class="row">
     <input type="hidden" id="txtname" value="{{name}}" />
     {{#each products }}
@@ -46,37 +43,76 @@ Không có sản phẩm!
                         Chi tiết
                     </a>
                 </p>
+    {{#each box }}
+    <div class="col-md-11">
+        <div class="thumbnail" style="min-height: 130px; max-width: ">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{#if ../layoutModels.isLogged }}
+                                {{#if isInFavoriteSite }}
+                                <a href="Loại khỏi danh sách yêu thích" role="button">
+                                    <img src="/images/others/Remove-Product.png" title="Bỏ yêu thích" width="30" height="30">
+                                </a>
+                                {{/if}}
+                            {{/if}}
+                        </div>
+                        <a href="/product/detail/{{product.ProID}}" class="col-md-8">
+                            <img src="/images/{{product.ProID}}/1_thumb.jpg" title="{{product.ProName}}" href="/product/detail/{{product.ProID}}"/>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="caption">
+                        <a href="/product/detail/{{product.ProID}}"><h4>{{product.ProName}}</h4></a>
+                        <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/price-icon.png" title="Giá" width="25" height="25">&nbsp;&nbsp;{{formatNumber product.Price}}</h4>
+                        <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/Quantity-icon.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;{{product.Quantity}}</h4>
+                        <p style="width: 400px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;">&nbsp;&nbsp;&nbsp;<img src="/images/others/Comment-Describe-icon.png" title="Mổ tả ngắn gọn" width="25" height="25">&nbsp;&nbsp;
+                        {{product.TinyDes}}
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    
+                </div>
             </div>
         </div>
     </div>
     {{/each}}
-<nav aria-label="Page navigation">
-    <ul class="pagination">
-        {{#if showPrevPage}}
-        <li>
-            <a href="?page={{prevPage}}" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
-        {{/if}}
-        {{#each pages }}
-        {{#if isActive }}
-        <li class="active">
-            <a href="?page={{pageValue}}">{{pageValue}}</a>
-        </li>
-        {{else}}
-        <li>
-            <a href="?page={{pageValue}}">{{pageValue}}</a>
-        </li>
-        {{/if}}
-        {{/each}}
-        {{#if showNextPage }}
-        <li>
-            <a href="?page={{nextPage}}" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
-        {{/if}}
-    </ul>
-</nav>
+</div>
+<div class="row">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {{#if showPrevPage}}
+            <li>
+                <a href="?page={{prevPage}}&text={{text}}&findBy={{findBy}}&arrange={{arrange}}">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                </a>
+            </li>
+            {{/if}}
+            {{#each pages }}
+            {{#if isActive }}
+            <li class="active">
+                <a href="?page={{pageValue}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}">{{pageValue}}</a>
+            </li>
+            {{else}}
+            <li>
+                <a href="?page={{pageValue}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}">{{pageValue}}</a>
+            </li>
+            {{/if}}
+            {{/each}}
+            {{#if showNextPage }}
+            <li>
+                <a href="?page={{pageValue}}&text={{text}}&findBy={{findBy}}&arrange={{arrange}}" aria-label="Next">
+                    <span class="glyphicon glyphicon-arrow-right"></span>
+                </a>
+            </li>
+            {{/if}}
+        </ul>
+    </nav>
+</div>
 {{/if}}
