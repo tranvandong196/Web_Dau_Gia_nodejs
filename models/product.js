@@ -203,6 +203,35 @@ exports.loadPageByAuction = function(userid, limit, offset) {
     
     return deferred.promise;
 }
+exports.loadPageByBasket = function(userid, limit, offset) {
+
+    var deferred = Q.defer();
+
+    var promises = [];
+
+    var view = {
+        userid: userid,
+        limit: limit,
+        offset: offset
+    };
+
+    var sqlCount = mustache.render('SELECT COUNT(*) as total FROM products WHERE HandleID  = {{userid}}', view);
+    promises.push(db.load(sqlCount));
+
+    var sql = mustache.render('SELECT * FROM products WHERE HandleID  = {{userid}} limit {{limit}} offset {{offset}}', view);
+    promises.push(db.load(sql));
+
+    Q.all(promises).spread(function(totalRow, rows) {
+        var data = {
+            total: totalRow[0].total,
+            list: rows
+        }
+        console.log("[Product] Da lay danh sach thang dau gia userID: " + userid + ", SoLuong = " + rows.length)
+        deferred.resolve(data);
+    });
+    
+    return deferred.promise;
+}
 // exports.makeCartItem = function(id, q) {
 
 //     var deferred = Q.defer();
