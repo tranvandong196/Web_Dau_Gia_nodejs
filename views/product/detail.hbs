@@ -7,7 +7,7 @@
 
     <style type="text/css">
         .padding {
-            padding-top: 8px;
+            padding-top: 1px;
         }
     </style>
 {{/section}}
@@ -46,69 +46,133 @@
 {{/section}}
 
 {{#with product }}
-    <div class="row">
-        <div class="col-sm-5">
-            <div class="caption-lg-orange">
-                <h3>{{ProName}}</h3>
-                </div>
-                <div class="padding">
-                    <h4>Giá bán: {{formatNumber Price}} vnđ</h4>
-                </div>
-                <div class="padding">
-                     <h4>Tồn kho: {{Quantity}}</h4>
-                </div>
-            <div class="padding">
-                {{FullDes}}
-            </div>
-            {{#if ../isPermit }}
-            <form class="form-horizontal padding" id="frmAddItem" method="post" action="/auction/add">
-                <div class="form-group" style="margin-top: 50px; margin-left: 10px">
-                    <input type="hidden" id="txtP" name="proID" value="{{ProID}}">
-                    <input type="hidden" id="txtStep" value="{{DeltaPrice}}">
-                    <div class="row">
-                        <div class="col-sm-6" class="input-group">
-                            <input type="text" id="txtQ" name="price" class="form-control" value="{{Price}}">
+<div class="col-md-12" style="right: 10px">
+    <div class="thumbnail" style="min-height: 130px;">
+        <div class="row">
+            <div class="col-md-5">
+                <!-- Thông tin chung -->
+                <!-- <div class="col-md-12"> -->
+                    <div class="caption-lg-orange">
+                        <h3><b>&nbsp;{{ProName}}</b></h3>
+                    </div>
+                    <div class="padding">
+                        <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/price-icon.png" title="Giá bán" width="25" height="25">&nbsp;&nbsp;<b>Giá bán:</b>  {{formatNumber Price}} vnđ</h4>
+                    </div>
+                    <div class="padding">
+                        <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/PriceToBuy.png" title="Giá mua ngay" width="25" height="25">&nbsp;&nbsp;<b>Giá mua ngay:</b> {{formatNumber PriceToBuy}} vnđ</h4>
+                    </div>
+                    <div class="padding">
+                         <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Quantity-icon.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;<b>Tồn kho:</b> {{Quantity}}</h4>
+                    </div>
+                    <div style="padding: 6px">&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Comment-Describe-icon.png" title="Mổ tả ngắn gọn" width="25" height="25">&nbsp;&nbsp;<b>Mô tả:</b> {{FullDes}}
+                    </div>
+                <!-- </div> -->
+                <!-- END Thông tin chung -->
+                <!-- Người bán - người giữ giá -->
+                <div class="col-md-12">
+                    <h4>&nbsp;</h4>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <img src="/images/others/Seller.png" title="Người bán" width="20" height="20">&nbsp;&nbsp;<a href="#">Người bán</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </span>
+                            <input type="text" class="form-control" value="Trần Văn Đông">
+                            </input>
                         </div>
-                        <div class="col-sm-6">
-                            <button class="btn btn-primary padding" id="btnDG">
-                                Đấu giá
-                            </button>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <img src="/images/others/Handle-Price.png" title="Người đang giữ giá" width="20" height="20">&nbsp;&nbsp;<a href="#">Người giữ giá</a>
+                            </span>
+                            <input type="text" class="form-control" value="Nguyễn Quốc Duy">
+                            </input>
+                        </div>
+
+                        <div class="input-group" style="padding-top: 20px">
+                            <span class="input-group-addon">
+                                <img src="/images/others/Time-start.png" title="Thời gian bắt đầu" width="20" height="20">&nbsp;&nbsp;Ngày bắt đầu&nbsp;
+                            </span>
+                            <input type="text" class="form-control" value="20/06/2017 17:00:00">
+                            </input>
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <img src="/images/others/Time-end.png" title="Thời gian kết thúc" width="22" height="20">&nbsp;&nbsp;Ngày kết thúc
+                            </span>
+                            <input type="text" class="form-control" value="01/07/2017 22:00:00">
+                            </input>
                         </div>
                     </div>
                 </div>
-            </form>
-            {{/if}}
-            {{#if ../layoutModels.isLogged }}
-            <div class="row" style="margin-top: 20px">
-                <div class="col-sm-offset-2">
-                {{#if ../isLoved }}
-                  <a href="/product/removeLove/{{ProID}}" role="button" class="btn btn-danger">
-                    <span class="glyphicon glyphicon-remove"></span>
-                    Bỏ thích
-                </a>
-                {{else}}
-                <a href="/product/addLove/{{ProID}}" role="button" class="btn btn-danger">
-                        <span class="glyphicon glyphicon-heart"></span>
-                        Thích
-                    </a>
-                {{/if}}
-                <a href="xxxx" role="button"><img src="/images/others/History.png" title="Xem lịch sử đấu giá cho sản phẩm này" width="38" height="38"></a>
+                <!-- END Người bán - người giữ giá -->
+                <!-- Các button: Đấu giá - yêu thích - lịch sử -->
+                <div class="col-md-12">
+                    <div class="row">
+                        {{#if ../isPermit }}
+                        <div class="col-md-4">
+                            <form class="form-horizontal padding" id="frmAddItem" method="post" action="/auction/add">
+                                <div class="form-group" style="margin-top: 50px; margin-left: 10px">
+                                    <input type="hidden" id="txtP" name="proID" value="{{ProID}}">
+                                    <input type="hidden" id="txtStep" value="{{DeltaPrice}}">
+                                    <div class="row">
+                                        <div class="col-sm-6" class="input-group">
+                                            <input type="text" id="txtQ" name="price" class="form-control" value="{{Price}}">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <button class="btn btn-primary" id="btnDG">
+                                                Đấu giá
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        {{/if}}
+                        <div class="col-md-4" style="margin-top: -10px">
+                            <a href="xxxx" role="button" class="btn"><img src="/images/others/History.png" title="Xem lịch sử đấu giá cho sản phẩm này" width="38" height="38">
+                            </a>
+                        </div>
+                        {{#if ../layoutModels.isLogged }}
+                        <div class="col-md-2">
+                            {{#if ../isLoved }}
+                            <a href="/product/removeLove/{{ProID}}" role="button" class="btn btn-danger">
+                                <span class="glyphicon glyphicon-remove"></span>
+                                Bỏ thích
+                            </a>
+                            {{else}}
+                            <a href="/product/addLove/{{ProID}}" role="button" class="btn btn-danger">
+                                <span class="glyphicon glyphicon-heart"></span>
+                                Thích
+                            </a>
+                            {{/if}}
+                        </div>
+                        {{/if}}
+                    </div>
                 </div>
+                <!-- END Các button: Đấu giá - yêu thích - lịch sử -->
             </div>
-            {{/if}}
-        </div>
-        <div class="col-md-7">
-            <img src="/images/{{ProID}}/1.jpg" id="img0" height="450" width="500"/>
-            <div class="row" style="margin-top: 10px">
-                <div class="col-sm-3">
-                    
+            <div class="col-md-7 picture">
+                <img  src="/images/{{ProID}}/1.jpg" id="img0" class="img-rounded" alt="..." height="450" width="500"/>
+                <div class="row" style="margin-top: 10px">
+                    <div class="col-sm-3">
+                        
+                    </div>
+                    {{#each ../indexs}}
+                    <div class="col-sm-2">
+                        <img src="/images/{{../../proID}}/{{stt}}.jpg" id="img{{stt}}" class="img-rounded" alt="..."  height="50" width="50"/>
+                    </div>
+                    {{/each}}
                 </div>
-                {{#each ../indexs}}
-                <div class="col-sm-2">
-                    <img src="/images/{{../../proID}}/{{stt}}.jpg" id="img{{stt}}" height="50" width="50"/>
-                </div>
-                {{/each}}
             </div>
         </div>
     </div>
+</div>
 {{/with}}
+{{#section 'css'}}
+    <style type="text/css">
+        @alert-message-background: @brand-info;
+        .picture {
+            background-color: @alert-message-background;
+        }
+    </style>
+{{/section}}

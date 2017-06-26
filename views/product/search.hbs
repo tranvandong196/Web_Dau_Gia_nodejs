@@ -27,8 +27,8 @@ Không có sản phẩm!
     <h4>#{{findBy}}</h4>
     <h4>#{{arrange}}</h4>
     {{#each box }}
-    <div class="col-md-12">
-        <div class="thumbnail" style="min-height: 200px; max-width: ">
+    <div class="col-md-12" style="right: 15px">
+        <div class="thumbnail" style="min-height: 130px; max-width: ">
             <div class="row">
                 <div class="col-md-3">
                     <div class="row">
@@ -53,18 +53,46 @@ Không có sản phẩm!
                 <div class="col-md-6">
                     <div class="caption">
                         <a href="/product/detail/{{product.ProID}}"><h4>{{product.ProName}}</h4></a>
-                        <h4>Giá: {{formatNumber product.Price}} vnđ</h4>
-                        <h4>Giá mua ngay: {{formatNumber product.PriceToBuy}} vnđ</h4>
-                        <h4>Tồn: {{product.Quantity}}</h4>
-                        <p>
+                        <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/price-icon.png" title="Giá" width="25" height="25">&nbsp;&nbsp;{{formatNumber product.Price}} vnđ</h4>
+                        <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/PriceToBuy.png" title="Giá mua ngay" width="25" height="25">&nbsp;&nbsp;{{formatNumber product.PriceToBuy}} vnđ</h4>
+                        <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/Quantity-icon.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;{{product.Quantity}}</h4>
+                        <p>&nbsp;&nbsp;&nbsp;<img src="/images/others/Comment-Describe-icon.png" title="Mổ tả ngắn gọn" width="25" height="25">&nbsp;&nbsp;
                         {{product.TinyDes}}
                         </p>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <h4>Số lượt đấu giá: {{numberOfAuctions}}</h4>
-                    <h4>Thời gian còn lại: {{restTime}}</h4>
-                    <h4>Người đang giữ giá: {{handlePrice}}</h4>
+                    <h4>&nbsp;</h4>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <span class="input-group-addon">
+                            <img src="/images/others/Number-auction.png" title="Số lượt đấu giá" width="20" height="20">
+                        </span>
+                        <input type="text" class="form-control" value="{{numberOfAuctions}}">
+                        </input>
+                      </div>
+                      
+                      <div class="input-group">
+                        <span class="input-group-addon">
+                            <img src="/images/others/Time-remain.png" title="Thời gian còn lại" width="20" height="20">
+                        </span>
+                        <input type="text" class="form-control" value="{{restTime}}">
+                        </input>
+                      </div>
+
+                      <div class="input-group">
+                        <span class="input-group-addon">
+                            <img src="/images/others/Handle-Price.png" title="Người đang giữ giá" width="20" height="20">
+                        </span>
+                        <input type="text" class="form-control" value="{{handlePrice}}">
+                        </input>
+                      </div>
+                    </div>
+
+                    <!-- <h4>&nbsp;</h4>
+                    <h4>&nbsp;<img src="/images/others/Number-auction.png" title="Số lượt đấu giá" width="25" height="25">&nbsp;&nbsp;{{numberOfAuctions}}</h4>
+                    <h4>&nbsp;<img src="/images/others/Time-remain.png" title="Thời gian còn lại" width="25" height="25">&nbsp;&nbsp;{{restTime}}</h4>
+                    <h4>&nbsp;<img src="/images/others/Handle-Price.png" title="Người đang giữ giá" width="25" height="25">&nbsp;&nbsp;{{handlePrice}}</h4> -->
                 </div>
             </div>
         </div>
