@@ -69,25 +69,23 @@
             </form>
             {{/if}}
             {{#if ../layoutModels.isLogged }}
-             {{#if ../isLoved }}
+             
             <div class="row" style="margin-top: 20px">
                 <div class="col-sm-offset-2">
+                {{#if ../isLoved }}
                   <a href="/product/removeLove/{{ProID}}" role="button" class="btn btn-danger">
                     <span class="glyphicon glyphicon-remove"></span>
                     Bỏ thích
-                </a>  
-                </div>
-            </div>
-            {{else}}
-            <div class="row" style="margin-top: 20px">
-                <div class="col-sm-offset-2">
-                    <a href="/product/addLove/{{ProID}}" role="button" class="btn btn-danger">
+                </a>
+                {{else}}
+                <a href="/product/addLove/{{ProID}}" role="button" class="btn btn-danger">
                         <span class="glyphicon glyphicon-heart"></span>
                         Thích
                     </a>
+                {{/if}}
+                <a href="xxxx" role="button"><img src="/images/others/History.png" title="Xem lịch sử đấu giá cho sản phẩm này" width="38" height="38"></a>
                 </div>
             </div>
-            {{/if}}
             {{/if}}
         </div>
         <div class="col-md-7">
