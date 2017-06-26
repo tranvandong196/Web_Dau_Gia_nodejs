@@ -24,25 +24,6 @@ Không có sản phẩm!
 <h4>{{Tile}}</h4>
 <div class="row">
     <input type="hidden" id="txtname" value="{{name}}" />
-    {{#each products }}
-    <div class="col-md-4">
-        <div class="thumbnail" style="min-height: 390px; max-width: 300px">
-            <img src="/images/{{ProID}}/1_thumb.jpg" title="{{ProName}}" />
-            <div class="caption">
-                <h4>{{ProName}}</h4>
-                <h4>Giá: {{formatNumber Price}} vnđ</h4>
-                <h4>Tồn: {{Quantity}}</h4>
-                <p style="width: 250px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;">
-                {{TinyDes}}
-                </p>
-                <p>
-                    <a href="/product/detail/{{ProID}}" class="btn btn-default" role="button">
-                        Chi tiết
-                    </a>
-                </p>
     {{#each box }}
     <div class="col-md-11">
         <div class="thumbnail" style="min-height: 130px; max-width: ">
