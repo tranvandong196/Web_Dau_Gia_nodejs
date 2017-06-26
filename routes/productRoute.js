@@ -516,7 +516,7 @@ productRoute.get('/byFavorite', function(req, res) {
             });
         }
 
-        res.render('product/byFavorite', {
+        res.render('product/byUser', {
             layoutModels: res.locals.layoutModels,
             products: data.list,
             isEmpty: data.total === 0,
