@@ -134,43 +134,43 @@ exports.deleteByCat = function(id) {
     return deferred.promise;
 }
 
-exports.findbyName = function(entity) {
+// exports.findbyName = function(entity) {
 
-    var deferred = Q.defer();
-    var sql = mustache.render(
-        'SELECT * FROM products where ProName LIKE N' + "'%{{search}}%'",
-        entity        
-        );
+//     var deferred = Q.defer();
+//     var sql = mustache.render(
+//         'SELECT * FROM products where ProName LIKE N' + "'%{{search}}%'",
+//         entity        
+//         );
 
 
-    db.load(sql).then(function(rows) {
-        if (rows) {
-            deferred.resolve(rows);
-        } else {
-            deferred.resolve(null);
-        }
-    });
+//     db.load(sql).then(function(rows) {
+//         if (rows) {
+//             deferred.resolve(rows);
+//         } else {
+//             deferred.resolve(null);
+//         }
+//     });
     
-    return deferred.promise;
-}
+//     return deferred.promise;
+// }
 
-exports.findbyCat = function(entity) {
+// exports.findbyCat = function(entity) {
 
-    var deferred = Q.defer();
-    var sql = mustache.render(
-        'SELECT CatID FROM categories where CatName LIKE N' + "'%{{search}}%'",
-        entity        
-        );  
+//     var deferred = Q.defer();
+//     var sql = mustache.render(
+//         'SELECT CatID FROM categories where CatName LIKE N' + "'%{{search}}%'",
+//         entity        
+//         );  
     
-    db.load(sql).then(function(rows) {
-        if (rows) {
-            deferred.resolve(rows);
-        } else {
-         deferred.resolve(null);
-     }
- });
-    return deferred.promise;
-}
+//     db.load(sql).then(function(rows) {
+//         if (rows) {
+//             deferred.resolve(rows);
+//         } else {
+//          deferred.resolve(null);
+//      }
+//  });
+//     return deferred.promise;
+// }
 
 exports.loadAllByFavorite = function(userid) {
 
@@ -213,6 +213,7 @@ exports.loadPageByFavorite = function(userid, limit, offset) {
     
     return deferred.promise;
 }
+
 // exports.makeCartItem = function(id, q) {
 
 //     var deferred = Q.defer();
@@ -233,3 +234,48 @@ exports.loadPageByFavorite = function(userid, limit, offset) {
 
 //     return deferred.promise;
 // }
+
+exports.search = function(entity){
+    var deferred = Q.defer();
+
+    var text = entity.text;
+    var findBy = entity.findBy;
+    var arrange = entity.arrange;
+    var sql;
+
+    if(findBy === 'Tìm theo danh mục')
+    {
+        findBy = mustache.render('where CatID in (select CatID from categories where CatName like "%{{text}}%")', entity);
+    }
+    else if(findBy === 'Tìm theo tên sản phẩm')
+    {
+        findBy = mustache.render('where ProName like "%{{text}}%"', entity);
+    }
+    else if(findBy === 'Tất cả')
+    {
+        findBy = mustache.render('where CatID in (select CatID from categories where CatName like "%{{text}}%") or ProName like "%{{text}}%"', entity);
+    }
+
+    sql = mustache.render('select * from products ' + findBy + ' order by ', entity);
+    if(arrange === 'Thời gian hết hạn tăng')
+    {
+        sql = sql + 'TimeDown asc';
+    }
+    else if(arrange === 'Thời gian hết hạn giảm')
+    {
+        sql = sql + 'TimeDown desc';
+    }
+    else if(arrange === 'Giá tăng dần')
+    {
+        sql = sql + 'Price asc';
+    }
+    else if(arrange === 'Giá giảm dần')
+    {
+        sql = sql + 'Price desc';
+    }
+    db.load(sql).then(function(rows){
+        deferred.resolve(rows);
+    })
+
+    return deferred.promise;
+}

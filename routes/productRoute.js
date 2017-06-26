@@ -259,211 +259,232 @@ productRoute.post('/add/:userID', function(req, res) {
     });
 });
 
+// productRoute.post('/search', function(req, res) {
+//     var text = req.body.search;
+//     var findBy = req.body.findBy;
+//     var arrange = req.body.arrange;
+//     var entity ={
+//      text: text
+//      findBy: findBy,
+//      arrange: arrange,
+//     };
+
+//          var products;
+//          var name = text;
+
+//          if(name == "")
+//          {
+//             var rec_per_page = 6;
+//             var curPage = req.body.pag;
+//             var offset = (curPage - 1) * rec_per_page;
+//             product.loadPageByCat(catid, rec_per_page, offset)
+//             .then(function(data) {
+
+//                 var number_of_pages = data.total / rec_per_page;
+//                 if (data.total % rec_per_page > 0) {
+//                     number_of_pages++;
+//                 }
+//                 var pages = [];
+//                 for (var i = 1; i <= number_of_pages; i++) {
+//                     pages.push({
+//                         pageValue: i,
+//                         catId: catid,
+//                         isActive: i === +curPage
+//                     });
+//                 }
+//                 for(var i = 0;i <data.list.length - 1;i++)
+//                 {
+//                     for(var j=data.list.length-1; j>i;j--)
+//                     {
+//                         if(opt == 1)
+//                         {
+//                          if(data.list[i].Price > data.list[j].Price)
+//                          {
+//                             var temp = data.list[i];
+//                             data.list[i] = data.list[j];
+//                             data.list[j] = temp;
+//                         }
+//                     }
+//                     if(opt == 2)
+//                     {
+//                         if(data.list[i].DeltaPrice > data.list[j].DeltaPrice)
+//                         {
+//                             var temp = data.list[i];
+//                             data.list[i] = data.list[j];
+//                             data.list[j] = temp;
+//                         }
+//                     }
+//                 }
+//             }
+
+//             res.render('product/search', {
+//                 layoutModels: res.locals.layoutModels,
+//                 products: data.list,
+//                 isEmpty: data.total === 0,
+//                 catId: catid,
+//                 name:name,
+//                 pages: pages,
+//                 curPage: curPage,
+//                 prevPage: curPage - 1,
+//                 nextPage: curPage + 1,
+//                 showPrevPage: curPage > 1,
+//                 showNextPage: curPage < number_of_pages - 1,
+//             });
+//         });
+
+//     }
+
+//     else
+//     {
+
+//         product.findbyName(entity).then(function(rows){
+
+//             if(rows.length === 0)
+//             {
+//                 product.findbyCat(entity)
+//                 .then(function(kq) {
+//                     var rec_per_page = 6;
+//                     var curPage = req.query.page ? req.query.page : 1;
+//                     var offset = (curPage - 1) * rec_per_page;
+
+//                     if(kq.length)
+//                     {
+//                        product.loadPageByCat(kq[0].CatID, rec_per_page, offset)
+//                        .then(function(data) {
+
+//                         var number_of_pages = data.total / rec_per_page;
+//                         if (data.total % rec_per_page > 0) {
+//                             number_of_pages++;
+//                         }
+//                         var pages = [];
+//                         for (var i = 1; i <= number_of_pages; i++) {
+//                             pages.push({
+//                                 pageValue: i,
+//                                 catId: kq[0].CatID,
+//                                 isActive: i === +curPage
+//                             });
+//                         }
+//                         for(var i = 0;i <data.list.length - 1;i++)
+//                         {
+//                             for(var j=data.list.length-1; j>i;j--)
+//                             {
+//                                 if(opt == 1)
+//                                 {
+//                                  if(data.list[i].Price > data.list[j].Price)
+//                                  {
+//                                     var temp = data.list[i];
+//                                     data.list[i] = data.list[j];
+//                                     data.list[j] = temp;
+//                                 }
+//                             }
+//                             if(opt == 2)
+//                             {
+//                                 if(data.list[i].DeltaPrice > data.list[j].DeltaPrice)
+//                                 {
+//                                     var temp = data.list[i];
+//                                     data.list[i] = data.list[j];
+//                                     data.list[j] = temp;
+//                                 }
+//                             }
+//                         }
+//                     }
+
+//                     res.render('product/search', {
+//                         layoutModels: res.locals.layoutModels,
+//                         products: data.list,
+//                         isEmpty: data.total === 0,
+//                         catId: kq[0].CatID,
+//                         name:name,
+//                         pages: pages,
+//                         curPage: curPage,
+//                         prevPage: curPage - 1,
+//                         nextPage: curPage + 1,
+//                         showPrevPage: curPage > 1,
+//                         showNextPage: curPage < number_of_pages - 1,
+//                     });
+//                 });
+//                    }
+
+//                    else {
+//                     res.render('product/search', {
+//                         layoutModels: res.locals.layoutModels,
+//                         isEmpty: true,
+//                     });
+//                 }
+
+//             });
+//             }
+
+//             if(rows.length > 0)
+//             {
+//                 for(var i = 0;i <rows.length - 1;i++)
+//                 {
+//                     for(var j=i+1; j<rows.length;j++)
+//                     {
+//                         if(opt == 1)
+//                         {
+//                             if(rows[i].Price > rows[j].Price)
+//                             {
+//                                 var temp = rows[i];
+//                                 rows[i] = rows[j];
+//                                 rows[j] = temp;
+//                             }
+//                         }
+                        
+//                         if(opt == 2)
+//                         {
+//                             if(rows[i].DeltaPrice > rows[j].DeltaPrice)
+//                             {
+//                                 var temp = rows[i];
+//                                 rows[i] = rows[j];
+//                                 rows[j] = temp;
+//                             }
+//                         }
+//                     }
+//                 }
+//                 res.render('product/search', {
+//                     layoutModels: res.locals.layoutModels,
+//                     name:name,
+//                     products: rows,
+//                 });
+//             }
+
+
+//         });
+
+//     }
+
+// });
+
 productRoute.post('/search', function(req, res) {
+    var rec_per_page = 6;
+
+    var curPage = 1;
+    var offset = 0;
     var text = req.body.search;
-    var opt = req.body.option;
-    var catid = req.body.cat;
+    var findBy = req.body.findBy;
+    var arrange = req.body.arrange;
+
     var entity ={
-     search: text
- };
+         text: text,
+         findBy: findBy,
+         arrange: arrange,
+    };
 
- var products;
- var name = text;
-
- if(name == "")
- {
-    var rec_per_page = 6;
-    var curPage = req.body.pag;
-    var offset = (curPage - 1) * rec_per_page;
-    product.loadPageByCat(catid, rec_per_page, offset)
-    .then(function(data) {
-
-        var number_of_pages = data.total / rec_per_page;
-        if (data.total % rec_per_page > 0) {
-            number_of_pages++;
-        }
-        var pages = [];
-        for (var i = 1; i <= number_of_pages; i++) {
-            pages.push({
-                pageValue: i,
-                catId: catid,
-                isActive: i === +curPage
-            });
-        }
-        for(var i = 0;i <data.list.length - 1;i++)
+    product.search(entity).then(function(products){
+        var list = [];
+        for(var i = offset; i < products.length; i++)
         {
-            for(var j=data.list.length-1; j>i;j--)
+            list.push(products[i]);
+            if(i === offset + 5)
             {
-                if(opt == 1)
-                {
-                 if(data.list[i].Price > data.list[j].Price)
-                 {
-                    var temp = data.list[i];
-                    data.list[i] = data.list[j];
-                    data.list[j] = temp;
-                }
-            }
-            if(opt == 2)
-            {
-                if(data.list[i].DeltaPrice > data.list[j].DeltaPrice)
-                {
-                    var temp = data.list[i];
-                    data.list[i] = data.list[j];
-                    data.list[j] = temp;
-                }
+                i = products.length;
             }
         }
-    }
-
-    res.render('product/search', {
-        layoutModels: res.locals.layoutModels,
-        products: data.list,
-        isEmpty: data.total === 0,
-        catId: catid,
-        name:name,
-        pages: pages,
-        curPage: curPage,
-        prevPage: curPage - 1,
-        nextPage: curPage + 1,
-        showPrevPage: curPage > 1,
-        showNextPage: curPage < number_of_pages - 1,
-    });
-});
-
-}
-
-else
-{
-
-    product.findbyName(entity).then(function(rows){
-
-        if(rows.length === 0)
-        {
-            product.findbyCat(entity)
-            .then(function(kq) {
-                var rec_per_page = 6;
-                var curPage = req.query.page ? req.query.page : 1;
-                var offset = (curPage - 1) * rec_per_page;
-
-                if(kq.length)
-                {
-                   product.loadPageByCat(kq[0].CatID, rec_per_page, offset)
-                   .then(function(data) {
-
-                    var number_of_pages = data.total / rec_per_page;
-                    if (data.total % rec_per_page > 0) {
-                        number_of_pages++;
-                    }
-                    var pages = [];
-                    for (var i = 1; i <= number_of_pages; i++) {
-                        pages.push({
-                            pageValue: i,
-                            catId: kq[0].CatID,
-                            isActive: i === +curPage
-                        });
-                    }
-                    for(var i = 0;i <data.list.length - 1;i++)
-                    {
-                        for(var j=data.list.length-1; j>i;j--)
-                        {
-                            if(opt == 1)
-                            {
-                             if(data.list[i].Price > data.list[j].Price)
-                             {
-                                var temp = data.list[i];
-                                data.list[i] = data.list[j];
-                                data.list[j] = temp;
-                            }
-                        }
-                        if(opt == 2)
-                        {
-                            if(data.list[i].DeltaPrice > data.list[j].DeltaPrice)
-                            {
-                                var temp = data.list[i];
-                                data.list[i] = data.list[j];
-                                data.list[j] = temp;
-                            }
-                        }
-                    }
-                }
-
-                res.render('product/search', {
-                    layoutModels: res.locals.layoutModels,
-                    products: data.list,
-                    isEmpty: data.total === 0,
-                    catId: kq[0].CatID,
-                    name:name,
-                    pages: pages,
-                    curPage: curPage,
-                    prevPage: curPage - 1,
-                    nextPage: curPage + 1,
-                    showPrevPage: curPage > 1,
-                    showNextPage: curPage < number_of_pages - 1,
-                });
-            });
-               }
-
-               else {
-                res.render('product/search', {
-                    layoutModels: res.locals.layoutModels,
-                    isEmpty: true,
-                });
-            }
-
-        });
+        var data = {
+            total: products.length,
+            list: list,
         }
-
-        if(rows.length > 0)
-        {
-            for(var i = 0;i <rows.length - 1;i++)
-            {
-                for(var j=i+1; j<rows.length;j++)
-                {
-                    if(opt == 1)
-                    {
-                        if(rows[i].Price > rows[j].Price)
-                        {
-                            var temp = rows[i];
-                            rows[i] = rows[j];
-                            rows[j] = temp;
-                        }
-                    }
-                    
-                    if(opt == 2)
-                    {
-                        if(rows[i].DeltaPrice > rows[j].DeltaPrice)
-                        {
-                            var temp = rows[i];
-                            rows[i] = rows[j];
-                            rows[j] = temp;
-                        }
-                    }
-                }
-            }
-            res.render('product/search', {
-                layoutModels: res.locals.layoutModels,
-                name:name,
-                products: rows,
-            });
-        }
-
-
-    });
-
-}
-
-});
-
-productRoute.get('/search', function(req, res) {
-
-    var catid = req.query.id;
-    var rec_per_page = 6;
-    var curPage = req.query.page ? req.query.page : 1;
-    var offset = (curPage - 1) * rec_per_page;
-
-    product.loadPageByCat(catid, rec_per_page, offset)
-    .then(function(data) {
-
         var number_of_pages = data.total / rec_per_page;
         if (data.total % rec_per_page > 0) {
             number_of_pages++;
@@ -473,7 +494,6 @@ productRoute.get('/search', function(req, res) {
         for (var i = 1; i <= number_of_pages; i++) {
             pages.push({
                 pageValue: i,
-                catId: catid,
                 isActive: i === +curPage
             });
         }
@@ -482,7 +502,11 @@ productRoute.get('/search', function(req, res) {
             layoutModels: res.locals.layoutModels,
             products: data.list,
             isEmpty: data.total === 0,
-            catId: catid,
+            text: text,
+            findBy: findBy,
+            arrange: arrange,
+            length: products.length,
+
             pages: pages,
             curPage: curPage,
             prevPage: curPage - 1,
@@ -490,7 +514,69 @@ productRoute.get('/search', function(req, res) {
             showPrevPage: curPage > 1,
             showNextPage: curPage < number_of_pages - 1,
         });
-    });
+    })
+});
+
+productRoute.get('/search', function(req, res) {
+    var rec_per_page = 6;
+    var curPage = req.query.page ? req.query.page : 1;
+    var offset = (curPage - 1) * rec_per_page;
+    console.log('offset: ' + offset);
+    var text = req.query.text;
+    var findBy = req.query.findBy;
+    var arrange = req.query.arrange;
+
+    var entity ={
+         text: text,
+         findBy: findBy,
+         arrange: arrange,
+    };
+    console.log(entity);
+    product.search(entity).then(function(products){
+        var list = [];
+        for(var i = offset; i < products.length; i++)
+        {
+            list.push(products[i]);
+            if(i === offset + 5)
+            {
+                i = products.length;
+            }
+        }
+        console.log(list);
+        var data = {
+            total: products.length,
+            list: list,
+        }
+        var number_of_pages = data.total / rec_per_page;
+        if (data.total % rec_per_page > 0) {
+            number_of_pages++;
+        }
+
+        var pages = [];
+        for (var i = 1; i <= number_of_pages; i++) {
+            pages.push({
+                pageValue: i,
+                isActive: i === +curPage
+            });
+        }
+
+        res.render('product/search', {
+            layoutModels: res.locals.layoutModels,
+            products: data.list,
+            isEmpty: data.total === 0,
+            text: text,
+            findBy: findBy,
+            arrange: arrange,
+            length: products.length,
+
+            pages: pages,
+            curPage: curPage,
+            prevPage: curPage - 1,
+            nextPage: curPage + 1,
+            showPrevPage: curPage > 1,
+            showNextPage: curPage < number_of_pages - 1,
+        });
+    })
 });
 
 productRoute.get('/byFavorite', function(req, res) {

@@ -3,8 +3,6 @@ var moment = require('moment');
 
 var product = require('../models/product');
 var cart = require('../models/cart');
-var order = require('../models/order');
-var detail = require('../models/order-detail');
 var restrict = require('../middle-wares/restrict');
 
 var cartRoute = express.Router();
@@ -63,21 +61,21 @@ cartRoute.post('/update', restrict, function(req, res) {
     res.redirect('/cart');
 });
 
-cartRoute.post('/checkout', restrict, function(req, res) {
-    var entity = {
-        OrderDate: moment().format('YYYY-MM-DDTHH:mm'),
-        UserID: req.session.user.id,
-        Total: req.body.total
-    };
+// cartRoute.post('/checkout', restrict, function(req, res) {
+//     var entity = {
+//         OrderDate: moment().format('YYYY-MM-DDTHH:mm'),
+//         UserID: req.session.user.id,
+//         Total: req.body.total
+//     };
 
-    order.insert(entity)
-        .then(function(orderId) {
-            detail.insertAll(req.session.cart, orderId)
-                .then(function(idList) {
-                	req.session.cart = [];
-                    res.redirect('/cart');
-                });
-        });
-});
+//     order.insert(entity)
+//         .then(function(orderId) {
+//             detail.insertAll(req.session.cart, orderId)
+//                 .then(function(idList) {
+//                 	req.session.cart = [];
+//                     res.redirect('/cart');
+//                 });
+//         });
+// });
 
 module.exports = cartRoute;

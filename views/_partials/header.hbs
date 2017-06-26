@@ -5,74 +5,72 @@
             <div class="row" style="top: 15px">
                 <!-- Logo và thanh tìm kiến -->
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                    <img src="/images/Others/daugialogo.png" style="height: 70px;margin-left: 5px">
+                    <img src="/images/Others/daugialogo.png" style="height: 80px;margin-left: 5px; margin-top: 10px">
                 </div>
-                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-                </div>
-                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                <div class="col-sm-6">
                     <div class="panel panel-default" style="background-color: #CCCCCC">
                         <div class="panel-body">
-                            <div class="input-group">
-                                <input class="form-control" placeholder="Tìm kiếm" style="width: 90%" type="text" id="txtSearch">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-success" id="search">
-                                        Tìm kiếm
-                                    </button>
-                                </span>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="Tìm kiếm" type="text" id="txtSearch" value="{{text}}">
+                                <div class="row" style="margin-top: 10px">
+                                    <div class="col-sm-5">
+                                        <select class="form-control" name="findBy" id="slFindBy">
+                                          <option>Tất cả</option>
+                                          <option>Tìm theo tên sản phẩm</option>
+                                          <option>Tìm theo danh mục</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <select class="form-control" name="arrange" id="slArrange">
+                                          <option>Thời gian hết hạn tăng</option>
+                                          <option>Thời gian hết hạn giảm</option>
+                                          <option>Giá tăng dần</option>
+                                          <option>Giá giảm dần</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-success" id="btnSearch">
+                                                Tìm kiếm
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- END Logo và thanh tìm kiến -->
-                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-                </div>
-                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style=" top: 10px;text-align: right;right: 10px">
-                    <a href="others/gioi-thieu.html">
-                        <i style=" font-size: 16px;">
-                        </i>
-                        <span style="color: #282525">
-                            Giới thiệu
-                        </span>
-                    </a>
-                    <a href="others/hoi-dap.html">
-                        <i style=" font-size: 16px;">
-                        </i>
-                        <span style="color: #282525">
-                            <span class="glyphicon glyphicon-triangle-right">
-                            </span>
-                            Hỏi đáp
-                        </span>
-                    </a>
-                    <a href="#">
-                        <i style=" font-size: 16px;">
-                        </i>
-                        <span style="color: #282525">
-                            <span class="glyphicon glyphicon-earphone">
-                            </span>
-                            Liên hệ
-                        </span>
-                    </a>
-                    <br>
+                <div class="col-sm-3" style=" top: 20px; text-align: right; right: 30px">
                     {{#if layoutModels.isLogged }}
                     <div class="btn-group">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Xin chào, <b>{{ layoutModels.curUser.name }}</b> <span class="caret"></span>
+                        <div class="row">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Xin chào, <b>{{ layoutModels.curUser.name }}</b> <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/account/profile">Thông tin cá nhân</a></li>
+                                <li><a id="upProduct" href="/product/add">Đăng sản phẩm</a></li>
+                                <li><a id="ProductFavorite" href="/product/byFavorite">Sản phẩm yêu thích</a></li>
+                                {{#if layoutModels.isAdmin }}
+                                <li><a id="manageCategories" href="/account/manageRequests">Duyệt yêu cầu</a></li>
+                                <li><a id="manageCategories" href="/account/manageCategories">Quản lý danh mục</a></li>
+                                <li><a id="manaUsers" href="/account/manageUsers">Quản lý người dùng</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
+                                {{else}}
+                                <li role="separator" class="divider"></li>
+                                <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
+                                {{/if}}
+                            </ul>
+                        </div>
+                        <a href="index.html">
+                            <i style="margin-right: 5px; font-size: 17px; top: -1px">
+                                <span class="glyphicon glyphicon-shopping-cart">
+                                    {{layoutModels.cartSumQ}}
+                                </span>
+                            </i>
                         </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/account/profile">Thông tin cá nhân</a></li>
-                            <li><a id="upProduct" href="/product/add">Đăng sản phẩm</a></li>
-                            <li><a id="ProductFavorite" href="/product/byFavorite">Sản phẩm yêu thích</a></li>
-                            {{#if layoutModels.isAdmin }}
-                            <li><a id="manageCategories" href="/account/manageRequests">Duyệt yêu cầu</a></li>
-                            <li><a id="manageCategories" href="/account/manageCategories">Quản lý danh mục</a></li>
-                            <li><a id="manaUsers" href="/account/manageUsers">Quản lý người dùng</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
-                            {{else}}
-                            <li role="separator" class="divider"></li>
-                            <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
-                            {{/if}}
-                        </ul>
                     </div>
                     {{else}}
                     <a href="/account/login">
@@ -108,61 +106,38 @@
                         </a>
                     </li>
                     <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
-                        <a href="#">
+                        <a href="others/gioi-thieu.html">
                             <i style="margin-right: 5px; font-size: 17px; top: -1px">
-                                Thời trang
                             </i>
-                        </a>
-                    </li>
-                    <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
-                        <a href="#">
-                            <i style="margin-right: 5px; font-size: 17px; top: -1px">
-                                Điện máy
-                            </i>
-                        </a>
-                    </li>
-                    <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
-                        <a href="#">
-                            <i style="margin-right: 5px; font-size: 17px; top: -1px">
-                                Tin học
-                            </i>
-                        </a>
-                    </li>
-                    <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
-                     <div class="dropdown">
-                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:100%">Sắp Xếp
-                          <span class="caret"></span></button>
-                          <ul class="dropdown-menu">
-                            <li><a href="#" id="sort1">Giá tăng dần</a></li>
-                            <li><a href="#" id="sort2">Thời gian kết thúc giảm dần</a></li>
-                        </ul>
-                    </div>
-                </li>
-                {{#if layoutModels.isLogged }}
-                <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
-                    <a href="index.html">
-                        <i style="margin-right: 5px; font-size: 17px; top: -1px">
-                            Giỏ hàng
-                            <span class="glyphicon glyphicon-shopping-cart">
-                                {{layoutModels.cartSumQ}}
+                            <span style="color: #282525">
+                                Giới thiệu
                             </span>
-                        </i>
-                    </a>
-                </li>
-                {{else}}
-                <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
-                    <a href="index.html">
-                        <i style="margin-right: 5px; font-size: 17px; top: -1px">
-                            Giỏ hàng
-                            <span class="glyphicon glyphicon-shopping-cart">
-                                {{layoutModels.cartSumQ}}
+                        </a>
+                    </li>
+                    <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
+                        <a href="others/hoi-dap.html">
+                            <i style="margin-right: 5px; font-size: 17px; top: -1px">
+                            </i>
+                            <span style="color: #282525">
+                                <span class="glyphicon glyphicon-triangle-right">
+                                </span>
+                                Hỏi đáp
                             </span>
-                        </i>
-                    </a>
-                </li>
-                {{/if}}
-            </ul>
-        </div>
-    </header>
-</div>
+                        </a>
+                    </li>
+                    <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
+                        <a href="#">
+                            <i style="margin-right: 5px; font-size: 17px; top: -1px">
+                            </i>
+                            <span style="color: #282525">
+                                <span class="glyphicon glyphicon-earphone">
+                                </span>
+                                Liên hệ
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </header>
+    </div>
 </div>

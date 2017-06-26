@@ -14,10 +14,10 @@
         {{> header this }}
         <form id="frmLogout" method="post" action="/account/logout"></form>
         <form id="frmSearch" method="post" action="/product/search">
-            <input name="search" id="textSearch" class="hidden"></input>
-             <input name="option" id="textOption" class="hidden"></input>
-              <input name="cat" id="textCat" class="hidden"></input>
-              <input name="pag" id="textPage" class="hidden"></input>
+              <input name="search" id="txtSearch0" class="hidden"></input>
+              <input name="findBy" id="txtFindBy" class="hidden"></input>
+              <input name="arrange" id="txtArr" class="hidden"></input>
+              <input name="page" id="textPage" class="hidden"></input>
         </form>
         <div class="container-fluid">
             <div class="row">
@@ -60,19 +60,10 @@
         });
     </script>
      <script type="text/javascript">
-        $('#search').on('click', function () {
-            $('#textSearch').val($('#txtSearch').val());
-            $('#frmSearch').submit();
-        });
-    </script>
-      <script type="text/javascript">
-        $('#sort1').on('click', function () {
-            $('#textOption').val("1");
-            $('#frmSearch').submit();
-        });
-
-         $('#sort2').on('click', function () {
-            $('#textOption').val("2");
+        $('#btnSearch').on('click', function () {
+            $('#txtSearch0').val($('#txtSearch').val());
+            $('#txtFindBy').val($('#slFindBy').val());
+            $('#txtArr').val($('#slArrange').val());
             $('#frmSearch').submit();
         });
     </script>

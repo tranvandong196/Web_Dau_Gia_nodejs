@@ -1,5 +1,5 @@
 {{#section 'title'}}
-Danh sách sản phẩm
+    Kết quả tìm kiếm
 {{/section}}
 
 {{#section 'js'}}
@@ -12,10 +12,7 @@ Danh sách sản phẩm
 </script>
 <script type="text/javascript">
     $('#textSearch').val($('#txtname').val());
-    $('#textCat').val($('#txtcat').val());
-    $('#textPage').val($('#txtpage').val());
 </script>
-
 {{/section}}
 
 {{#if isEmpty }}
@@ -23,12 +20,12 @@ Không có sản phẩm!
 {{else}}
 <form id="frmAddToCart" method="post" action="/cart/add1">
     <input type="hidden" id="txtP" name="proId" />
-    <input type="hidden" id="txtC" name="catId" value="{{catId}}" />
 </form>
 <div class="row">
     <input type="hidden" id="txtname" value="{{name}}" />
-    <input type="hidden" id="txtcat" value="{{catId}}" />
-    <input type="hidden" id="txtpage" value="{{curPage}}" />
+    <h4>Có {{length}} sản phẩm tìm kiếm được với từ khóa "{{text}}"
+    <h4>#{{findBy}}</h4>
+    <h4>#{{arrange}}</h4>
     {{#each products }}
     <div class="col-md-4">
         <div class="thumbnail" style="min-height: 390px; max-width: 300px">
@@ -37,55 +34,51 @@ Không có sản phẩm!
                 <h4>{{ProName}}</h4>
                 <h4>Giá: {{formatNumber Price}}</h4>
                 <h4>Tồn: {{Quantity}}</h4>
-                <p style="width: 300px;
+                <p style="width: 250px;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;">
                 {{TinyDes}}
-            </p>
-            <p>
-                <a href="/product/detail/{{ProID}}" class="btn btn-default" role="button">
-                    Chi tiết
-                </a>
-                {{#if ../layoutModels.isLogged }}
-                <a href="javascript:;" class="btn btn-success addItem" role="button" data-id="{{ProID}}">
-                    <i class="fa fa-cart-plus"></i>
-                    Đặt mua
-                </a>
-                {{/if}}
-            </p>
+                </p>
+                <p>
+                    <a href="/product/detail/{{ProID}}" class="btn btn-default" role="button">
+                        Chi tiết
+                    </a>
+                </p>
+            </div>
         </div>
     </div>
+    {{/each}}
 </div>
-{{/each}}
+<div class="row">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {{#if showPrevPage}}
+            <li>
+                <a href="?page={{prevPage}}&text={{text}}&findBy={{findBy}}&arrange={{arrange}}">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                </a>
+            </li>
+            {{/if}}
+            {{#each pages }}
+            {{#if isActive }}
+            <li class="active">
+                <a href="?page={{pageValue}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}">{{pageValue}}</a>
+            </li>
+            {{else}}
+            <li>
+                <a href="?page={{pageValue}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}">{{pageValue}}</a>
+            </li>
+            {{/if}}
+            {{/each}}
+            {{#if showNextPage }}
+            <li>
+                <a href="?page={{pageValue}}&text={{text}}&findBy={{findBy}}&arrange={{arrange}}" aria-label="Next">
+                    <span class="glyphicon glyphicon-arrow-right"></span>
+                </a>
+            </li>
+            {{/if}}
+        </ul>
+    </nav>
 </div>
-<nav aria-label="Page navigation">
-    <ul class="pagination">
-        {{#if showPrevPage}}
-        <li>
-            <a href="?page={{prevPage}}" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
-        {{/if}}
-        {{#each pages }}
-        {{#if isActive }}
-        <li class="active">
-            <a href="?page={{pageValue}}&id={{catId}}" >{{pageValue}}</a>
-        </li>
-        {{else}}
-        <li>
-            <a href="?page={{pageValue}}&id={{catId}}" >{{pageValue}}</a>
-        </li>
-        {{/if}}
-        {{/each}}
-        {{#if showNextPage }}
-        <li>
-            <a href="?page={{nextPage}}&id={{catId}}" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
-        {{/if}}
-    </ul>
-</nav>
 {{/if}}
