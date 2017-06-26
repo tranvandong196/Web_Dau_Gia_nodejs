@@ -26,24 +26,38 @@ Không có sản phẩm!
     <h4>Có {{length}} sản phẩm tìm kiếm được với từ khóa "{{text}}"
     <h4>#{{findBy}}</h4>
     <h4>#{{arrange}}</h4>
-    {{#each products }}
+    {{#each box }}
     <div class="col-md-4">
-        <div class="thumbnail" style="min-height: 390px; max-width: 300px">
-            <img src="/images/{{ProID}}/1_thumb.jpg" title="{{ProName}}" />
+        <div class="thumbnail" style="min-height: 340px; max-width: 300px">
+            <a href="/product/detail/{{product.ProID}}"><img src="/images/{{product.ProID}}/1_thumb.jpg" title="{{product.ProName}}" href="/product/detail/{{product.ProID}}"/></a>
+            
             <div class="caption">
-                <h4>{{ProName}}</h4>
-                <h4>Giá: {{formatNumber Price}}</h4>
-                <h4>Tồn: {{Quantity}}</h4>
+                <a href="/product/detail/{{product.ProID}}"><h4>{{product.ProName}}</h4></a>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h4>Giá: {{formatNumber product.Price}}</h4>
+                        <h4>Tồn: {{product.Quantity}}</h4>
+                    </div>
+                    <div class="col-sm-offset-1 col-sm-3">
+                    {{#if ../layoutModels.isLogged }}
+                    {{#if isLoved }}
+                        <a href="/product/search/removeLove/{{product.ProID}}?page={{../curPage}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}" role="button">
+                            <img src="/images/others/heart.jpg" width="30" height="30">
+                        </a>
+                    {{else}}
+                        <a href="/product/search/addLove/{{product.ProID}}?page={{../curPage}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}" role="button" >
+                            <img src="/images/others/heart-empty.png" width="30" height="30">
+                        </a>
+                    {{/if}}
+                    {{/if}}
+                        
+                    </div>
+                </div>
                 <p style="width: 250px;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;">
-                {{TinyDes}}
-                </p>
-                <p>
-                    <a href="/product/detail/{{ProID}}" class="btn btn-default" role="button">
-                        Chi tiết
-                    </a>
+                {{product.TinyDes}}
                 </p>
             </div>
         </div>

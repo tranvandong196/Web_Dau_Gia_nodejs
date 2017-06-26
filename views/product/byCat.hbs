@@ -26,10 +26,10 @@ Không có sản phẩm!
     <input type="hidden" id="txtname" value="{{name}}" />
     {{#each products }}
     <div class="col-md-4">
-        <div class="thumbnail" style="min-height: 390px; max-width: 300px">
-            <img src="/images/{{ProID}}/1_thumb.jpg" title="{{ProName}}" />
+        <div class="thumbnail" style="min-height: 340px; max-width: 300px">
+            <a href="/product/detail/{{product.ProID}}"><img src="/images/{{ProID}}/1_thumb.jpg" title="{{ProName}}" href="/product/detail/{{ProID}}"/></a>
             <div class="caption">
-                <h4>{{ProName}}</h4>
+                <a href="/product/detail/{{ProID}}"><h4>{{ProName}}</h4></a>
                 <h4>Giá: {{formatNumber Price}}</h4>
                 <h4>Tồn: {{Quantity}}</h4>
                 <p style="width: 250px;
@@ -37,11 +37,6 @@ Không có sản phẩm!
                 overflow: hidden;
                 text-overflow: ellipsis;">
                 {{TinyDes}}
-                </p>
-                <p>
-                    <a href="/product/detail/{{ProID}}" class="btn btn-default" role="button">
-                        Chi tiết
-                    </a>
                 </p>
             </div>
         </div>
@@ -53,7 +48,7 @@ Không có sản phẩm!
         <ul class="pagination">
             {{#if showPrevPage}}
             <li>
-                <a href="?page={{prevPage}}" aria-label="Previous">
+                <a href="?page={{prevPage}}">
                     <span class="glyphicon glyphicon-arrow-left"></span>
                 </a>
             </li>

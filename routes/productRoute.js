@@ -139,7 +139,7 @@ productRoute.get('/addLove/:id', restrict, function(req, res) {
     };
     favorite.insert(entity).then(function(insertId){
         res.redirect('/product/detail/' + id);
-    })
+    });
 });
 
 productRoute.get('/removeLove/:id', restrict, function(req, res) {
@@ -152,7 +152,184 @@ productRoute.get('/removeLove/:id', restrict, function(req, res) {
     };
     favorite.delete(entity).then(function(affectedRows){
         res.redirect('/product/detail/' + id);
-    })
+    });
+});
+
+productRoute.get('/search/addLove/:id', restrict, function(req, res) {
+    //TODO
+    var id = req.params.id;
+    var user = res.locals.layoutModels.curUser;
+    var entity = {
+        proID: id,
+        userID: user.id,
+    };
+    favorite.insert(entity).then(function(insertId){
+        var rec_per_page = 6;
+        var curPage = req.query.page ? req.query.page : 1;
+        var offset = (curPage - 1) * rec_per_page;
+        console.log('offset: ' + offset);
+        var text = req.query.text;
+        var findBy = req.query.findBy;
+        var arrange = req.query.arrange;
+
+        var entity ={
+             text: text,
+             findBy: findBy,
+             arrange: arrange,
+        };
+        product.search(entity).then(function(products){
+            var list = [];
+            for(var i = offset; i < products.length; i++)
+            {
+                list.push(products[i]);
+                if(i === offset + 5)
+                {
+                    i = products.length;
+                }
+            }
+            var data = {
+                total: products.length,
+                list: list,
+            }
+            var number_of_pages = data.total / rec_per_page;
+            if (data.total % rec_per_page > 0) {
+                number_of_pages++;
+            }
+
+            var pages = [];
+            for (var i = 1; i <= number_of_pages; i++) {
+                pages.push({
+                    pageValue: i,
+                    isActive: i === +curPage
+                });
+            }
+
+            product.loadAllByFavorite(res.locals.layoutModels.curUser.id).then(function(rows){
+                var box = [];   
+                for (var i = 0; i < data.list.length; i++) {
+                    var bool = rows.findIndex(function(element){
+                        return element.ProID === data.list[i].ProID;
+                    });
+
+                    var isLoved = false;
+                    if(bool !== -1)
+                    {
+                        isLoved = true;
+                    }
+                    var temp = {
+                        product: data.list[i],
+                        isLoved: isLoved,
+                    }
+                    box.push(temp);
+                }
+                res.render('product/search', {
+                    layoutModels: res.locals.layoutModels,
+                    box: box,
+                    isEmpty: data.total === 0,
+                    text: text,
+                    findBy: findBy,
+                    arrange: arrange,
+                    length: products.length,
+
+                    pages: pages,
+                    curPage: curPage,
+                    prevPage: curPage - 1,
+                    nextPage: curPage + 1,
+                    showPrevPage: curPage > 1,
+                    showNextPage: curPage < number_of_pages - 1,
+                });
+            });
+        });
+    });
+});
+
+
+productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
+    //TODO
+    var id = req.params.id;
+    var user = res.locals.layoutModels.curUser;
+    var entity = {
+        proID: id,
+        userID: user.id,
+    };
+    favorite.delete(entity).then(function(affectedRows){
+        var rec_per_page = 6;
+        var curPage = req.query.page ? req.query.page : 1;
+        var offset = (curPage - 1) * rec_per_page;
+        console.log('offset: ' + offset);
+        var text = req.query.text;
+        var findBy = req.query.findBy;
+        var arrange = req.query.arrange;
+
+        var entity ={
+             text: text,
+             findBy: findBy,
+             arrange: arrange,
+        };
+        product.search(entity).then(function(products){
+            var list = [];
+            for(var i = offset; i < products.length; i++)
+            {
+                list.push(products[i]);
+                if(i === offset + 5)
+                {
+                    i = products.length;
+                }
+            }
+            var data = {
+                total: products.length,
+                list: list,
+            }
+            var number_of_pages = data.total / rec_per_page;
+            if (data.total % rec_per_page > 0) {
+                number_of_pages++;
+            }
+
+            var pages = [];
+            for (var i = 1; i <= number_of_pages; i++) {
+                pages.push({
+                    pageValue: i,
+                    isActive: i === +curPage
+                });
+            }
+
+            product.loadAllByFavorite(res.locals.layoutModels.curUser.id).then(function(rows){
+                var box = [];   
+                for (var i = 0; i < data.list.length; i++) {
+                    var bool = rows.findIndex(function(element){
+                        return element.ProID === data.list[i].ProID;
+                    });
+
+                    var isLoved = false;
+                    if(bool !== -1)
+                    {
+                        isLoved = true;
+                    }
+                    var temp = {
+                        product: data.list[i],
+                        isLoved: isLoved,
+                    }
+                    box.push(temp);
+                }
+                res.render('product/search', {
+                    layoutModels: res.locals.layoutModels,
+                    box: box,
+                    isEmpty: data.total === 0,
+                    text: text,
+                    findBy: findBy,
+                    arrange: arrange,
+                    length: products.length,
+
+                    pages: pages,
+                    curPage: curPage,
+                    prevPage: curPage - 1,
+                    nextPage: curPage + 1,
+                    showPrevPage: curPage > 1,
+                    showNextPage: curPage < number_of_pages - 1,
+                });
+            });
+        });
+    });
 });
 
 productRoute.post('/add/:userID', function(req, res) {
@@ -259,206 +436,8 @@ productRoute.post('/add/:userID', function(req, res) {
     });
 });
 
-// productRoute.post('/search', function(req, res) {
-//     var text = req.body.search;
-//     var findBy = req.body.findBy;
-//     var arrange = req.body.arrange;
-//     var entity ={
-//      text: text
-//      findBy: findBy,
-//      arrange: arrange,
-//     };
-
-//          var products;
-//          var name = text;
-
-//          if(name == "")
-//          {
-//             var rec_per_page = 6;
-//             var curPage = req.body.pag;
-//             var offset = (curPage - 1) * rec_per_page;
-//             product.loadPageByCat(catid, rec_per_page, offset)
-//             .then(function(data) {
-
-//                 var number_of_pages = data.total / rec_per_page;
-//                 if (data.total % rec_per_page > 0) {
-//                     number_of_pages++;
-//                 }
-//                 var pages = [];
-//                 for (var i = 1; i <= number_of_pages; i++) {
-//                     pages.push({
-//                         pageValue: i,
-//                         catId: catid,
-//                         isActive: i === +curPage
-//                     });
-//                 }
-//                 for(var i = 0;i <data.list.length - 1;i++)
-//                 {
-//                     for(var j=data.list.length-1; j>i;j--)
-//                     {
-//                         if(opt == 1)
-//                         {
-//                          if(data.list[i].Price > data.list[j].Price)
-//                          {
-//                             var temp = data.list[i];
-//                             data.list[i] = data.list[j];
-//                             data.list[j] = temp;
-//                         }
-//                     }
-//                     if(opt == 2)
-//                     {
-//                         if(data.list[i].DeltaPrice > data.list[j].DeltaPrice)
-//                         {
-//                             var temp = data.list[i];
-//                             data.list[i] = data.list[j];
-//                             data.list[j] = temp;
-//                         }
-//                     }
-//                 }
-//             }
-
-//             res.render('product/search', {
-//                 layoutModels: res.locals.layoutModels,
-//                 products: data.list,
-//                 isEmpty: data.total === 0,
-//                 catId: catid,
-//                 name:name,
-//                 pages: pages,
-//                 curPage: curPage,
-//                 prevPage: curPage - 1,
-//                 nextPage: curPage + 1,
-//                 showPrevPage: curPage > 1,
-//                 showNextPage: curPage < number_of_pages - 1,
-//             });
-//         });
-
-//     }
-
-//     else
-//     {
-
-//         product.findbyName(entity).then(function(rows){
-
-//             if(rows.length === 0)
-//             {
-//                 product.findbyCat(entity)
-//                 .then(function(kq) {
-//                     var rec_per_page = 6;
-//                     var curPage = req.query.page ? req.query.page : 1;
-//                     var offset = (curPage - 1) * rec_per_page;
-
-//                     if(kq.length)
-//                     {
-//                        product.loadPageByCat(kq[0].CatID, rec_per_page, offset)
-//                        .then(function(data) {
-
-//                         var number_of_pages = data.total / rec_per_page;
-//                         if (data.total % rec_per_page > 0) {
-//                             number_of_pages++;
-//                         }
-//                         var pages = [];
-//                         for (var i = 1; i <= number_of_pages; i++) {
-//                             pages.push({
-//                                 pageValue: i,
-//                                 catId: kq[0].CatID,
-//                                 isActive: i === +curPage
-//                             });
-//                         }
-//                         for(var i = 0;i <data.list.length - 1;i++)
-//                         {
-//                             for(var j=data.list.length-1; j>i;j--)
-//                             {
-//                                 if(opt == 1)
-//                                 {
-//                                  if(data.list[i].Price > data.list[j].Price)
-//                                  {
-//                                     var temp = data.list[i];
-//                                     data.list[i] = data.list[j];
-//                                     data.list[j] = temp;
-//                                 }
-//                             }
-//                             if(opt == 2)
-//                             {
-//                                 if(data.list[i].DeltaPrice > data.list[j].DeltaPrice)
-//                                 {
-//                                     var temp = data.list[i];
-//                                     data.list[i] = data.list[j];
-//                                     data.list[j] = temp;
-//                                 }
-//                             }
-//                         }
-//                     }
-
-//                     res.render('product/search', {
-//                         layoutModels: res.locals.layoutModels,
-//                         products: data.list,
-//                         isEmpty: data.total === 0,
-//                         catId: kq[0].CatID,
-//                         name:name,
-//                         pages: pages,
-//                         curPage: curPage,
-//                         prevPage: curPage - 1,
-//                         nextPage: curPage + 1,
-//                         showPrevPage: curPage > 1,
-//                         showNextPage: curPage < number_of_pages - 1,
-//                     });
-//                 });
-//                    }
-
-//                    else {
-//                     res.render('product/search', {
-//                         layoutModels: res.locals.layoutModels,
-//                         isEmpty: true,
-//                     });
-//                 }
-
-//             });
-//             }
-
-//             if(rows.length > 0)
-//             {
-//                 for(var i = 0;i <rows.length - 1;i++)
-//                 {
-//                     for(var j=i+1; j<rows.length;j++)
-//                     {
-//                         if(opt == 1)
-//                         {
-//                             if(rows[i].Price > rows[j].Price)
-//                             {
-//                                 var temp = rows[i];
-//                                 rows[i] = rows[j];
-//                                 rows[j] = temp;
-//                             }
-//                         }
-                        
-//                         if(opt == 2)
-//                         {
-//                             if(rows[i].DeltaPrice > rows[j].DeltaPrice)
-//                             {
-//                                 var temp = rows[i];
-//                                 rows[i] = rows[j];
-//                                 rows[j] = temp;
-//                             }
-//                         }
-//                     }
-//                 }
-//                 res.render('product/search', {
-//                     layoutModels: res.locals.layoutModels,
-//                     name:name,
-//                     products: rows,
-//                 });
-//             }
-
-
-//         });
-
-//     }
-
-// });
-
 productRoute.post('/search', function(req, res) {
     var rec_per_page = 6;
-
     var curPage = 1;
     var offset = 0;
     var text = req.body.search;
@@ -497,24 +476,42 @@ productRoute.post('/search', function(req, res) {
                 isActive: i === +curPage
             });
         }
+        product.loadAllByFavorite(res.locals.layoutModels.curUser.id).then(function(rows){
+            var box = [];   
+            for (var i = 0; i < data.list.length; i++) {
+                var bool = rows.findIndex(function(element){
+                    return element.ProID === data.list[i].ProID;
+                });
 
-        res.render('product/search', {
-            layoutModels: res.locals.layoutModels,
-            products: data.list,
-            isEmpty: data.total === 0,
-            text: text,
-            findBy: findBy,
-            arrange: arrange,
-            length: products.length,
+                var isLoved = false;
+                if(bool !== -1)
+                {
+                    isLoved = true;
+                }
+                var temp = {
+                    product: data.list[i],
+                    isLoved: isLoved,
+                }
+                box.push(temp);
+            }
+            res.render('product/search', {
+                layoutModels: res.locals.layoutModels,
+                box: box,
+                isEmpty: data.total === 0,
+                text: text,
+                findBy: findBy,
+                arrange: arrange,
+                length: products.length,
 
-            pages: pages,
-            curPage: curPage,
-            prevPage: curPage - 1,
-            nextPage: curPage + 1,
-            showPrevPage: curPage > 1,
-            showNextPage: curPage < number_of_pages - 1,
+                pages: pages,
+                curPage: curPage,
+                prevPage: curPage - 1,
+                nextPage: curPage + 1,
+                showPrevPage: curPage > 1,
+                showNextPage: curPage < number_of_pages - 1,
+            });
         });
-    })
+    });
 });
 
 productRoute.get('/search', function(req, res) {
@@ -531,7 +528,6 @@ productRoute.get('/search', function(req, res) {
          findBy: findBy,
          arrange: arrange,
     };
-    console.log(entity);
     product.search(entity).then(function(products){
         var list = [];
         for(var i = offset; i < products.length; i++)
@@ -542,7 +538,6 @@ productRoute.get('/search', function(req, res) {
                 i = products.length;
             }
         }
-        console.log(list);
         var data = {
             total: products.length,
             list: list,
@@ -560,23 +555,42 @@ productRoute.get('/search', function(req, res) {
             });
         }
 
-        res.render('product/search', {
-            layoutModels: res.locals.layoutModels,
-            products: data.list,
-            isEmpty: data.total === 0,
-            text: text,
-            findBy: findBy,
-            arrange: arrange,
-            length: products.length,
+        product.loadAllByFavorite(res.locals.layoutModels.curUser.id).then(function(rows){
+            var box = [];   
+            for (var i = 0; i < data.list.length; i++) {
+                var bool = rows.findIndex(function(element){
+                    return element.ProID === data.list[i].ProID;
+                });
 
-            pages: pages,
-            curPage: curPage,
-            prevPage: curPage - 1,
-            nextPage: curPage + 1,
-            showPrevPage: curPage > 1,
-            showNextPage: curPage < number_of_pages - 1,
+                var isLoved = false;
+                if(bool !== -1)
+                {
+                    isLoved = true;
+                }
+                var temp = {
+                    product: data.list[i],
+                    isLoved: isLoved,
+                }
+                box.push(temp);
+            }
+            res.render('product/search', {
+                layoutModels: res.locals.layoutModels,
+                box: box,
+                isEmpty: data.total === 0,
+                text: text,
+                findBy: findBy,
+                arrange: arrange,
+                length: products.length,
+
+                pages: pages,
+                curPage: curPage,
+                prevPage: curPage - 1,
+                nextPage: curPage + 1,
+                showPrevPage: curPage > 1,
+                showNextPage: curPage < number_of_pages - 1,
+            });
         });
-    })
+    });
 });
 
 productRoute.get('/byFavorite', function(req, res) {
@@ -658,4 +672,5 @@ productRoute.get('/byAuction', function(req, res) {
         });
     });
 });
+
 module.exports = productRoute;
