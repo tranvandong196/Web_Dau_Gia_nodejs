@@ -221,10 +221,10 @@ exports.loadPageByBasket = function(userid, limit, offset) {
         offset: offset
     };
 
-    var sqlCount = mustache.render('SELECT COUNT(*) as total FROM products WHERE HandleID  = {{userid}}', view);
+    var sqlCount = mustache.render('SELECT COUNT(*) as total FROM products WHERE HandleID  = {{userid}} AND (NOW() > TimeDown OR Price >= PriceToBuy)', view);
     promises.push(db.load(sqlCount));
 
-    var sql = mustache.render('SELECT * FROM products WHERE HandleID  = {{userid}} limit {{limit}} offset {{offset}}', view);
+    var sql = mustache.render('SELECT * FROM products WHERE HandleID  = {{userid}} AND (NOW() > TimeDown OR Price >= PriceToBuy) limit {{limit}} offset {{offset}}', view);
     promises.push(db.load(sql));
 
     Q.all(promises).spread(function(totalRow, rows) {
@@ -238,7 +238,64 @@ exports.loadPageByBasket = function(userid, limit, offset) {
     
     return deferred.promise;
 }
+exports.loadPageByOnSale = function(userid, limit, offset) {
 
+    var deferred = Q.defer();
+
+    var promises = [];
+
+    var view = {
+        userid: userid,
+        limit: limit,
+        offset: offset
+    };
+
+    var sqlCount = mustache.render('SELECT COUNT(*) as total FROM products WHERE UserID = {{userid}} AND NOW() < TimeDown', view);
+    promises.push(db.load(sqlCount));
+
+    var sql = mustache.render('SELECT * FROM products WHERE UserID = {{userid}} AND NOW() < TimeDown limit {{limit}} offset {{offset}}', view);
+    promises.push(db.load(sql));
+
+    Q.all(promises).spread(function(totalRow, rows) {
+        var data = {
+            total: totalRow[0].total,
+            list: rows
+        }
+        console.log("[Product] Da lay danh sach SP dang ban userID: " + userid + ", SoLuong = " + rows.length)
+        deferred.resolve(data);
+    });
+    
+    return deferred.promise;
+}
+exports.loadPageBySold = function(userid, limit, offset) {
+
+    var deferred = Q.defer();
+
+    var promises = [];
+
+    var view = {
+        userid: userid,
+        limit: limit,
+        offset: offset
+    };
+
+    var sqlCount = mustache.render('SELECT COUNT(*) as total FROM products WHERE UserID = {{userid}} AND Price >= PriceToBuy', view);
+    promises.push(db.load(sqlCount));
+
+    var sql = mustache.render('SELECT * FROM products WHERE UserID = {{userid}} AND Price >= PriceToBuy limit {{limit}} offset {{offset}}', view);
+    promises.push(db.load(sql));
+
+    Q.all(promises).spread(function(totalRow, rows) {
+        var data = {
+            total: totalRow[0].total,
+            list: rows
+        }
+        console.log("[Product] Da lay danh sach SP da~ ban userID: " + userid + ", SoLuong = " + rows.length)
+        deferred.resolve(data);
+    });
+    
+    return deferred.promise;
+}
 exports.search = function(entity){
     var deferred = Q.defer();
 
