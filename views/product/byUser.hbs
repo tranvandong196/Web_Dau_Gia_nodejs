@@ -9,6 +9,16 @@
         $('#txtP').val(proId);
         $('#frmAddToCart').submit();
     });
+    $("#scorePlus").click(function(){
+        $("#scorePlus").addClass('btn-danger');
+        $("#scoreMinus").removeClass('btn-primary');
+        $("#scoreMinus").addClass('btn-default');
+    });
+    $("#scoreMinus").click(function(){
+        $("#scoreMinus").addClass('btn-primary');
+        $("#scorePlus").removeClass('btn-danger');
+        $("#scorePlus").addClass('btn-default');
+    });
 </script>
 <script type="text/javascript">
     $('#textSearch').val($('#txtname').val());
@@ -21,25 +31,25 @@ Không có sản phẩm!
 <form id="frmAddToCart" method="post" action="/cart/add1">
     <input type="hidden" id="txtP" name="proId" />
 </form>
-<h4>{{Tile}}</h4>
+<h4>{{Tile}} <span class="badge">{{box.length}}</span></h4>
 <div class="row">
     <input type="hidden" id="txtname" value="{{name}}" />
     {{#each box }}
     <div class="col-md-11">
         <div class="thumbnail" style="min-height: 130px; max-width: ">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-1">
+                 {{#if ../layoutModels.isLogged }}
+                    {{#if canRemoveProduct }}
+                        <a href="Loại khỏi danh sách yêu thích" role="button">
+                            <img src="/images/others/Remove-Product.png" title="Bỏ yêu thích" width="30" height="30">
+                        </a>
+                    {{/if}}
+                {{/if}}
+                 </div>
+                <div class="col-md-3">
                     <div class="row">
-                        <div class="col-md-3">
-                            {{#if ../layoutModels.isLogged }}
-                                {{#if isInFavoriteSite }}
-                                <a href="Loại khỏi danh sách yêu thích" role="button">
-                                    <img src="/images/others/Remove-Product.png" title="Bỏ yêu thích" width="30" height="30">
-                                </a>
-                                {{/if}}
-                            {{/if}}
-                        </div>
-                        <a href="/product/detail/{{product.ProID}}" class="col-md-8">
+                        <a href="/product/detail/{{product.ProID}}" class="col-md-12">
                             <img src="/images/{{product.ProID}}/1_thumb.jpg" title="{{product.ProName}}" href="/product/detail/{{product.ProID}}"/>
                         </a>
                     </div>
@@ -57,10 +67,30 @@ Không có sản phẩm!
                         </p>
                     </div>
                 </div>
+
+                {{# if canGiveScore_comment}}
+                <!-- Cộng/trừ điểm - Gửi nhận xét -->
                 <div class="col-md-2">
-                    
+                    <div class="btn-group" role="group" aria-label="...">
+                      <button type="button" id="scorePlus" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> +1</button>
+                      <button type="button" id="scoreMinus" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> -1</button>
+                    </div>
                 </div>
+                <form class="form-group" role="search">
+                      <div class="col-lg-12">
+                        <div class="input-group">
+                          <input type="text" class="form-control" placeholder="Gửi nhận xét">
+                          <span class="input-group-btn">
+                            <button type="submit" class="btn btn-default">Gửi</button>
+                          </span>
+                        </div>
+                      </div>
+                </form>
+                <!-- END Cộng/trừ điểm -  Gửi nhận xét -->
+                {{/if}}
             </div>
+
+          
         </div>
     </div>
     {{/each}}
@@ -97,3 +127,18 @@ Không có sản phẩm!
     </nav>
 </div>
 {{/if}}
+
+{{#section 'css'}}
+    <style type="text/css">
+        /*input[type=text] {
+            background-color: #f2ffed;
+        }*/
+        /*input[readonly] {
+            background-color: #72A4D2;
+        }*/
+
+        *[hidden] {
+        display: none;
+        }
+    </style>
+{{/section}}
