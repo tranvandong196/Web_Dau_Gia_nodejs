@@ -51,40 +51,39 @@ productRoute.get('/byCat/:id', function(req, res) {
 productRoute.get('/detail/:id', function(req, res) {
     var indexs = [];
     var user = res.locals.layoutModels.curUser;
-    fs.readdir('./public/images/' + req.params.id, (err, files) => {
-        for(var i = 1; i < files.length; i++)
-        {
-            var temp = {index: i,};
-            indexs.push(temp);
-        }
-    });
     product.loadDetail(req.params.id)
     .then(function(pro) {
         var indexs = [];
-         var history='';
         fs.readdir('./public/images/' + req.params.id, (err, files) => {
+            for(var i = 1; i < files.length; i++)
+            {
+                var temp = {stt: i,};
+                indexs.push(temp);
+            }
+            var history='';
+            var dir = './public/info';
+            if(!fs.existsSync(dir))
+            {
+                fs.mkdirSync(dir);
+            }
+            dir = dir + '/' + pro.ProID;
+            if(!fs.existsSync(dir))
+            {
+                fs.mkdirSync(dir);
+                fs.closeSync(fs.openSync(dir + '/history.txt', 'w'));
+            }
             if(user)
             {
                 var entity = {
                     proID: req.params.id,
                     userID: user.id,
                 };
-
-
-                fs.readFile('public/infor/'+req.params.id+'/history.txt', 'utf8', (err, data) => {
+                fs.readFile(dir +'/history.txt', 'utf8', (err, data) => {
                   if (err) throw err;
                   history = data;
               });
                 
                 favorite.isLoved(entity).then(function(isLoved){
-                    for(var i = 1; i < files.length; i++)
-                    {
-                        var temp = {
-                            stt: i,
-                        };
-                        indexs.push(temp);
-                    }
-                    
                     var score = user.score;
                     var x = parseFloat(0.8);
                     if (pro) {
@@ -92,6 +91,7 @@ productRoute.get('/detail/:id', function(req, res) {
                             layoutModels: res.locals.layoutModels,
                             product: pro,
                             isPermit: score > x,
+                            isAlive: pro.State === 'đang đấu giá',
                             indexs: indexs,
                             history: history,
                             proID: req.params.id,
@@ -104,7 +104,7 @@ productRoute.get('/detail/:id', function(req, res) {
             }
             else
             {
-                fs.readFile('public/infor/'+req.params.id+'/history.txt', 'utf8', (err, data) => {
+                fs.readFile(dir +'/history.txt', 'utf8', (err, data) => {
                   if (err) throw err;
                   history = data;
               });
@@ -123,6 +123,7 @@ productRoute.get('/detail/:id', function(req, res) {
                         layoutModels: res.locals.layoutModels,
                         product: pro,
                         history:history,
+                        isAlive: pro.State === 'đang đấu giá',
                         isPermit: false,
                         indexs: indexs,
                         proID: req.params.id,
@@ -144,6 +145,114 @@ productRoute.get('/add', restrict, function(req, res) {
             categories: rows,
         };
         res.render('product/add', vm);
+    });
+});
+
+productRoute.post('/add/:userID', function(req, res) {
+
+    var dir = './public/images';
+    if(!fs.existsSync(dir))
+    {
+        fs.mkdirSync(dir);
+    }
+    if(!fs.existsSync(dir + '/temp'))
+        fs.mkdirSync(dir + '/temp');
+    var storage = multer.diskStorage({
+        destination: function(req,file,cb){
+            cb(null, dir + '/temp')
+        },
+        filename: function(req,file,cb){
+            cb(null, file.originalname)
+        }
+    });
+    var files;
+    var dest;
+    var upload = multer({storage: storage}).array('images');
+    upload(req,res,function(err) {
+
+        category.findIdByName(req.body.catName).then(function(row){
+            var catID = row.CatID;
+            files = req.files;
+            var id = req.params.userID;
+            var now = new Date(Date.now()).toLocaleString();
+            now = moment().format('YYYY-MM-DD HH:mm:ss');
+            var timeDown = moment(req.body.timeDown, 'D/M/YYYY').format('YYYY-MM-DD HH:mm:ss');
+            var entity = {
+                proName: req.body.proName,
+                userID: id,
+                tinyDes: req.body.tinyDes,
+                fullDes: req.body.fullDes,
+                price: req.body.price,
+                priceToBuy: req.body.priceToBuy,
+                catID: catID,
+                quantity: req.body.quantity,
+                timeUp: now,
+                timeDown: timeDown,
+                handleID: 0,
+                deltaPrice: req.body.deltaPrice,
+            };
+
+            product.insert(entity).then(function(insertId) {
+                if(insertId === -1)
+                {
+                    res.render('product/add', {
+                        layoutModels: res.locals.layoutModels,
+                        showMsg: true,
+                        error: true,
+                        msg: 'Thêm thất bại.'
+                    });
+                }
+                else
+                {
+                    dest = dir + '/' + insertId;
+                    if(!fs.existsSync(dest))
+                        fs.mkdirSync(dest);
+                    var size = files.length;
+                    if(size > 3)
+                        size = 3;
+                    for(var i = 1; i <= size; i++)
+                    {
+                        //tạo file hình rỗng để chép sang
+                        fs.closeSync(fs.openSync(dest + '/' + i + '.jpg', 'w'));
+
+                        //copy hình sang thư mục đích
+                        var stream = fs.createWriteStream(dest + '/' + i + '.jpg');
+                        if(i === 1)
+                        {
+                            fs.createReadStream(dir + '/temp/' + files[i - 1].originalname)
+                            .pipe(stream).on('finish', function () {
+                                //tạo thumbnail.jpg
+                                thumb({
+                                  source: dest + '/1.jpg',
+                                  destination: dest,
+                                  width: 150,
+                              }, function(files, err, stdout, stderr) {
+                                  console.log('Created thumb images!');
+                              });
+                            });
+                        }
+                        else
+                        {
+                            fs.createReadStream(dir + '/temp/' + files[i - 1].originalname)
+                            .pipe(stream).on('finish', function () {
+                            });
+                        }
+                    }
+
+                    for(var i = 1; i <= files.length; i++)
+                    {
+                        //xóa file hình đã lưu tạm
+                        fs.unlinkSync(dir + '/temp/' + files[i - 1].originalname);
+                    }          
+                    res.render('product/add', {
+                        layoutModels: res.locals.layoutModels,
+                        showMsg: true,
+                        error: false,
+                        msg: 'Thêm thành công.'
+                    });     
+                }
+            });
+        });
     });
 });
 
@@ -257,9 +366,9 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                     for(var i = 0; i < box.length; i++)
                     {
                         box[i].numberOfAuctions = rs[k];
-                        var tmp = rs[k + 1].Name;
+                        var tmp = rs[k + 1];
                         if(tmp)
-                            box[i].handlePrice = '****' + tmp[tmp.length - 1];
+                            box[i].handlePrice = '****' + tmp.Name[tmp.length - 1];
                         else
                             box[i].handlePrice = 'Chưa có'
                         k = k + 2;
@@ -370,9 +479,9 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                     for(var i = 0; i < box.length; i++)
                     {
                         box[i].numberOfAuctions = rs[k];
-                        var tmp = rs[k + 1].Name;
+                        var tmp = rs[k + 1];
                         if(tmp)
-                            box[i].handlePrice = '****' + tmp[tmp.length - 1];
+                            box[i].handlePrice = '****' + tmp.Name[tmp.length - 1];
                         else
                             box[i].handlePrice = 'Chưa có'
                         k = k + 2;
@@ -394,110 +503,6 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                         showNextPage: curPage < number_of_pages - 1,
                     });
                 });
-            });
-        });
-    });
-});
-
-productRoute.post('/add/:userID', function(req, res) {
-
-    var dir = './public/images';
-    if(!fs.existsSync(dir + '/temp'))
-        fs.mkdirSync(dir + '/temp');
-    var storage = multer.diskStorage({
-        destination: function(req,file,cb){
-            cb(null, dir + '/temp')
-        },
-        filename: function(req,file,cb){
-            cb(null, file.originalname)
-        }
-    });
-    var files;
-    var dest;
-    var upload = multer({storage: storage}).array('images');
-    upload(req,res,function(err) {
-
-        category.findIdByName(req.body.catName).then(function(row){
-            var catID = row.CatID;
-            files = req.files;
-            var id = req.params.userID;
-            var now = new Date(Date.now()).toLocaleString();
-            now = moment().format('YYYY-MM-DD HH:mm:ss');
-            var timeDown = moment(req.body.timeDown, 'D/M/YYYY').format('YYYY-MM-DD HH:mm:ss');
-            var entity = {
-                proName: req.body.proName,
-                userID: id,
-                tinyDes: req.body.tinyDes,
-                fullDes: req.body.fullDes,
-                price: req.body.price,
-                priceToBuy: req.body.priceToBuy,
-                catID: catID,
-                quantity: req.body.quantity,
-                timeUp: now,
-                timeDown: timeDown,
-                handleID: 0,
-                deltaPrice: req.body.deltaPrice,
-            };
-
-            product.insert(entity).then(function(insertId) {
-                if(insertId === -1)
-                {
-                    res.render('product/add', {
-                        layoutModels: res.locals.layoutModels,
-                        showMsg: true,
-                        error: true,
-                        msg: 'Thêm thất bại.'
-                    });
-                }
-                else
-                {
-                    dest = dir + '/' + insertId;
-                    if(!fs.existsSync(dest))
-                        fs.mkdirSync(dest);
-                    var size = files.length;
-                    if(size > 3)
-                        size = 3;
-                    for(var i = 1; i <= size; i++)
-                    {
-                        //tạo file hình rỗng để chép sang
-                        fs.closeSync(fs.openSync(dest + '/' + i + '.jpg', 'w'));
-
-                        //copy hình sang thư mục đích
-                        var stream = fs.createWriteStream(dest + '/' + i + '.jpg');
-                        if(i === 1)
-                        {
-                            fs.createReadStream(dir + '/temp/' + files[i - 1].originalname)
-                            .pipe(stream).on('finish', function () {
-                                //tạo thumbnail.jpg
-                                thumb({
-                                  source: dest + '/1.jpg',
-                                  destination: dest,
-                                  width: 150,
-                              }, function(files, err, stdout, stderr) {
-                                  console.log('Created thumb images!');
-                              });
-                            });
-                        }
-                        else
-                        {
-                            fs.createReadStream(dir + '/temp/' + files[i - 1].originalname)
-                            .pipe(stream).on('finish', function () {
-                            });
-                        }
-                    }
-
-                    for(var i = 1; i <= files.length; i++)
-                    {
-                        //xóa file hình đã lưu tạm
-                        fs.unlinkSync(dir + '/temp/' + files[i - 1].originalname);
-                    }          
-                    res.render('product/add', {
-                        layoutModels: res.locals.layoutModels,
-                        showMsg: true,
-                        error: false,
-                        msg: 'Thêm thành công.'
-                    });     
-                }
             });
         });
     });
@@ -581,9 +586,9 @@ productRoute.post('/search', function(req, res) {
                 for(var i = 0; i < box.length; i++)
                 {
                     box[i].numberOfAuctions = rs[k];
-                    var tmp = rs[k + 1].Name;
+                    var tmp = rs[k + 1];
                     if(tmp)
-                        box[i].handlePrice = '****' + tmp[tmp.length - 1];
+                        box[i].handlePrice = '****' + tmp.Name[tmp.length - 1];
                     else
                         box[i].handlePrice = 'Chưa có'
                     k = k + 2;
@@ -684,9 +689,9 @@ productRoute.get('/search', function(req, res) {
                 for(var i = 0; i < box.length; i++)
                 {
                     box[i].numberOfAuctions = rs[k];
-                    var tmp = rs[k + 1].Name;
+                    var tmp = rs[k + 1];
                     if(tmp)
-                        box[i].handlePrice = '****' + tmp[tmp.length - 1];
+                        box[i].handlePrice = '****' + tmp.Name[tmp.length - 1];
                     else
                         box[i].handlePrice = 'Chưa có'
                     k = k + 2;

@@ -301,3 +301,37 @@ exports.getNumberOfAuction = function(ProID) {
     });
     return deferred.promise;
 }
+
+exports.updateHandlePrice = function(ProID, UserID){
+    var deferred = Q.defer();
+    if(UserID)
+    {
+        var sql = 'update products set HandleID = ' + UserID + ' where ProID = ' + ProID;
+        db.update(sql).then(function(changedRows){
+            deferred.resolve(changedRows);
+        });
+    }
+    else
+    {
+        deferred.resolve(0);
+    }
+
+    return deferred.promise;
+}
+
+exports.updateState = function(ProID, State){
+    var deferred = Q.defer();
+    if(State)
+    {
+        var sql = 'update products set State = "' + State + '" where ProID = ' + ProID;
+        db.update(sql).then(function(changedRows){
+            deferred.resolve(changedRows);
+        });
+    }
+    else
+    {
+        deferred.resolve(0);
+    }
+
+    return deferred.promise;
+}

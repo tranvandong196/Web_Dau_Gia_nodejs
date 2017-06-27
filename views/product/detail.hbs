@@ -37,10 +37,11 @@ Chi tiết sản phẩm
 <script type="text/javascript">
     $('#btnDG').on('click', function () {
         var rs = confirm('Bạn có chắc ra giá sản phẩm này với giá là ' + $('#txtQ').val() + ' không?');
-        if(rs == true)
+        if(rs === true)
         {
             $('#frmAddItem').submit();
         }
+        return false;
     });
 </script>
 
@@ -52,7 +53,7 @@ Chi tiết sản phẩm
         }
        else
        {
-        alert('Chưa có lượt đấu giá nào');
+            alert('Chưa có lượt đấu giá nào');
        }
 
    });

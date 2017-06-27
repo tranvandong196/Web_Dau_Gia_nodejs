@@ -65,7 +65,7 @@ exports.findHandlePrice = function(ProID) {
         if(rows[0])
             deferred.resolve(rows[0]);
         else
-            deferred.resolve(null);
+            deferred.resolve(null); 
     });
 
     return deferred.promise;

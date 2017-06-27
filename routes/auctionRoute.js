@@ -23,7 +23,6 @@ auctionRoute.post('/add', restrict, function(req, res) {
             var price2Buy = -1;
             if(pro.PriceToBuy)
                 price2Buy = pro.PriceToBuy;
-            console.log(price2Buy);
             if(price2Buy !== -1 && req.body.price >= price2Buy)
             {
                 var item = {
@@ -37,23 +36,27 @@ auctionRoute.post('/add', restrict, function(req, res) {
                 };
                 cart.add(req.session.cart, item);
             }
-            var name=res.locals.layoutModels.curUser.username;
-            var tmp='';
-            var temp='';
-            var price=req.body.price; 
+            var name = res.locals.layoutModels.curUser.username;
+            var tmp = '';
+            var temp = '';
+            var price = req.body.price;
             price = currencyFormatter.format(price, { code: 'VND' });
-            for(var i=0;i<name.length - 1;i++)
+            for(var i = 0; i < name.length - 1 ; i++)
             {
-                temp+='*'
+                temp += '*'
             }
-            temp+=name[name.length - 1];
+            temp += name[name.length - 1];
             name = temp;
-            console.log(temp);
-            tmp+=now + '  -  ' +name+ '  =>  ' +price + '\r\n';
-            fs.appendFile('public/infor/'+pro.ProID+'/history.txt', tmp, (err) => {
+            tmp += now + '  -  ' + name + '  =>  ' + price + '\r\n';
+            var dir = './public/info/' + pro.ProID;
+            fs.appendFile(dir + '/history.txt', tmp, (err) => {
                 if (err) throw err;
             });
-            res.redirect('/product/detail/' + req.body.proID);
+            auction.findHandlePrice(pro.ProID).then(function(user){
+                product.updateHandlePrice(pro.ProID, user.ID).then(function(changedRows){
+                    res.redirect('/product/detail/' + req.body.proID);
+                });
+            });
         });
     });
 });
