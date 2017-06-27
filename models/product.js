@@ -202,7 +202,7 @@ exports.loadPageByAuction = function(userid, limit, offset) {
             total: totalRow[0].total,
             list: rows
         }
-        console.log("[Product] Da lay danh sach dang dau gia userID: " + userid + ", SoLuong = " + rows.length)
+        console.log("[Product] Da lay danh sach dang dau gia userID: " + userid + ", SoLuong = " + totalRow[0].total)
         deferred.resolve(data);
     });
     

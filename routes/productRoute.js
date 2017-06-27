@@ -801,6 +801,7 @@ productRoute.get('/byFavorite', function(req, res) {
         res.render('product/byUser', {
             layoutModels: res.locals.layoutModels,
             box: box,
+            total: data.total,
             isEmpty: data.total === 0,
             catId: req.params.id,
             Tile: 'Sản phẩm yêu thích',
@@ -845,6 +846,7 @@ productRoute.get('/byAuction', function(req, res) {
         res.render('product/byUser', {
             layoutModels: res.locals.layoutModels,
             box: box,
+            total: data.total,
             isEmpty: data.total === 0,
             catId: req.params.id,
             Tile: 'Sản phẩm đang đấu giá',
@@ -890,6 +892,7 @@ productRoute.get('/byBasket', function(req, res) {
         res.render('product/byUser', {
             layoutModels: res.locals.layoutModels,
             box: box,
+            total: data.total,
             isEmpty: data.total === 0,
             catId: req.params.id,
             Tile: 'Sản phẩm thắng đấu giá - giỏ hàng',
@@ -935,6 +938,7 @@ productRoute.get('/byOnSale', function(req, res) {
         res.render('product/byUser', {
             layoutModels: res.locals.layoutModels,
             box: box,
+            total: data.total,
             isEmpty: data.total === 0,
             catId: req.params.id,
             Tile: 'Sản phẩm đang bán',
@@ -980,6 +984,7 @@ productRoute.get('/bySold', function(req, res) {
         res.render('product/byUser', {
             layoutModels: res.locals.layoutModels,
             box: box,
+            total: data.total,
             isEmpty: data.total === 0,
             catId: req.params.id,
             Tile: 'Sản phẩm đang bán',
