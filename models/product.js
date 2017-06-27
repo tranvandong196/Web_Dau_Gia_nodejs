@@ -392,3 +392,23 @@ exports.updateState = function(ProID, State){
 
     return deferred.promise;
 }
+
+exports.findSolder = function(ProID){
+    var deferred = Q.defer();
+    if(ProID)
+    {
+        var sql = 'select * from users where ID = (select UserID from products where ProID = ' + ProID + ')';
+        db.load(sql).then(function(rows){
+            if(rows[0])
+                deferred.resolve(rows[0]);
+            else
+                deferred.resolve(null);
+        });
+    }
+    else
+    {
+        deferred.resolve(null);
+    }
+
+    return deferred.promise;
+}

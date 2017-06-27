@@ -41,7 +41,7 @@ Không có sản phẩm!
                 <div class="col-md-1">
                  {{#if ../layoutModels.isLogged }}
                     {{#if canRemoveProduct }}
-                        <a href="Loại khỏi danh sách yêu thích" role="button">
+                        <a href="/product/byUser/removeLove/{{product.ProID}}" role="button">
                             <img src="/images/others/Remove-Product.png" title="Bỏ yêu thích" width="30" height="30">
                         </a>
                     {{/if}}

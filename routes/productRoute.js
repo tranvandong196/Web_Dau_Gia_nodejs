@@ -87,16 +87,46 @@ productRoute.get('/detail/:id', function(req, res) {
                     var score = user.score;
                     var x = parseFloat(0.8);
                     if (pro) {
-                        res.render('product/detail', {
-                            layoutModels: res.locals.layoutModels,
-                            product: pro,
-                            isPermit: score > x,
-                            isAlive: pro.State === 'đang đấu giá',
-                            indexs: indexs,
-                            history: history,
-                            proID: req.params.id,
-                            isLoved: isLoved,
+                        Q.all([
+                            auction.findMaxPrice(pro.ProID), auction.findHandlePrice(pro.ProID), product.findSolder(pro.ProID)
+                        ]).then(function(rs){
+                            var curPrice = pro.Price;
+                            var handlePrice = {
+                                Name: 'Trống',
+                                Score: 0.0,
+                            };
+                            var solder = {
+                                Name: 'Trống',
+                                Score: 0.0,
+                            };
+                            if(rs[1])
+                            {
+                                handlePrice.Name = rs[1].Name;
+                                handlePrice.Score = rs[1].Score;
+                            }
+                            if(rs[2])
+                            {
+                                solder.Name = rs[2].Name;
+                                solder.Score = rs[2].Score;
+                            }
+                            if(rs[0])
+                                curPrice = rs[0];
+                            res.render('product/detail', {
+                                layoutModels: res.locals.layoutModels,
+                                product: pro,
+                                isPermit: score > x,
+                                isAlive: pro.State === 'đang đấu giá',
+                                isEnd: pro.State === 'đã kết thúc',
+                                handlePrice: handlePrice,
+                                solder: solder,
+                                curPrice: curPrice,
+                                indexs: indexs,
+                                history: history,
+                                proID: req.params.id,
+                                isLoved: isLoved,
+                            });
                         });
+                        
                     } else {
                         res.redirect('/home');
                     }
@@ -109,25 +139,47 @@ productRoute.get('/detail/:id', function(req, res) {
                   history = data;
               });
 
-                for(var i = 1; i < files.length; i++)
-                {
-                    var temp = {
-                        stt: i,
-                    };
-                    indexs.push(temp);
-                }
                 var score = 0;
                 var x = parseFloat(0.8);
                 if (pro) {
-                    res.render('product/detail', {
-                        layoutModels: res.locals.layoutModels,
-                        product: pro,
-                        history:history,
-                        isAlive: pro.State === 'đang đấu giá',
-                        isPermit: false,
-                        indexs: indexs,
-                        proID: req.params.id,
-                        isLoved: false,
+                    Q.all([
+                        auction.findMaxPrice(pro.ProID), auction.findHandlePrice(pro.ProID), product.findSolder(pro.ProID)
+                    ]).then(function(rs){
+                        var curPrice = pro.Price;
+                        var handlePrice = {
+                            Name: 'Trống',
+                            Score: 0.0,
+                        };
+                        var solder = {
+                            Name: 'Trống',
+                            Score: 0.0,
+                        };
+                        if(rs[1])
+                        {
+                            handlePrice.Name = rs[1].Name;
+                            handlePrice.Score = rs[1].Score;
+                        }
+                        if(rs[2])
+                        {
+                            solder.Name = rs[2].Name;
+                            solder.Score = rs[2].Score;
+                        }
+                        if(rs[0])
+                            curPrice = rs[0];
+                        res.render('product/detail', {
+                            layoutModels: res.locals.layoutModels,
+                            product: pro,
+                            isPermit: score > x,
+                            isAlive: pro.State === 'đang đấu giá',
+                            isEnd: pro.State === 'đã kết thúc',
+                            handlePrice: handlePrice,
+                            solder: solder,
+                            curPrice: curPrice,
+                            indexs: indexs,
+                            history: history,
+                            proID: req.params.id,
+                            isLoved: isLoved,
+                        });
                     });
                 } else {
                     res.redirect('/home');
@@ -726,7 +778,6 @@ productRoute.get('/byFavorite', function(req, res) {
     if (res.locals.layoutModels.isLogged)
         userIDcurrent = res.locals.layoutModels.curUser.id;
     product.loadPageByFavorite(userIDcurrent, rec_per_page, offset).then(function(data) {
-        console.log("[ProductRoute] Da lay danh sach SP yeu thich: SoLuong = " + data.list.length)
         var number_of_pages = data.total / rec_per_page;
         if (data.total % rec_per_page > 0) {
             number_of_pages++;
@@ -772,7 +823,6 @@ productRoute.get('/byAuction', function(req, res) {
     if (res.locals.layoutModels.isLogged)
         userIDcurrent = res.locals.layoutModels.curUser.id;
     product.loadPageByAuction(userIDcurrent, rec_per_page, offset).then(function(data) {
-        console.log("[ProductRoute] Da lay danh sach SP dang dau gia: SoLuong = " + data.list.length)
         var number_of_pages = data.total / rec_per_page;
         if (data.total % rec_per_page > 0) {
             number_of_pages++;
@@ -940,6 +990,18 @@ productRoute.get('/bySold', function(req, res) {
             showPrevPage: curPage > 1,
             showNextPage: curPage < number_of_pages - 1,
         });
+    });
+});
+
+productRoute.get('/byUser/removeLove/:id', function(req, res){
+    var id = req.params.id;
+    var user = res.locals.layoutModels.curUser;
+    var entity = {
+        proID: id,
+        userID: user.id,
+    };
+    favorite.delete(entity).then(function(affectedRows){
+        res.redirect('/product/byFavorite')
     });
 });
 module.exports = productRoute;

@@ -71,50 +71,18 @@ exports.findHandlePrice = function(ProID) {
     return deferred.promise;
 }
 
-exports.loadAllAuctions = function() {
+exports.findMaxPrice = function(ProID) {
 
     var deferred = Q.defer();
 
-    var sql = 'SELECT * from auctions';
+    var sql =
+            'select Max(Price) as MaxPrice from auctions where ProID = ' + ProID;
+
     db.load(sql).then(function(rows) {
-        if (rows) {
-            deferred.resolve(rows);
-        } else {
-            deferred.resolve(null);
-        }
+        if(rows[0])
+            deferred.resolve(rows[0].MaxPrice);
+        else
+            deferred.resolve(null); 
     });
-
-    return deferred.promise;
-}
-
-exports.SumOfProduct = function() {
-
-    var deferred = Q.defer();
-
-    var sql = 'SELECT COUNT(*) as COUNT from products'
-    db.load(sql).then(function(rows) {
-        if (rows) {
-            deferred.resolve(rows);
-        } else {
-            deferred.resolve(null);
-        }
-    });
-
-    return deferred.promise;
-}
-
-exports.SumOfAuction = function() {
-
-    var deferred = Q.defer();
-
-    var sql = 'SELECT COUNT(*) as COUNT from auctions'
-    db.load(sql).then(function(rows) {
-        if (rows) {
-            deferred.resolve(rows);
-        } else {
-            deferred.resolve(null);
-        }
-    });
-
     return deferred.promise;
 }
