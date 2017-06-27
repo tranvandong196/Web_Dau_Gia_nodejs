@@ -142,14 +142,12 @@
                         {{#if ../layoutModels.isLogged }}
                             <div class="btn-group">
                                 {{#if ../isLoved }}
-                                <a href="/product/removeLove/{{ProID}}" role="button" class="btn btn-danger">
-                                    <span class="glyphicon glyphicon-remove"></span>
-                                    Bỏ thích
+                                <a href="/product/removeLove/{{ProID}}" role="button">
+                                    <img src="/images/others/heart.jpg" width="30" height="30">
                                 </a>
                                 {{else}}
-                                <a href="/product/addLove/{{ProID}}" role="button" class="btn btn-danger">
-                                    <span class="glyphicon glyphicon-heart"></span>
-                                    Thích
+                                <a href="/product/addLove/{{ProID}}" role="button">
+                                    <img src="/images/others/heart-empty.png" width="30" height="30">
                                 </a>
                                 {{/if}}
                             </div>
