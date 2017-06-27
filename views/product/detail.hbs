@@ -62,8 +62,57 @@ Chi tiết sản phẩm
                 <div class="caption-lg-orange">
                     <h3><b>&nbsp;{{ProName}}</b></h3>
                 </div>
+<<<<<<< HEAD
                 <div class="padding">
                     <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/price-icon.png" title="Giá bán" width="25" height="25">&nbsp;&nbsp;<b>Giá bán:</b>  {{formatNumber Price}} vnđ</h4>
+=======
+                <!-- END Người bán - người giữ giá -->
+               
+                <!-- Các button: Đấu giá - yêu thích - lịch sử -->
+                <div class="col-md-12">
+                    <div class="row">
+                     <!-- Đấu giá - Cho điểm -->
+                 {{#if ../isPermit }}
+                        <div class="col-md-9">
+                            <form class="form-horizontal" id="frmAddItem" method="post" action="/auction/add">
+                                <div class="form-group" style="margin-left: 0px">
+                                    <input type="hidden" id="txtP" name="proID" value="{{ProID}}">
+                                    <input type="hidden" id="txtStep" value="{{DeltaPrice}}">
+                                    <div class="row">
+                                        <div class="col-sm-10" class="input-group">
+                                            <input type="text" id="txtQ" name="price" class="form-control" value="{{Price}}">
+                                        </div>
+                                       <div class="col-sm-2">
+                                            <button class="btn btn-primary" id="btnDG">
+                                                &nbsp;Đấu giá
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                {{/if}}
+                <!-- END Đấu giá - Cho điểm -->
+
+                        <div class="col-md-8">
+                        {{#if ../layoutModels.isLogged }}
+                            <div class="btn-group">
+                                {{#if ../isLoved }}
+                                <a href="/product/removeLove/{{ProID}}" role="button">
+                                    <img src="/images/others/heart.jpg" width="30" height="30">
+                                </a>
+                                {{else}}
+                                <a href="/product/addLove/{{ProID}}" role="button">
+                                    <img src="/images/others/heart-empty.png" width="30" height="30">
+                                </a>
+                                {{/if}}
+                            </div>
+                        {{/if}}
+                            <a href="xxxx" role="button" class="btn"><img src="/images/others/History.png" title="Xem lịch sử đấu giá cho sản phẩm này" width="38" height="38">
+                            </a>
+                        </div>
+                    </div>
+>>>>>>> origin/master
                 </div>
                 <div class="padding">
                     <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/PriceToBuy.png" title="Giá mua ngay" width="25" height="25">&nbsp;&nbsp;<b>Giá mua ngay:</b> {{formatNumber PriceToBuy}} vnđ</h4>
