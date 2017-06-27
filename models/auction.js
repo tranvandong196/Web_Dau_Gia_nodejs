@@ -59,11 +59,77 @@ exports.findHandlePrice = function(ProID) {
     var deferred = Q.defer();
 
     var sql =
-            'select * from users, (select UserID, Price from auctions WHERE ProID = ' + ProID + ' GROUP BY '
-             + 'ProID HAVING Price = MAX(Price)) as temp where ID = temp.UserID ';
+            'select Name from users where ID in (select UserID from auctions where ProID = ' + ProID + ' and Price = (select MAX(Price) from auctions))';
 
     db.load(sql).then(function(rows) {
-        deferred.resolve(rows[0].UserID);
+        if(rows[0])
+            deferred.resolve(rows[0].Name);
+        else
+            deferred.resolve(null);
+    });
+
+    return deferred.promise;
+}
+
+exports.loadAllAuctions = function() {
+
+    var deferred = Q.defer();
+
+    var sql = 'SELECT * from auctions';
+    db.load(sql).then(function(rows) {
+        if (rows) {
+            deferred.resolve(rows);
+        } else {
+            deferred.resolve(null);
+        }
+    });
+
+    return deferred.promise;
+}
+
+exports.loadUserName = function() {
+
+    var deferred = Q.defer();
+
+    var sql = 'SELECT * from Users'
+    db.load(sql).then(function(rows) {
+        if (rows) {
+            deferred.resolve(rows);
+        } else {
+            deferred.resolve(null);
+        }
+    });
+
+    return deferred.promise;
+}
+
+exports.SumOfProduct = function() {
+
+    var deferred = Q.defer();
+
+    var sql = 'SELECT COUNT(*) as COUNT from products'
+    db.load(sql).then(function(rows) {
+        if (rows) {
+            deferred.resolve(rows);
+        } else {
+            deferred.resolve(null);
+        }
+    });
+
+    return deferred.promise;
+}
+
+exports.SumOfAuction = function() {
+
+    var deferred = Q.defer();
+
+    var sql = 'SELECT COUNT(*) as COUNT from auctions'
+    db.load(sql).then(function(rows) {
+        if (rows) {
+            deferred.resolve(rows);
+        } else {
+            deferred.resolve(null);
+        }
     });
 
     return deferred.promise;

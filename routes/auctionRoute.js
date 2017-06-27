@@ -5,7 +5,8 @@ var product = require('../models/product');
 var auction = require('../models/auction');
 var cart = require('../models/cart');
 var restrict = require('../middle-wares/restrict');
-
+var fs = require('fs');
+var currencyFormatter = require('currency-formatter');
 var auctionRoute = express.Router();
 
 auctionRoute.post('/add', restrict, function(req, res) {
@@ -25,16 +26,38 @@ auctionRoute.post('/add', restrict, function(req, res) {
             if(price2Buy !== -1 && req.body.price >= price2Buy)
             {
                 var item = {
-                product: {
-                    ProID: pro.ProID,
-                    ProName: pro.ProName,
-                    Price: pro.Price,
-                },
-                quantity: 1,
-                amount: 1,
+                    product: {
+                        ProID: pro.ProID,
+                        ProName: pro.ProName,
+                        Price: pro.Price,
+                    },
+                    quantity: 1,
+                    amount: 1,
                 };
                 cart.add(req.session.cart, item);
             }
+
+            
+            auction.loadUserName().then(function(rows){
+                var name='';
+                var tmp='';
+                var price=req.body.price; 
+                price = currencyFormatter.format(price, { code: 'VND' });
+                for(var h=0;;h++)
+                {
+                    if(res.locals.layoutModels.curUser.id == rows[h].ID)
+                    {
+                        name = rows[h].Username;
+                        break;
+                    }
+                }
+                tmp+=now + '  -  ' +name+ '  =>  ' +price + '\r\n';
+
+                fs.appendFile('public/images/'+pro.ProID+'/history.txt', tmp, (err) => {
+                    if (err) throw err;
+                });
+            });
+
             res.redirect('/product/detail/' + req.body.proID);
         });
     });

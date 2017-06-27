@@ -1,5 +1,6 @@
 var express = require('express');
 var product = require('../models/product');
+var auction = require('../models/auction');
 var moment = require('moment');
 var productRoute = express.Router();
 var category = require('../models/category');
@@ -60,6 +61,7 @@ productRoute.get('/detail/:id', function(req, res) {
     product.loadDetail(req.params.id)
     .then(function(pro) {
         var indexs = [];
+         var history='';
         fs.readdir('./public/images/' + req.params.id, (err, files) => {
             if(user)
             {
@@ -67,6 +69,13 @@ productRoute.get('/detail/:id', function(req, res) {
                     proID: req.params.id,
                     userID: user.id,
                 };
+
+
+                fs.readFile('public/images/'+req.params.id+'/history.txt', 'utf8', (err, data) => {
+                  if (err) throw err;
+                  history = data;
+              });
+                
                 favorite.isLoved(entity).then(function(isLoved){
                     for(var i = 1; i < files.length; i++)
                     {
@@ -75,6 +84,7 @@ productRoute.get('/detail/:id', function(req, res) {
                         };
                         indexs.push(temp);
                     }
+                    
                     var score = user.score;
                     var x = parseFloat(0.8);
                     if (pro) {
@@ -83,6 +93,7 @@ productRoute.get('/detail/:id', function(req, res) {
                             product: pro,
                             isPermit: score > x,
                             indexs: indexs,
+                            history: history,
                             proID: req.params.id,
                             isLoved: isLoved,
                         });
@@ -93,6 +104,11 @@ productRoute.get('/detail/:id', function(req, res) {
             }
             else
             {
+                fs.readFile('public/images/'+req.params.id+'/history.txt', 'utf8', (err, data) => {
+                  if (err) throw err;
+                  history = data;
+              });
+
                 for(var i = 1; i < files.length; i++)
                 {
                     var temp = {
@@ -106,6 +122,7 @@ productRoute.get('/detail/:id', function(req, res) {
                     res.render('product/detail', {
                         layoutModels: res.locals.layoutModels,
                         product: pro,
+                        history:history,
                         isPermit: false,
                         indexs: indexs,
                         proID: req.params.id,
@@ -203,6 +220,8 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                     isActive: i === +curPage
                 });
             }
+
+            //the same with /search/removeLove ; get /search and post /search
             var UserID;
             if(res.locals.layoutModels.curUser)
                 UserID = res.locals.layoutModels.curUser.id;
@@ -218,6 +237,7 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                         });
                     }
                     promise.push(product.getNumberOfAuction(data.list[i].ProID));
+                    promise.push(auction.findHandlePrice(data.list[i].ProID));
                     var isLoved = false;
                     if(bool !== -1)
                     {
@@ -233,9 +253,16 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                     box.push(temp);
                 }
                 Q.all(promise).then(function(rs){
+                    var k = 0;
                     for(var i = 0; i < box.length; i++)
                     {
-                        box[i].numberOfAuctions = rs[i];
+                        box[i].numberOfAuctions = rs[k];
+                        var tmp = rs[k + 1];
+                        if(tmp)
+                            box[i].handlePrice = '****' + tmp[tmp.length - 1];
+                        else
+                            box[i].handlePrice = 'Chưa có'
+                        k = k + 2;
                     }
                     res.render('product/search', {
                         layoutModels: res.locals.layoutModels,
@@ -322,6 +349,7 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                         });
                     }
                     promise.push(product.getNumberOfAuction(data.list[i].ProID));
+                    promise.push(auction.findHandlePrice(data.list[i].ProID));
                     var isLoved = false;
                     if(bool !== -1)
                     {
@@ -337,9 +365,16 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                     box.push(temp);
                 }
                 Q.all(promise).then(function(rs){
+                    var k = 0;
                     for(var i = 0; i < box.length; i++)
                     {
-                        box[i].numberOfAuctions = rs[i];
+                        box[i].numberOfAuctions = rs[k];
+                        var tmp = rs[k + 1];
+                        if(tmp)
+                            box[i].handlePrice = '****' + tmp[tmp.length - 1];
+                        else
+                            box[i].handlePrice = 'Chưa có'
+                        k = k + 2;
                     }
                     res.render('product/search', {
                         layoutModels: res.locals.layoutModels,
@@ -524,25 +559,33 @@ productRoute.post('/search', function(req, res) {
                     });
                 }
                 promise.push(product.getNumberOfAuction(data.list[i].ProID));
-                var isLoved = false;
-                if(bool !== -1)
-                {
-                    isLoved = true;
+                    promise.push(auction.findHandlePrice(data.list[i].ProID));
+                    var isLoved = false;
+                    if(bool !== -1)
+                    {
+                        isLoved = true;
+                    }
+                    var temp = {
+                        product: data.list[i],
+                        isLoved: isLoved,
+                        restTime: 0,
+                        numberOfAuctions: 0,
+                        handlePrice: -1,
+                    }
+                    box.push(temp);
                 }
-                var temp = {
-                    product: data.list[i],
-                    isLoved: isLoved,
-                    restTime: 0,
-                    numberOfAuctions: 0,
-                    handlePrice: -1,
-                }
-                box.push(temp);
-            }
-            Q.all(promise).then(function(rs){
-                for(var i = 0; i < box.length; i++)
-                {
-                    box[i].numberOfAuctions = rs[i];
-                }
+                Q.all(promise).then(function(rs){
+                    var k = 0;
+                    for(var i = 0; i < box.length; i++)
+                    {
+                        box[i].numberOfAuctions = rs[k];
+                        var tmp = rs[k + 1];
+                        if(tmp)
+                            box[i].handlePrice = '****' + tmp[tmp.length - 1];
+                        else
+                            box[i].handlePrice = 'Chưa có'
+                        k = k + 2;
+                    }
                 res.render('product/search', {
                     layoutModels: res.locals.layoutModels,
                     box: box,
@@ -619,25 +662,33 @@ productRoute.get('/search', function(req, res) {
                     });
                 }
                 promise.push(product.getNumberOfAuction(data.list[i].ProID));
-                var isLoved = false;
-                if(bool !== -1)
-                {
-                    isLoved = true;
+                    promise.push(auction.findHandlePrice(data.list[i].ProID));
+                    var isLoved = false;
+                    if(bool !== -1)
+                    {
+                        isLoved = true;
+                    }
+                    var temp = {
+                        product: data.list[i],
+                        isLoved: isLoved,
+                        restTime: 0,
+                        numberOfAuctions: 0,
+                        handlePrice: -1,
+                    }
+                    box.push(temp);
                 }
-                var temp = {
-                    product: data.list[i],
-                    isLoved: isLoved,
-                    restTime: 0,
-                    numberOfAuctions: 0,
-                    handlePrice: -1,
-                }
-                box.push(temp);
-            }
-            Q.all(promise).then(function(rs){
-                for(var i = 0; i < box.length; i++)
-                {
-                    box[i].numberOfAuctions = rs[i];
-                }
+                Q.all(promise).then(function(rs){
+                    var k = 0;
+                    for(var i = 0; i < box.length; i++)
+                    {
+                        box[i].numberOfAuctions = rs[k];
+                        var tmp = rs[k + 1];
+                        if(tmp)
+                            box[i].handlePrice = '****' + tmp[tmp.length - 1];
+                        else
+                            box[i].handlePrice = 'Chưa có'
+                        k = k + 2;
+                    }
                 res.render('product/search', {
                     layoutModels: res.locals.layoutModels,
                     box: box,
