@@ -59,11 +59,11 @@ exports.findHandlePrice = function(ProID) {
     var deferred = Q.defer();
 
     var sql =
-            'select Name from users where ID in (select UserID from auctions where ProID = ' + ProID + ' and Price = (select MAX(Price) from auctions))';
+            'select * from users where ID in (select UserID from auctions where ProID = ' + ProID + ' and Price = (select MAX(Price) from auctions))';
 
     db.load(sql).then(function(rows) {
         if(rows[0])
-            deferred.resolve(rows[0].Name);
+            deferred.resolve(rows[0]);
         else
             deferred.resolve(null);
     });
@@ -76,22 +76,6 @@ exports.loadAllAuctions = function() {
     var deferred = Q.defer();
 
     var sql = 'SELECT * from auctions';
-    db.load(sql).then(function(rows) {
-        if (rows) {
-            deferred.resolve(rows);
-        } else {
-            deferred.resolve(null);
-        }
-    });
-
-    return deferred.promise;
-}
-
-exports.loadUserName = function() {
-
-    var deferred = Q.defer();
-
-    var sql = 'SELECT * from Users'
     db.load(sql).then(function(rows) {
         if (rows) {
             deferred.resolve(rows);

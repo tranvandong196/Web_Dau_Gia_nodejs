@@ -46,7 +46,15 @@ Chi tiết sản phẩm
 
 <script type="text/javascript">
     $('#watch_history').on('click', function () {
-       alert($('#his').val());
+        if($('#his').val() != '')
+        {
+            alert($('#his').val());
+        }
+       else
+       {
+        alert('Chưa có lượt đấu giá nào');
+       }
+
    });
 </script>
 {{/section}}

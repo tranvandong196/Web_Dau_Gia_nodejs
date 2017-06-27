@@ -71,7 +71,7 @@ productRoute.get('/detail/:id', function(req, res) {
                 };
 
 
-                fs.readFile('public/history/'+req.params.id+'/history.txt', 'utf8', (err, data) => {
+                fs.readFile('public/infor/'+req.params.id+'/history.txt', 'utf8', (err, data) => {
                   if (err) throw err;
                   history = data;
               });
@@ -104,7 +104,7 @@ productRoute.get('/detail/:id', function(req, res) {
             }
             else
             {
-                fs.readFile('public/history/'+req.params.id+'/history.txt', 'utf8', (err, data) => {
+                fs.readFile('public/infor/'+req.params.id+'/history.txt', 'utf8', (err, data) => {
                   if (err) throw err;
                   history = data;
               });
@@ -257,7 +257,7 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                     for(var i = 0; i < box.length; i++)
                     {
                         box[i].numberOfAuctions = rs[k];
-                        var tmp = rs[k + 1];
+                        var tmp = rs[k + 1].Name;
                         if(tmp)
                             box[i].handlePrice = '****' + tmp[tmp.length - 1];
                         else
@@ -334,6 +334,7 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                     isActive: i === +curPage
                 });
             }
+            //the same with /search/removeLove ; get /search and post /search
             var UserID;
             if(res.locals.layoutModels.curUser)
                 UserID = res.locals.layoutModels.curUser.id;
@@ -369,7 +370,7 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                     for(var i = 0; i < box.length; i++)
                     {
                         box[i].numberOfAuctions = rs[k];
-                        var tmp = rs[k + 1];
+                        var tmp = rs[k + 1].Name;
                         if(tmp)
                             box[i].handlePrice = '****' + tmp[tmp.length - 1];
                         else
@@ -544,6 +545,7 @@ productRoute.post('/search', function(req, res) {
                 isActive: i === +curPage,
             });
         }
+        //the same with /search/removeLove ; get /search and post /search
         var UserID;
         if(res.locals.layoutModels.curUser)
             UserID = res.locals.layoutModels.curUser.id;
@@ -559,33 +561,33 @@ productRoute.post('/search', function(req, res) {
                     });
                 }
                 promise.push(product.getNumberOfAuction(data.list[i].ProID));
-                    promise.push(auction.findHandlePrice(data.list[i].ProID));
-                    var isLoved = false;
-                    if(bool !== -1)
-                    {
-                        isLoved = true;
-                    }
-                    var temp = {
-                        product: data.list[i],
-                        isLoved: isLoved,
-                        restTime: 0,
-                        numberOfAuctions: 0,
-                        handlePrice: -1,
-                    }
-                    box.push(temp);
+                promise.push(auction.findHandlePrice(data.list[i].ProID));
+                var isLoved = false;
+                if(bool !== -1)
+                {
+                    isLoved = true;
                 }
-                Q.all(promise).then(function(rs){
-                    var k = 0;
-                    for(var i = 0; i < box.length; i++)
-                    {
-                        box[i].numberOfAuctions = rs[k];
-                        var tmp = rs[k + 1];
-                        if(tmp)
-                            box[i].handlePrice = '****' + tmp[tmp.length - 1];
-                        else
-                            box[i].handlePrice = 'Chưa có'
-                        k = k + 2;
-                    }
+                var temp = {
+                    product: data.list[i],
+                    isLoved: isLoved,
+                    restTime: 0,
+                    numberOfAuctions: 0,
+                    handlePrice: -1,
+                }
+                box.push(temp);
+            }
+            Q.all(promise).then(function(rs){
+                var k = 0;
+                for(var i = 0; i < box.length; i++)
+                {
+                    box[i].numberOfAuctions = rs[k];
+                    var tmp = rs[k + 1].Name;
+                    if(tmp)
+                        box[i].handlePrice = '****' + tmp[tmp.length - 1];
+                    else
+                        box[i].handlePrice = 'Chưa có'
+                    k = k + 2;
+                }
                 res.render('product/search', {
                     layoutModels: res.locals.layoutModels,
                     box: box,
@@ -646,7 +648,7 @@ productRoute.get('/search', function(req, res) {
                 isActive: i === +curPage
             });
         }
-
+        //the same with /search/removeLove ; get /search and post /search
         var UserID;
         if(res.locals.layoutModels.curUser)
             UserID = res.locals.layoutModels.curUser.id;
@@ -662,33 +664,33 @@ productRoute.get('/search', function(req, res) {
                     });
                 }
                 promise.push(product.getNumberOfAuction(data.list[i].ProID));
-                    promise.push(auction.findHandlePrice(data.list[i].ProID));
-                    var isLoved = false;
-                    if(bool !== -1)
-                    {
-                        isLoved = true;
-                    }
-                    var temp = {
-                        product: data.list[i],
-                        isLoved: isLoved,
-                        restTime: 0,
-                        numberOfAuctions: 0,
-                        handlePrice: -1,
-                    }
-                    box.push(temp);
+                promise.push(auction.findHandlePrice(data.list[i].ProID));
+                var isLoved = false;
+                if(bool !== -1)
+                {
+                    isLoved = true;
                 }
-                Q.all(promise).then(function(rs){
-                    var k = 0;
-                    for(var i = 0; i < box.length; i++)
-                    {
-                        box[i].numberOfAuctions = rs[k];
-                        var tmp = rs[k + 1];
-                        if(tmp)
-                            box[i].handlePrice = '****' + tmp[tmp.length - 1];
-                        else
-                            box[i].handlePrice = 'Chưa có'
-                        k = k + 2;
-                    }
+                var temp = {
+                    product: data.list[i],
+                    isLoved: isLoved,
+                    restTime: 0,
+                    numberOfAuctions: 0,
+                    handlePrice: -1,
+                }
+                box.push(temp);
+            }
+            Q.all(promise).then(function(rs){
+                var k = 0;
+                for(var i = 0; i < box.length; i++)
+                {
+                    box[i].numberOfAuctions = rs[k];
+                    var tmp = rs[k + 1].Name;
+                    if(tmp)
+                        box[i].handlePrice = '****' + tmp[tmp.length - 1];
+                    else
+                        box[i].handlePrice = 'Chưa có'
+                    k = k + 2;
+                }
                 res.render('product/search', {
                     layoutModels: res.locals.layoutModels,
                     box: box,
@@ -826,7 +828,7 @@ productRoute.get('/byBasket', function(req, res) {
         for (var i = 0; i < data.list.length; i++) {
             var temp = {
                 product: data.list[i],
-                canGiveScore_comment: true
+                canGiveScore_comment_toSeller: true
             }
             box.push(temp);
         }
@@ -854,7 +856,7 @@ productRoute.get('/byOnSale', function(req, res) {
     var userIDcurrent = -1;
     if (res.locals.layoutModels.isLogged)
         userIDcurrent = res.locals.layoutModels.curUser.id;
-    product.loadPageByBasket(userIDcurrent, rec_per_page, offset).then(function(data) {
+    product.loadPageByOnSale(userIDcurrent, rec_per_page, offset).then(function(data) {
         console.log("[ProductRoute] Da lay danh sach SP dang ban: SoLuong = " + data.list.length)
         var number_of_pages = data.total / rec_per_page;
         if (data.total % rec_per_page > 0) {
@@ -872,6 +874,51 @@ productRoute.get('/byOnSale', function(req, res) {
         for (var i = 0; i < data.list.length; i++) {
             var temp = {
                 product: data.list[i]
+            }
+            box.push(temp);
+        }
+        res.render('product/byUser', {
+            layoutModels: res.locals.layoutModels,
+            box: box,
+            isEmpty: data.total === 0,
+            catId: req.params.id,
+            Tile: 'Sản phẩm đang bán',
+            pages: pages,
+            curPage: curPage,
+            prevPage: curPage - 1,
+            nextPage: curPage + 1,
+            showPrevPage: curPage > 1,
+            showNextPage: curPage < number_of_pages - 1,
+        });
+    });
+});
+productRoute.get('/bySold', function(req, res) {
+
+    var rec_per_page = 6;
+    var curPage = req.query.page ? req.query.page : 1;
+    var offset = (curPage - 1) * rec_per_page;
+    var userIDcurrent = -1;
+    if (res.locals.layoutModels.isLogged)
+        userIDcurrent = res.locals.layoutModels.curUser.id;
+    product.loadPageBySold(userIDcurrent, rec_per_page, offset).then(function(data) {
+        console.log("[ProductRoute] Da lay danh sach SP dang ban: SoLuong = " + data.list.length)
+        var number_of_pages = data.total / rec_per_page;
+        if (data.total % rec_per_page > 0) {
+            number_of_pages++;
+        }
+
+        var pages = [];
+        for (var i = 1; i <= number_of_pages; i++) {
+            pages.push({
+                pageValue: i,
+                isActive: i === +curPage
+            });
+        }
+        var box = [];   
+        for (var i = 0; i < data.list.length; i++) {
+            var temp = {
+                product: data.list[i],
+                canGiveScore_comment_toBuyer: true
             }
             box.push(temp);
         }

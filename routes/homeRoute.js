@@ -16,7 +16,7 @@ homeRoute.get('/', function(req, res) {
 	var price = [];
 	var name = [];
 	var tmp='';
-
+	var temp='';
 
 	Q.all([
 		auction.SumOfProduct(), auction.SumOfAuction(), auction.loadAllAuctions(), auction.loadUserName()
@@ -24,17 +24,16 @@ homeRoute.get('/', function(req, res) {
 			for(var i=1;i<=rows[0][0].COUNT;i++)
 			{
 				try {
-					fs.statSync('public/history/'+i);
+					fs.statSync('public/infor/'+i);
 				} catch(e) {
-					console.log("ok");
-					fs.mkdirSync('public/history/'+i);
+					fs.mkdirSync('public/infor/'+i);
 				}
 				
 			}
 			
 			for(var i=1;i<=rows[0][0].COUNT;i++)
 			{
-				fs.writeFile('public/history/'+i+'/history.txt', '', (err) => {
+				fs.writeFile('public/infor/'+i+'/history.txt', '', (err) => {
 					if (err) throw err;
 				});
 			}
@@ -47,15 +46,21 @@ homeRoute.get('/', function(req, res) {
 				{
 					if(rows[2][j].UserID == rows[3][h].ID)
 					{
-						name[j] = rows[3][h].Username;
+						for(var i=0;i<rows[3][h].Username.length - 1;i++)
+						{
+							temp+='*'
+						}
+						temp+=rows[3][h].Username[rows[3][h].Username.length - 1];
+						name[j] = temp;
 						break;
 					}
 				}
 				tmp+=date[j] + '  -  ' +name[j]+ '  =>  ' +price[j] + '\r\n';
 
-				fs.appendFile('public/history/'+rows[2][j].ProID+'/history.txt', tmp, (err) => {
+				fs.appendFile('public/infor/'+rows[2][j].ProID+'/history.txt', tmp, (err) => {
 					if (err) throw err;
 				});
+				temp='';
 				tmp='';
 			}
 
