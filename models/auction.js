@@ -70,3 +70,67 @@ exports.findHandlePrice = function(ProID) {
 
     return deferred.promise;
 }
+
+exports.loadAllAuctions = function() {
+
+    var deferred = Q.defer();
+
+    var sql = 'SELECT * from auctions';
+    db.load(sql).then(function(rows) {
+        if (rows) {
+            deferred.resolve(rows);
+        } else {
+            deferred.resolve(null);
+        }
+    });
+
+    return deferred.promise;
+}
+
+exports.loadUserName = function() {
+
+    var deferred = Q.defer();
+
+    var sql = 'SELECT * from Users'
+    db.load(sql).then(function(rows) {
+        if (rows) {
+            deferred.resolve(rows);
+        } else {
+            deferred.resolve(null);
+        }
+    });
+
+    return deferred.promise;
+}
+
+exports.SumOfProduct = function() {
+
+    var deferred = Q.defer();
+
+    var sql = 'SELECT COUNT(*) as COUNT from products'
+    db.load(sql).then(function(rows) {
+        if (rows) {
+            deferred.resolve(rows);
+        } else {
+            deferred.resolve(null);
+        }
+    });
+
+    return deferred.promise;
+}
+
+exports.SumOfAuction = function() {
+
+    var deferred = Q.defer();
+
+    var sql = 'SELECT COUNT(*) as COUNT from auctions'
+    db.load(sql).then(function(rows) {
+        if (rows) {
+            deferred.resolve(rows);
+        } else {
+            deferred.resolve(null);
+        }
+    });
+
+    return deferred.promise;
+}

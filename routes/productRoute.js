@@ -61,6 +61,7 @@ productRoute.get('/detail/:id', function(req, res) {
     product.loadDetail(req.params.id)
     .then(function(pro) {
         var indexs = [];
+         var history='';
         fs.readdir('./public/images/' + req.params.id, (err, files) => {
             if(user)
             {
@@ -68,6 +69,13 @@ productRoute.get('/detail/:id', function(req, res) {
                     proID: req.params.id,
                     userID: user.id,
                 };
+
+
+                fs.readFile('public/images/'+req.params.id+'/history.txt', 'utf8', (err, data) => {
+                  if (err) throw err;
+                  history = data;
+              });
+                
                 favorite.isLoved(entity).then(function(isLoved){
                     for(var i = 1; i < files.length; i++)
                     {
@@ -76,6 +84,7 @@ productRoute.get('/detail/:id', function(req, res) {
                         };
                         indexs.push(temp);
                     }
+                    
                     var score = user.score;
                     var x = parseFloat(0.8);
                     if (pro) {
@@ -84,6 +93,7 @@ productRoute.get('/detail/:id', function(req, res) {
                             product: pro,
                             isPermit: score > x,
                             indexs: indexs,
+                            history: history,
                             proID: req.params.id,
                             isLoved: isLoved,
                         });
@@ -94,6 +104,11 @@ productRoute.get('/detail/:id', function(req, res) {
             }
             else
             {
+                fs.readFile('public/images/'+req.params.id+'/history.txt', 'utf8', (err, data) => {
+                  if (err) throw err;
+                  history = data;
+              });
+
                 for(var i = 1; i < files.length; i++)
                 {
                     var temp = {
@@ -107,6 +122,7 @@ productRoute.get('/detail/:id', function(req, res) {
                     res.render('product/detail', {
                         layoutModels: res.locals.layoutModels,
                         product: pro,
+                        history:history,
                         isPermit: false,
                         indexs: indexs,
                         proID: req.params.id,
