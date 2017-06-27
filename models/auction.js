@@ -91,7 +91,7 @@ exports.loadUserName = function() {
 
     var deferred = Q.defer();
 
-    var sql = 'SELECT * from Users'
+    var sql = 'SELECT * from users'
     db.load(sql).then(function(rows) {
         if (rows) {
             deferred.resolve(rows);

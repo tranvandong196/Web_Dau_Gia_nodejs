@@ -32,20 +32,19 @@ auctionRoute.post('/add', restrict, function(req, res) {
                         Price: pro.Price,
                     },
                     quantity: 1,
-                    amount: 1,
+                    amount: pro.Price,
                 };
                 cart.add(req.session.cart, item);
             }
-
             
             auction.loadUserName().then(function(rows){
-                var name='';
-                var tmp='';
-                var price=req.body.price; 
+                var name = '';
+                var tmp = '';
+                var price = req.body.price; 
                 price = currencyFormatter.format(price, { code: 'VND' });
-                for(var h=0;;h++)
+                for(var h = 0; ; h++)
                 {
-                    if(res.locals.layoutModels.curUser.id == rows[h].ID)
+                    if(res.locals.layoutModels.curUser.id === rows[h].ID)
                     {
                         name = rows[h].Username;
                         break;
@@ -56,9 +55,8 @@ auctionRoute.post('/add', restrict, function(req, res) {
                 fs.appendFile('public/history/'+pro.ProID+'/history.txt', tmp, (err) => {
                     if (err) throw err;
                 });
+                res.redirect('/product/detail/' + req.body.proID);
             });
-
-            res.redirect('/product/detail/' + req.body.proID);
         });
     });
 });
