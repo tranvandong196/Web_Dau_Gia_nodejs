@@ -61,6 +61,7 @@ productRoute.get('/detail/:id', function(req, res) {
     product.loadDetail(req.params.id)
     .then(function(pro) {
         var indexs = [];
+         var history='';
         fs.readdir('./public/images/' + req.params.id, (err, files) => {
             if(user)
             {
@@ -68,6 +69,13 @@ productRoute.get('/detail/:id', function(req, res) {
                     proID: req.params.id,
                     userID: user.id,
                 };
+
+
+                fs.readFile('public/images/'+req.params.id+'/history.txt', 'utf8', (err, data) => {
+                  if (err) throw err;
+                  history = data;
+              });
+                
                 favorite.isLoved(entity).then(function(isLoved){
                     for(var i = 1; i < files.length; i++)
                     {
@@ -76,6 +84,7 @@ productRoute.get('/detail/:id', function(req, res) {
                         };
                         indexs.push(temp);
                     }
+                    
                     var score = user.score;
                     var x = parseFloat(0.8);
                     if (pro) {
@@ -84,6 +93,7 @@ productRoute.get('/detail/:id', function(req, res) {
                             product: pro,
                             isPermit: score > x,
                             indexs: indexs,
+                            history: history,
                             proID: req.params.id,
                             isLoved: isLoved,
                         });
@@ -94,6 +104,11 @@ productRoute.get('/detail/:id', function(req, res) {
             }
             else
             {
+                fs.readFile('public/images/'+req.params.id+'/history.txt', 'utf8', (err, data) => {
+                  if (err) throw err;
+                  history = data;
+              });
+
                 for(var i = 1; i < files.length; i++)
                 {
                     var temp = {
@@ -107,6 +122,7 @@ productRoute.get('/detail/:id', function(req, res) {
                     res.render('product/detail', {
                         layoutModels: res.locals.layoutModels,
                         product: pro,
+                        history:history,
                         isPermit: false,
                         indexs: indexs,
                         proID: req.params.id,
@@ -720,7 +736,7 @@ productRoute.get('/byFavorite', function(req, res) {
         for (var i = 0; i < data.list.length; i++) {
             var temp = {
                 product: data.list[i],
-                isInFavoriteSite: true,
+                canRemoveProduct: true
             }
             box.push(temp);
         }
@@ -729,7 +745,7 @@ productRoute.get('/byFavorite', function(req, res) {
             box: box,
             isEmpty: data.total === 0,
             catId: req.params.id,
-            Tile: 'Sản phẩm yêu thích (' + data.list.length + ')',
+            Tile: 'Sản phẩm yêu thích',
             pages: pages,
             curPage: curPage,
             prevPage: curPage - 1,
@@ -766,7 +782,6 @@ productRoute.get('/byAuction', function(req, res) {
         for (var i = 0; i < data.list.length; i++) {
             var temp = {
                 product: data.list[i],
-                isInFavoriteSite: false,
             }
             box.push(temp);
         }
@@ -775,7 +790,7 @@ productRoute.get('/byAuction', function(req, res) {
             box: box,
             isEmpty: data.total === 0,
             catId: req.params.id,
-            Tile: 'Sản phẩm đang đấu giá ('+ data.list.length + ')',
+            Tile: 'Sản phẩm đang đấu giá',
             pages: pages,
             curPage: curPage,
             prevPage: curPage - 1,
@@ -811,7 +826,7 @@ productRoute.get('/byBasket', function(req, res) {
         for (var i = 0; i < data.list.length; i++) {
             var temp = {
                 product: data.list[i],
-                isInFavoriteSite: false,
+                canGiveScore_comment: true
             }
             box.push(temp);
         }
@@ -820,7 +835,52 @@ productRoute.get('/byBasket', function(req, res) {
             box: box,
             isEmpty: data.total === 0,
             catId: req.params.id,
-            Tile: 'Sản phẩm thắng đấu giá - giỏ hàng (' + data.list.length + ')',
+            Tile: 'Sản phẩm thắng đấu giá - giỏ hàng',
+            pages: pages,
+            curPage: curPage,
+            prevPage: curPage - 1,
+            nextPage: curPage + 1,
+            showPrevPage: curPage > 1,
+            showNextPage: curPage < number_of_pages - 1,
+        });
+    });
+});
+
+productRoute.get('/byOnSale', function(req, res) {
+
+    var rec_per_page = 6;
+    var curPage = req.query.page ? req.query.page : 1;
+    var offset = (curPage - 1) * rec_per_page;
+    var userIDcurrent = -1;
+    if (res.locals.layoutModels.isLogged)
+        userIDcurrent = res.locals.layoutModels.curUser.id;
+    product.loadPageByBasket(userIDcurrent, rec_per_page, offset).then(function(data) {
+        console.log("[ProductRoute] Da lay danh sach SP dang ban: SoLuong = " + data.list.length)
+        var number_of_pages = data.total / rec_per_page;
+        if (data.total % rec_per_page > 0) {
+            number_of_pages++;
+        }
+
+        var pages = [];
+        for (var i = 1; i <= number_of_pages; i++) {
+            pages.push({
+                pageValue: i,
+                isActive: i === +curPage
+            });
+        }
+        var box = [];   
+        for (var i = 0; i < data.list.length; i++) {
+            var temp = {
+                product: data.list[i]
+            }
+            box.push(temp);
+        }
+        res.render('product/byUser', {
+            layoutModels: res.locals.layoutModels,
+            box: box,
+            isEmpty: data.total === 0,
+            catId: req.params.id,
+            Tile: 'Sản phẩm đang bán',
             pages: pages,
             curPage: curPage,
             prevPage: curPage - 1,
