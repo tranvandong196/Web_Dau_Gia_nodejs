@@ -55,6 +55,7 @@ Chi tiết sản phẩm
 <div class="col-md-12" style="right: 10px">
     <div class="thumbnail" style="min-height: 130px;">
         <div class="row">
+<<<<<<< HEAD
             <div class="col-md-6 col-md-offset-0 picture" style="width: 50%">
                 <div class="row" style="max-height: 480px   ; max-width: 450px; min-height: 480px; min-width: 450px; margin-left: 10px; width: 50%">
                     <img  src="/images/{{ProID}}/1.jpg" id="img0" class="img-rounded" alt="..." style="max-height: 500px; max-width: 450px"/>
@@ -180,6 +181,12 @@ Chi tiết sản phẩm
             <div class="col-md-5">
                 <!-- Thông tin chung -->
                 <!-- <div class="col-md-12"> -->
+=======
+            <input type="hidden" id="his" value="{{../history}}" />
+            <div class="col-md-5">
+                <!-- Thông tin chung -->
+                <!-- <div class="col-md-12"> -->
+>>>>>>> 8f03752ad427f642e76b061a362de1d40a7e1b9d
                 <div class="caption-lg-orange">
                     <h3><b>&nbsp;{{ProName}}</b></h3>
                 </div>
@@ -231,6 +238,7 @@ Chi tiết sản phẩm
                         </div>
 
                     </div>
+<<<<<<< HEAD
                 <!-- END Các button: Đấu giá - yêu thích - lịch sử -->
             </div>
                 </div>
@@ -268,6 +276,43 @@ Chi tiết sản phẩm
                     99
                 </span>
             </div>
+=======
+                </div>
+                <div class="padding">
+                    <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/PriceToBuy.png" title="Giá mua ngay" width="25" height="25">&nbsp;&nbsp;<b>Giá mua ngay:</b> {{formatNumber PriceToBuy}} vnđ</h4>
+                </div>
+                <div class="padding">
+                 <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Quantity-icon.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;<b>Tồn kho:</b> {{Quantity}}</h4>
+             </div>
+             <div style="padding: 6px">&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Comment-Describe-icon.png" title="Mổ tả ngắn gọn" width="25" height="25">&nbsp;&nbsp;<b>Mô tả:</b> {{FullDes}}
+             </div>
+             <!-- </div> -->
+             <!-- END Thông tin chung -->
+             <!-- Người bán - người giữ giá -->
+             <div class="col-md-12">
+                <h4>&nbsp;</h4>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <img src="/images/others/Seller.png" title="Người bán" width="20" height="20">&nbsp;&nbsp;<a href="#">Người bán</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </span>
+                        <input type="text" class="form-control" value="Trần Văn Đông">
+                    </input>
+                    <span class="input-group-addon">
+                        82
+                    </span>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <img src="/images/others/Handle-Price.png" title="Người đang giữ giá" width="20" height="20">&nbsp;&nbsp;<a href="#">Người giữ giá</a>
+                    </span>
+                    <input type="text" class="form-control" value="Nguyễn Quốc Duy Đạt">
+                </input>
+                <span class="input-group-addon">
+                    99
+                </span>
+            </div>
+>>>>>>> 8f03752ad427f642e76b061a362de1d40a7e1b9d
 
             <div class="input-group" style="padding-top: 20px">
                 <span class="input-group-addon">
@@ -328,6 +373,7 @@ Chi tiết sản phẩm
                 Thích
             </a>
             {{/if}}
+<<<<<<< HEAD
         </div>
         {{/if}}
     </div>
@@ -349,6 +395,29 @@ Chi tiết sản phẩm
     </div>
 </div>
 </div>
+=======
+        </div>
+        {{/if}}
+    </div>
+</div>
+</div>
+<!-- END Các button: Đấu giá - yêu thích - lịch sử -->
+</div>
+<div class="col-md-7 picture">
+    <img  src="/images/{{ProID}}/1.jpg" id="img0" class="img-rounded" alt="..." height="450" width="500"/>
+    <div class="row" style="margin-top: 10px">
+        <div class="col-sm-3">
+
+        </div>
+        {{#each ../indexs}}
+        <div class="col-sm-2">
+            <img src="/images/{{../../proID}}/{{stt}}.jpg" id="img{{stt}}" class="img-rounded" alt="..."  height="50" width="50"/>
+        </div>
+        {{/each}}
+    </div>
+</div>
+</div>
+>>>>>>> 8f03752ad427f642e76b061a362de1d40a7e1b9d
 </div>
 </div>
 {{/with}}
