@@ -134,11 +134,6 @@ productRoute.get('/detail/:id', function(req, res) {
             }
             else
             {
-                fs.readFile(dir +'/history.txt', 'utf8', (err, data) => {
-                  if (err) throw err;
-                  history = data;
-              });
-
                 var score = 0;
                 var x = parseFloat(0.8);
                 if (pro) {
@@ -178,7 +173,7 @@ productRoute.get('/detail/:id', function(req, res) {
                             indexs: indexs,
                             history: history,
                             proID: req.params.id,
-                            isLoved: isLoved,
+                            isLoved: false,
                         });
                     });
                 } else {
