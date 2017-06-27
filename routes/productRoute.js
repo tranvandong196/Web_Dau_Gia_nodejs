@@ -94,27 +94,31 @@ productRoute.get('/detail/:id', function(req, res) {
                             var handlePrice = {
                                 Name: 'Trống',
                                 Score: 0.0,
+                                ID: 0,
                             };
                             var solder = {
                                 Name: 'Trống',
                                 Score: 0.0,
+                                ID: 0,
                             };
                             if(rs[1])
                             {
                                 handlePrice.Name = rs[1].Name;
                                 handlePrice.Score = rs[1].Score;
+                                handlePrice.ID = rs[1].ID;
                             }
                             if(rs[2])
                             {
                                 solder.Name = rs[2].Name;
                                 solder.Score = rs[2].Score;
+                                solder.ID = rs[2].ID;
                             }
                             if(rs[0])
                                 curPrice = rs[0];
                             res.render('product/detail', {
                                 layoutModels: res.locals.layoutModels,
                                 product: pro,
-                                isPermit: score > x,
+                                isPermit: score > x && solder.ID !== user.id,
                                 isAlive: pro.State === 'đang đấu giá',
                                 isEnd: pro.State === 'đã kết thúc',
                                 handlePrice: handlePrice,
@@ -144,20 +148,24 @@ productRoute.get('/detail/:id', function(req, res) {
                         var handlePrice = {
                             Name: 'Trống',
                             Score: 0.0,
+                            ID: 0,
                         };
                         var solder = {
                             Name: 'Trống',
                             Score: 0.0,
+                            ID: 0,
                         };
                         if(rs[1])
                         {
                             handlePrice.Name = rs[1].Name;
                             handlePrice.Score = rs[1].Score;
+                            handlePrice.ID = rs[1].ID;
                         }
                         if(rs[2])
                         {
                             solder.Name = rs[2].Name;
                             solder.Score = rs[2].Score;
+                            solder.ID = rs[2].ID;
                         }
                         if(rs[0])
                             curPrice = rs[0];
@@ -399,10 +407,16 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                     {
                         isLoved = true;
                     }
+                    var ms = moment(data.list[i].TimeDown, 'YYYY-MM-DD HH:mm:ss').diff(moment(data.list[i].TimeUp, 'YYYY-MM-DD HH:mm:ss'));
+                    var d = moment.duration(ms);
+                    var diffDays = parseInt(d / (1000 * 3600 * 24)); 
+                    var hours = parseInt((d - diffDays * 24 * 3600 * 1000) / (1000 * 3600));
+                    var minutes = parseInt((d - diffDays * 24 * 3600 * 1000 - hours * 1000 * 3600) / (1000 * 60));
+                    var restTime = diffDays + ' ngày ' + hours + ' giờ ' + minutes + ' phút';
                     var temp = {
                         product: data.list[i],
                         isLoved: isLoved,
-                        restTime: 0,
+                        restTime: restTime,
                         numberOfAuctions: 0,
                         handlePrice: -1,
                     }
@@ -415,9 +429,9 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                         box[i].numberOfAuctions = rs[k];
                         var tmp = rs[k + 1];
                         if(tmp)
-                            box[i].handlePrice = '****' + tmp.Name[tmp.length - 1];
+                            box[i].handlePrice = '****' + tmp.Name[tmp.Name.length - 1];
                         else
-                            box[i].handlePrice = 'Chưa có'
+                            box[i].handlePrice = 'Chưa có';;
                         k = k + 2;
                     }
                     res.render('product/search', {
@@ -512,10 +526,16 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                     {
                         isLoved = true;
                     }
+                    var ms = moment(data.list[i].TimeDown, 'YYYY-MM-DD HH:mm:ss').diff(moment(data.list[i].TimeUp, 'YYYY-MM-DD HH:mm:ss'));
+                    var d = moment.duration(ms);
+                    var diffDays = parseInt(d / (1000 * 3600 * 24)); 
+                    var hours = parseInt((d - diffDays * 24 * 3600 * 1000) / (1000 * 3600));
+                    var minutes = parseInt((d - diffDays * 24 * 3600 * 1000 - hours * 1000 * 3600) / (1000 * 60));
+                    var restTime = diffDays + ' ngày ' + hours + ' giờ ' + minutes + ' phút';
                     var temp = {
                         product: data.list[i],
                         isLoved: isLoved,
-                        restTime: 0,
+                        restTime: restTime,
                         numberOfAuctions: 0,
                         handlePrice: -1,
                     }
@@ -528,9 +548,9 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                         box[i].numberOfAuctions = rs[k];
                         var tmp = rs[k + 1];
                         if(tmp)
-                            box[i].handlePrice = '****' + tmp.Name[tmp.length - 1];
+                            box[i].handlePrice = '****' + tmp.Name[tmp.Name.length - 1];
                         else
-                            box[i].handlePrice = 'Chưa có'
+                            box[i].handlePrice = 'Chưa có';;
                         k = k + 2;
                     }
                     res.render('product/search', {
@@ -619,10 +639,16 @@ productRoute.post('/search', function(req, res) {
                 {
                     isLoved = true;
                 }
+                var ms = moment(data.list[i].TimeDown, 'YYYY-MM-DD HH:mm:ss').diff(moment(data.list[i].TimeUp, 'YYYY-MM-DD HH:mm:ss'));
+                var d = moment.duration(ms);
+                var diffDays = parseInt(d / (1000 * 3600 * 24));
+                var hours = parseInt((d - diffDays * 24 * 3600 * 1000) / (1000 * 3600));
+                var minutes = parseInt((d - diffDays * 24 * 3600 * 1000 - hours * 1000 * 3600) / (1000 * 60));
+                var restTime = diffDays + ' ngày ' + hours + ' giờ ' + minutes + ' phút';
                 var temp = {
                     product: data.list[i],
                     isLoved: isLoved,
-                    restTime: 0,
+                    restTime: restTime,
                     numberOfAuctions: 0,
                     handlePrice: -1,
                 }
@@ -635,9 +661,9 @@ productRoute.post('/search', function(req, res) {
                     box[i].numberOfAuctions = rs[k];
                     var tmp = rs[k + 1];
                     if(tmp)
-                        box[i].handlePrice = '****' + tmp.Name[tmp.length - 1];
+                        box[i].handlePrice = '****' + tmp.Name[tmp.Name.length - 1];
                     else
-                        box[i].handlePrice = 'Chưa có'
+                        box[i].handlePrice = 'Chưa có';
                     k = k + 2;
                 }
                 res.render('product/search', {
@@ -722,10 +748,16 @@ productRoute.get('/search', function(req, res) {
                 {
                     isLoved = true;
                 }
+                var ms = moment(data.list[i].TimeDown, 'YYYY-MM-DD HH:mm:ss').diff(moment(data.list[i].TimeUp, 'YYYY-MM-DD HH:mm:ss'));
+                var d = moment.duration(ms);
+                var diffDays = parseInt(d / (1000 * 3600 * 24)); 
+                var hours = parseInt((d - diffDays * 24 * 3600 * 1000) / (1000 * 3600));
+                var minutes = parseInt((d - diffDays * 24 * 3600 * 1000 - hours * 1000 * 3600) / (1000 * 60));
+                var restTime = diffDays + ' ngày ' + hours + ' giờ ' + minutes + ' phút';
                 var temp = {
                     product: data.list[i],
                     isLoved: isLoved,
-                    restTime: 0,
+                    restTime: restTime,
                     numberOfAuctions: 0,
                     handlePrice: -1,
                 }
@@ -738,9 +770,9 @@ productRoute.get('/search', function(req, res) {
                     box[i].numberOfAuctions = rs[k];
                     var tmp = rs[k + 1];
                     if(tmp)
-                        box[i].handlePrice = '****' + tmp.Name[tmp.length - 1];
+                        box[i].handlePrice = '****' + tmp.Name[tmp.Name.length - 1];
                     else
-                        box[i].handlePrice = 'Chưa có'
+                        box[i].handlePrice = 'Chưa có';
                     k = k + 2;
                 }
                 res.render('product/search', {
