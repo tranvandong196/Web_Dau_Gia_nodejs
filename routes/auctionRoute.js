@@ -38,26 +38,23 @@ auctionRoute.post('/add', restrict, function(req, res) {
             }
 
             
-            auction.loadUserName().then(function(rows){
-                var name='';
-                var tmp='';
-                var price=req.body.price; 
-                price = currencyFormatter.format(price, { code: 'VND' });
-                for(var h=0;;h++)
-                {
-                    if(res.locals.layoutModels.curUser.id == rows[h].ID)
-                    {
-                        name = rows[h].Username;
-                        break;
-                    }
-                }
-                tmp+=now + '  -  ' +name+ '  =>  ' +price + '\r\n';
 
-                fs.appendFile('public/history/'+pro.ProID+'/history.txt', tmp, (err) => {
-                    if (err) throw err;
-                });
+            var name=res.locals.layoutModels.curUser.username;
+            var tmp='';
+            var temp='';
+            var price=req.body.price; 
+            price = currencyFormatter.format(price, { code: 'VND' });
+            for(var i=0;i<name.length - 1;i++)
+            {
+                temp+='*'
+            }
+            temp+=name[name.length - 1];
+            name = temp;
+            console.log(temp);
+            tmp+=now + '  -  ' +name+ '  =>  ' +price + '\r\n';
+            fs.appendFile('public/infor/'+pro.ProID+'/history.txt', tmp, (err) => {
+                if (err) throw err;
             });
-
             res.redirect('/product/detail/' + req.body.proID);
         });
     });
@@ -100,13 +97,13 @@ auctionRoute.post('/checkout', restrict, function(req, res) {
     };
 
     order.insert(entity)
-        .then(function(orderId) {
-            detail.insertAll(req.session.cart, orderId)
-                .then(function(idList) {
-                	req.session.cart = [];
-                    res.redirect('/cart');
-                });
-        });
+    .then(function(orderId) {
+        detail.insertAll(req.session.cart, orderId)
+        .then(function(idList) {
+         req.session.cart = [];
+         res.redirect('/cart');
+     });
+    });
 });
 
 module.exports = auctionRoute;
