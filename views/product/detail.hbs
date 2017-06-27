@@ -78,13 +78,19 @@
                             </span>
                             <input type="text" class="form-control" value="Trần Văn Đông">
                             </input>
+                            <span class="input-group-addon">
+                                82
+                            </span>
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <img src="/images/others/Handle-Price.png" title="Người đang giữ giá" width="20" height="20">&nbsp;&nbsp;<a href="#">Người giữ giá</a>
                             </span>
-                            <input type="text" class="form-control" value="Nguyễn Quốc Duy">
+                            <input type="text" class="form-control" value="Nguyễn Quốc Duy Đạt">
                             </input>
+                            <span class="input-group-addon">
+                                99
+                            </span>
                         </div>
 
                         <div class="input-group" style="padding-top: 20px">
@@ -105,20 +111,22 @@
                     </div>
                 </div>
                 <!-- END Người bán - người giữ giá -->
+               
                 <!-- Các button: Đấu giá - yêu thích - lịch sử -->
                 <div class="col-md-12">
                     <div class="row">
-                        {{#if ../isPermit }}
-                        <div class="col-md-4">
-                            <form class="form-horizontal padding" id="frmAddItem" method="post" action="/auction/add">
-                                <div class="form-group" style="margin-top: 50px; margin-left: 10px">
+                     <!-- Đấu giá - Cho điểm -->
+                 {{#if ../isPermit }}
+                        <div class="col-md-9">
+                            <form class="form-horizontal" id="frmAddItem" method="post" action="/auction/add">
+                                <div class="form-group" style="margin-left: 0px">
                                     <input type="hidden" id="txtP" name="proID" value="{{ProID}}">
                                     <input type="hidden" id="txtStep" value="{{DeltaPrice}}">
                                     <div class="row">
-                                        <div class="col-sm-6" class="input-group">
+                                        <div class="col-sm-8" class="input-group">
                                             <input type="text" id="txtQ" name="price" class="form-control" value="{{Price}}">
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-4">
                                             <button class="btn btn-primary" id="btnDG">
                                                 Đấu giá
                                             </button>
@@ -127,26 +135,27 @@
                                 </div>
                             </form>
                         </div>
+                {{/if}}
+                <!-- END Đấu giá - Cho điểm -->
+                        {{#if ../layoutModels.isLogged }}
+                        <div class="col-md-8">
+                            <div class="btn-group">
+                                {{#if ../isLoved }}
+                                <a href="/product/removeLove/{{ProID}}" role="button" class="btn btn-danger">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                    Bỏ thích
+                                </a>
+                                {{else}}
+                                <a href="/product/addLove/{{ProID}}" role="button" class="btn btn-danger">
+                                    <span class="glyphicon glyphicon-heart"></span>
+                                    Thích
+                                </a>
+                                {{/if}}
+                            </div>
                         {{/if}}
-                        <div class="col-md-4" style="margin-top: -10px">
                             <a href="xxxx" role="button" class="btn"><img src="/images/others/History.png" title="Xem lịch sử đấu giá cho sản phẩm này" width="38" height="38">
                             </a>
                         </div>
-                        {{#if ../layoutModels.isLogged }}
-                        <div class="col-md-2">
-                            {{#if ../isLoved }}
-                            <a href="/product/removeLove/{{ProID}}" role="button" class="btn btn-danger">
-                                <span class="glyphicon glyphicon-remove"></span>
-                                Bỏ thích
-                            </a>
-                            {{else}}
-                            <a href="/product/addLove/{{ProID}}" role="button" class="btn btn-danger">
-                                <span class="glyphicon glyphicon-heart"></span>
-                                Thích
-                            </a>
-                            {{/if}}
-                        </div>
-                        {{/if}}
                     </div>
                 </div>
                 <!-- END Các button: Đấu giá - yêu thích - lịch sử -->
