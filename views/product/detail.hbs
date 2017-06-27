@@ -16,7 +16,7 @@ Chi tiết sản phẩm
 <script src="/assests/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
 <script type="text/javascript">
     $('#txtQ').TouchSpin({
-        min: $('#txtQd').val(),
+        min: parseInt($('#txtQ').val()) + parseInt($('#txtStep').val()),
         max: 100000000,
         step: $('#txtStep').val(),
         verticalButtons: true
