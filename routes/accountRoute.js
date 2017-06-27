@@ -136,7 +136,9 @@ accountRoute.post('/register', function(req, res) {
 
 accountRoute.get('/profile', restrict, function(req, res) {
     res.render('account/profile', {
-        layoutModels: res.locals.layoutModels
+        layoutModels: res.locals.layoutModels,
+        percentScore: res.locals.layoutModels.curUser.score*100,
+        canAuction: res.locals.layoutModels.curUser.score >= 0.8
     });
 });
 
