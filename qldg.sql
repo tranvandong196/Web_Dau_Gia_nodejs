@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : MySQL
-Source Server Version : 50717
+Source Server Version : 50505
 Source Host           : localhost:3306
 Source Database       : qldg
 
 Target Server Type    : MYSQL
-Target Server Version : 50717
+Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2017-06-27 14:58:16
+Date: 2017-06-27 18:37:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,7 +28,7 @@ CREATE TABLE `auctions` (
   PRIMARY KEY (`ID`),
   KEY `fk_auctions_users` (`UserID`),
   KEY `fk_auctions_products` (`ProID`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of auctions
@@ -41,6 +41,13 @@ INSERT INTO `auctions` VALUES ('13', '2017-06-27 14:21:16', '380000', '1', '1');
 INSERT INTO `auctions` VALUES ('14', '2017-06-27 14:26:52', '6000000', '1', '23');
 INSERT INTO `auctions` VALUES ('15', '2017-06-27 14:33:28', '450000', '1', '1');
 INSERT INTO `auctions` VALUES ('16', '2017-06-27 14:37:28', '7860000', '1', '22');
+INSERT INTO `auctions` VALUES ('17', '2017-06-27 15:42:55', '480000', '5', '18');
+INSERT INTO `auctions` VALUES ('18', '2017-06-27 15:43:55', '300000', '5', '4');
+INSERT INTO `auctions` VALUES ('19', '2017-06-27 15:44:17', '5020000', '5', '23');
+INSERT INTO `auctions` VALUES ('20', '2017-06-27 17:00:20', '440000', '5', '20');
+INSERT INTO `auctions` VALUES ('21', '2017-06-27 17:00:30', '15740000', '5', '30');
+INSERT INTO `auctions` VALUES ('22', '2017-06-27 17:00:40', '5720000', '5', '21');
+INSERT INTO `auctions` VALUES ('23', '2017-06-27 17:00:56', '8510000', '5', '25');
 
 -- ----------------------------
 -- Table structure for categories
@@ -73,7 +80,7 @@ CREATE TABLE `favorites` (
   PRIMARY KEY (`ID`),
   KEY `fk_favorites_users` (`UserID`),
   KEY `fk_favorites` (`ProID`)
-) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of favorites
@@ -105,6 +112,30 @@ INSERT INTO `favorites` VALUES ('57', '10', '1');
 INSERT INTO `favorites` VALUES ('78', '24', '1');
 INSERT INTO `favorites` VALUES ('83', '17', '1');
 INSERT INTO `favorites` VALUES ('85', '1', '1');
+INSERT INTO `favorites` VALUES ('86', '17', '5');
+INSERT INTO `favorites` VALUES ('87', '3', '5');
+
+-- ----------------------------
+-- Table structure for feedbacks
+-- ----------------------------
+DROP TABLE IF EXISTS `feedbacks`;
+CREATE TABLE `feedbacks` (
+  `ProID` int(11) NOT NULL,
+  `ReceiverID` int(11) NOT NULL,
+  `SenderID` int(11) NOT NULL,
+  `Score` int(11) NOT NULL DEFAULT '0',
+  `Note` varchar(255) COLLATE utf8_vietnamese_ci DEFAULT NULL,
+  PRIMARY KEY (`SenderID`,`ReceiverID`,`ProID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
+
+-- ----------------------------
+-- Records of feedbacks
+-- ----------------------------
+INSERT INTO `feedbacks` VALUES ('16', '3', '1', '1', 'Rất bền mà đẹp');
+INSERT INTO `feedbacks` VALUES ('4', '1', '3', '0', 'Mẫu mã đẹp');
+INSERT INTO `feedbacks` VALUES ('5', '1', '3', '-1', 'Bị rách đũng quần');
+INSERT INTO `feedbacks` VALUES ('8', '5', '4', '-1', 'Sản phẩm bị hỏng sau 1 tuần sử dụng');
+INSERT INTO `feedbacks` VALUES ('7', '4', '5', '1', 'Sản phẩm chất lượng cao');
 
 -- ----------------------------
 -- Table structure for products
@@ -134,14 +165,14 @@ CREATE TABLE `products` (
 -- ----------------------------
 -- Records of products
 -- ----------------------------
-INSERT INTO `products` VALUES ('1', 'Sơ mi nam cao cấp phong cách-SM0013500', 'Vải giãn nhung HQ,mịn,co giãn thoải mái,dày dặn,mịn màng,cuộn sườn,đẹp hết nấc', 'Vải giãn nhung HQ,mịn,co giãn thoải mái,dày dặn,mịn màng,cuộn sườn,đẹp hết nấc. Size M dưới 60-62kg,Size L dưới 65-67kg, Size XL dưới 70-72kg tuỳ chiều cao và cân nặng ', '370000', '1', '5', '400000', '1', null, '2017-06-06 13:00:12', '2017-07-05 13:01:16', '10000', 'đang đấu giá');
+INSERT INTO `products` VALUES ('1', 'Sơ mi nam cao cấp phong cách-SM0013500', 'Vải giãn nhung HQ,mịn,co giãn thoải mái,dày dặn,mịn màng,cuộn sườn,đẹp hết nấc', 'Vải giãn nhung HQ,mịn,co giãn thoải mái,dày dặn,mịn màng,cuộn sườn,đẹp hết nấc. Size M dưới 60-62kg,Size L dưới 65-67kg, Size XL dưới 70-72kg tuỳ chiều cao và cân nặng ', '500000', '1', '5', '400000', '4', '5', '2017-06-06 13:00:12', '2017-07-05 13:01:16', '10000', 'đang đấu giá');
 INSERT INTO `products` VALUES ('2', 'Sơ mi nam tay ngắn thời trang-ASM01295210', 'Cotton xí nghiệp,mềm,mượt', 'Chất liệu: Cotton xí nghiệp,mềm,mượt\r\nSize: Size M dưới 60kg,Size L dưới 65kg, Size XL dưới 70kg tuỳ chiều cao và cân nặng \r\nMàu sắc: 3 màu y hình', '295000', '1', '3', '350000', '1', null, '2017-06-06 13:00:16', '2017-07-05 13:01:16', '10000', 'đang đấu giá');
 INSERT INTO `products` VALUES ('3', 'Áo thun nam thời trang-AT01260210', 'Thun cotton 4 chiều,dày,mượt', 'Chất liệu: Thun cotton 4 chiều,dày,mượt\r\nSize: M,L,XL\r\nMàu sắc: Trắng, đen\r\nHàng shop', '260000', '1', '4', '30000', '1', null, '2017-06-07 13:00:19', '2017-07-05 13:01:16', '10000', 'đang đấu giá');
-INSERT INTO `products` VALUES ('4', 'Áo thun nam thời trang-ATN009000', 'dày dặn,không xù lông,không rút,thấm hút mồ hôi,bo dệt,đẹp từng centimet', 'Chất liệu: Thun 100% cotton co giãn 4 chiều,mượt,dày dặn,không xù lông,không rút,thấm hút mồ hôi,bo dệt,đẹp từng centimet\r\nSize: M,L,XL \r\nMàu sắc: 2 màu như hình', '290000', '1', '3', '350000', '1', null, '2017-06-16 13:00:23', '2017-07-05 13:01:16', '10000', 'đang đấu giá');
-INSERT INTO `products` VALUES ('5', 'Quần jeans nam orginaility', 'thoải mái, êm', 'null', '310000', '1', '2', '400000', '1', null, '2017-06-07 13:00:19', '2017-07-05 13:01:16', '20000', 'đang đấu giá');
+INSERT INTO `products` VALUES ('4', 'Áo thun nam thời trang-ATN009000', 'dày dặn,không xù lông,không rút,thấm hút mồ hôi,bo dệt,đẹp từng centimet', 'Chất liệu: Thun 100% cotton co giãn 4 chiều,mượt,dày dặn,không xù lông,không rút,thấm hút mồ hôi,bo dệt,đẹp từng centimet\r\nSize: M,L,XL \r\nMàu sắc: 2 màu như hình', '290000', '1', '3', '350000', '1', '3', '2017-06-16 13:00:23', '2017-07-05 13:01:16', '10000', 'đang đấu giá');
+INSERT INTO `products` VALUES ('5', 'Quần jeans nam orginaility', 'thoải mái, êm', 'null', '310000', '1', '2', '400000', '1', '3', '2017-06-07 13:00:19', '2017-07-05 13:01:16', '20000', 'đang đấu giá');
 INSERT INTO `products` VALUES ('6', ' \r\nQuần dài kaki nam cá tính', 'thoải mái, êm', 'null', '240000', '1', '6', '300000', '3', null, '2017-06-07 13:00:19', '2017-07-05 13:01:16', '20000', 'đang đấu giá');
-INSERT INTO `products` VALUES ('7', 'Quần sort nam-QS0011500', 'thoải mái, êm', 'Chất liệu:Cotton nhập \r\nSize: 29,30,31,32\r\nMàu sắc: 2 màu y hình', '330000', '1', '5', '400000', '4', null, '2017-06-07 13:00:19', '2017-07-05 13:01:16', '20000', 'đang đấu giá');
-INSERT INTO `products` VALUES ('8', ' \r\nQuần Short nam Polo Ralph Lauren', 'thoải mái, êm', 'Hàng chính hãng nhập khẩu từ Mỹ\r\nGiao hàng miễn phí', '1775000', '1', '3', '2000000', '5', null, '2017-06-07 13:00:19', '2017-07-04 13:01:30', '20000', 'đang đấu giá');
+INSERT INTO `products` VALUES ('7', 'Quần sort nam-QS0011500', 'thoải mái, êm', 'Chất liệu:Cotton nhập \r\nSize: 29,30,31,32\r\nMàu sắc: 2 màu y hình', '330000', '1', '5', '400000', '4', '5', '2017-06-07 13:00:19', '2017-07-05 13:01:16', '20000', 'đang đấu giá');
+INSERT INTO `products` VALUES ('8', ' \r\nQuần Short nam Polo Ralph Lauren', 'thoải mái, êm', 'Hàng chính hãng nhập khẩu từ Mỹ\r\nGiao hàng miễn phí', '2500000', '1', '3', '2000000', '5', '4', '2017-06-07 13:00:19', '2017-07-04 13:01:30', '20000', 'đang đấu giá');
 INSERT INTO `products` VALUES ('9', 'Áo sơ mi nữ sọc paris', 'êm, thoáng mát', 'hàng tốt, uy tín', '230000', '1', '3', '300000', '5', null, '2017-06-07 13:00:19', '2017-07-04 13:01:30', '20000', 'đang đấu giá');
 INSERT INTO `products` VALUES ('10', 'Áo sơ mi hoạ tiết xích bích', 'Lụa lanh siêu mát,chất rất đẹp ', 'SALE: 195k ( có số lượng ) \r\n- Lụa lanh siêu mát,chất rất đẹp \r\n- Free size: Dưới 53kg\r\n- Màu: Đen, trắng', '195000', '1', '2', '250000', '5', null, '2017-06-07 13:00:19', '2017-07-04 13:01:30', '20000', 'đang đấu giá');
 INSERT INTO `products` VALUES ('11', 'Áo thun thêu hoa hồng và chữ', 'Thun cotton 100%,dày dặn rất đẹp,sờ chất thích liền mặc mát lạnh,from chuẩn đẹp ', '- Chất liệu: Thun cotton 100%,dày dặn rất đẹp,sờ chất thích liền mặc mát lạnh,from chuẩn đẹp \r\n- Màu sắc: Trắng,đen\r\n- Free size: Dưới 55kg', '290000', '1', '3', '350000', '5', null, '2017-06-07 13:00:19', '2017-07-08 13:01:37', '20000', 'đang đấu giá');
@@ -149,7 +180,7 @@ INSERT INTO `products` VALUES ('12', 'Áo thun from rộng lông công', 'Thun c
 INSERT INTO `products` VALUES ('13', 'Quần jeans lưng thun paris', 'thoải mái êm', 'null', '320000', '1', '5', '400000', '5', null, '2017-06-23 13:00:42', '2017-07-09 13:01:44', '20000', 'đang đấu giá');
 INSERT INTO `products` VALUES ('14', 'Quần jean nữ Lucky Brand Lolita Skinny Jean', 'thoải mái, êm', 'Xuất xứ:	Chính hãng nhập từ Mỹ\r\nSize:	Xem bảng hướng dẫn chọn Size\r\nMàu sắc:	Như hình', '3000000', '1', '5', '4000000', '5', null, '2017-06-23 13:00:42', '2017-07-02 13:01:53', '20000', 'đang đấu giá');
 INSERT INTO `products` VALUES ('15', 'Đầm body đan dây sexy', 'Chất thun Nhập Lazza dày dặn', '- Chất thun Nhập Lazza dày dặn \r\n- Freesize 45-54kg cao 1,5-1,65m\r\n- Màu: Xanh rêu, hồng, đen', '360000', '1', '3', '450000', '5', null, '2017-06-23 13:00:42', '2017-07-02 13:01:53', '20000', 'đang đấu giá');
-INSERT INTO `products` VALUES ('16', ' \r\nĐầm body nịch eo kết nút nấm', 'Quý cô công sở quá là sang chảnh', '- Màu sắc: Đen, Đỏ Đô, Hồng dâu, Vàng bò,  Da tây. \r\n- Chất liệu: Thun cotton mỹ . \r\n- Quy cách may: Đường may sườn 1cm. ', '440000', '1', '3', '500000', '3', null, '2017-06-23 13:00:42', '2017-07-02 13:01:53', '20000', 'đang đấu giá');
+INSERT INTO `products` VALUES ('16', ' \r\nĐầm body nịch eo kết nút nấm', 'Quý cô công sở quá là sang chảnh', '- Màu sắc: Đen, Đỏ Đô, Hồng dâu, Vàng bò,  Da tây. \r\n- Chất liệu: Thun cotton mỹ . \r\n- Quy cách may: Đường may sườn 1cm. ', '440000', '1', '3', '500000', '3', '1', '2017-06-23 13:00:42', '2017-07-02 13:01:53', '20000', 'đang đấu giá');
 INSERT INTO `products` VALUES ('17', 'Giày nam Columbia Granite Ridge Hiking Shoe', 'thoải mái, êm chân', 'Chất liệu:	Da và Vải\r\nĐế giày:	Cao su\r\nChiều cao gót:	2cm\r\nXuất xứ:	Chính hãng nhập từ Mỹ', '2180000', '2', '5', '3000000', '3', null, '2017-06-23 13:00:42', '2017-07-02 13:01:53', '20000', 'đang đấu giá');
 INSERT INTO `products` VALUES ('18', 'Gìay bata viền nâu', 'thoải mái, êm chân', 'Size  35/39', '460000', '2', '3', '500000', '3', null, '2017-06-23 13:00:42', '2017-07-02 13:01:53', '20000', 'đang đấu giá');
 INSERT INTO `products` VALUES ('19', 'Giày nam Nunn Bush Alec Moc Toe', 'nhẹ, thoải mái, êm châm', 'Chất liệu:	Da/Sợi tồng hợp\r\nĐế giày:	Cao su\r\nChiều cao gót:	3cm\r\nXuất xứ:	Chính hãng nhập từ Mỹ', '2730000', '2', '6', '3000000', '3', null, '2017-06-23 13:00:42', '2017-07-02 13:01:53', '20000', 'đang đấu giá');
@@ -163,7 +194,7 @@ INSERT INTO `products` VALUES ('26', ' \r\nĐồng hồ thông minh DZ09', 'Đ�
 INSERT INTO `products` VALUES ('27', 'Đồng hồ nữ Seiko SUT249 Solar Analog Display', 'Mới Full box - nhập khẩu từ Mỹ', 'Bảo hành 24 tháng\r\nGiao hàng miễn phí trên toàn quốc', '3220000', '5', '3', '4000000', '1', null, '2017-06-23 13:00:42', '2017-07-13 13:02:03', '10000', 'đang đấu giá');
 INSERT INTO `products` VALUES ('28', ' \r\nThe Platinum - Đen - VƯƠNG QUỐC ANH', 'sang trọng, quý phái, đẳng cấp', 'Band Loại Chất liệu: Da \r\nTrường hợp Chất liệu: hợp kim \r\nTrường hợp Độ dày: 7 mm \r\nSố mẫu: thạch anh', '1200000', '5', '6', '2000000', '1', null, '2017-06-23 13:00:42', '2017-07-13 13:02:03', '10000', 'đang đấu giá');
 INSERT INTO `products` VALUES ('29', 'Quạt hơi nước PGT-4000G', 'Khi sử dụng máy làm mát USAircooler bạn sẽ không còn phải lo lắng về tiền điện tăng cao', 'công ty chúng tôi dám đảm bảo sản phẩm sẽ tiết kiệm tới 80% điện năng tiêu thụ so với máy lạnh có cùng diện tích sử dụng bên cạnh đó sản phẩm còn ﻿làm sạch không khí giúp bảo vệ sức khỏe cho mọi người đặc biệt là người già và trẻ nhỏ', '8752000', '6', '10', '9500000', '3', null, '2017-06-23 13:00:42', '2017-07-13 13:02:03', '10000', 'đang đấu giá');
-INSERT INTO `products` VALUES ('30', 'MÁY LỌC NƯỚC COWAY CHP-06ER', ' loại và loại bỏ hoàn toàn kim loại nặng', 'MÁY LỌC NƯỚC COWAY CHP-06ER, loại và loại bỏ hoàn toàn kim loại nặng, Clo, Asen, VOC, thuốc tẩy rửa, chất gây ung thư, và khi khuẩn gây hại cho nguồn nước... mang lại chất lượng nước tinh khiết nhất.', '15725000', '6', '5', '16500000', '4', null, '2017-06-23 13:00:42', '2017-07-13 13:02:03', '10000', 'đang đấu giá');
+INSERT INTO `products` VALUES ('30', 'MÁY LỌC NƯỚC COWAY CHP-06ER', ' loại và loại bỏ hoàn toàn kim loại nặng', 'MÁY LỌC NƯỚC COWAY CHP-06ER, loại và loại bỏ hoàn toàn kim loại nặng, Clo, Asen, VOC, thuốc tẩy rửa, chất gây ung thư, và khi khuẩn gây hại cho nguồn nước... mang lại chất lượng nước tinh khiết nhất.', '15725000', '6', '5', '16500000', '4', '5', '2017-06-23 13:00:42', '2017-07-13 13:02:03', '10000', 'đang đấu giá');
 
 -- ----------------------------
 -- Table structure for sessions
@@ -179,6 +210,7 @@ CREATE TABLE `sessions` (
 -- ----------------------------
 -- Records of sessions
 -- ----------------------------
+INSERT INTO `sessions` VALUES ('G9ZBbrmRAdXMuvbImU5uB-tRtWf5EUeC', '1498649805', 0x7B22636F6F6B6965223A7B226F726967696E616C4D6178416765223A6E756C6C2C2265787069726573223A6E756C6C2C22687474704F6E6C79223A747275652C2270617468223A222F227D2C2269734C6F67676564223A747275652C22697341646D696E223A747275652C2275736572223A7B226964223A352C22757365726E616D65223A227476646F6E67222C226E616D65223A225472E1BAA76E2056C4836E20C490C3B46E67222C22656D61696C223A225375706572686968696861686140676D61696C2E636F6D222C2261646472657373223A224E677579E1BB856E20546869E1BB876E20546875E1BAAD742C2054502E48434D222C2273636F7265506C7573223A36302C2273636F72654D696E7573223A352C2273636F7265223A302E39322C22644F42223A22313939362D30362D30335431373A30303A30302E3030305A222C227065726D697373696F6E223A312C2270617373776F7264223A226531306164633339343962613539616262653536653035376632306638383365227D2C2263617274223A5B5D7D);
 INSERT INTO `sessions` VALUES ('R3RapPfZl7BNh0QRPu6-9tRp454wbTKV', '1498583463', 0x7B22636F6F6B6965223A7B226F726967696E616C4D6178416765223A6E756C6C2C2265787069726573223A6E756C6C2C22687474704F6E6C79223A747275652C2270617468223A222F227D2C2269734C6F67676564223A747275652C22697341646D696E223A747275652C2275736572223A7B226964223A312C22757365726E616D65223A224461646177696E64222C226E616D65223A225472C6B0C6A16E67204D696E68205068C3A17420C490E1BAA174222C22656D61696C223A22746D706461743132303640676D61696C2E636F6D222C2261646472657373223A223332305C5C32325C5C3137412C204E677579E1BB856E2056C4836E204C696E682C205175E1BAAD6E20372C20545048434D222C2273636F7265506C7573223A34302C2273636F72654D696E7573223A352C2273636F7265223A312C22644F42223A22313939352D31322D33315431373A30303A30302E3030305A222C227065726D697373696F6E223A312C2270617373776F7264223A226531306164633339343962613539616262653536653035376632306638383365227D2C2263617274223A5B5D7D);
 INSERT INTO `sessions` VALUES ('uraopHZ-B8axUDERsecbuIA4Kf37LJva', '1498635455', 0x7B22636F6F6B6965223A7B226F726967696E616C4D6178416765223A6E756C6C2C2265787069726573223A6E756C6C2C22687474704F6E6C79223A747275652C2270617468223A222F227D2C2269734C6F67676564223A747275652C22697341646D696E223A747275652C2275736572223A7B226964223A312C22757365726E616D65223A224461646177696E64222C226E616D65223A225472C6B0C6A16E67204D696E68205068C3A17420C490E1BAA174222C22656D61696C223A22746D706461743132303640676D61696C2E636F6D222C2261646472657373223A223332305C5C32325C5C3137412C204E677579E1BB856E2056C4836E204C696E682C205175E1BAAD6E20372C20545048434D222C2273636F7265506C7573223A34302C2273636F72654D696E7573223A352C2273636F7265223A312C22644F42223A22313939352D31322D33315431373A30303A30302E3030305A222C227065726D697373696F6E223A312C2270617373776F7264223A226531306164633339343962613539616262653536653035376632306638383365227D2C2263617274223A5B7B2270726F64756374223A7B2250726F4944223A32322C2250726F4E616D65223A22C49169E1BB876E2074686FE1BAA169204970686F6E65203520426C61636B203136476220756E6C6F636B222C225072696365223A363139303030307D2C227175616E74697479223A312C22616D6F756E74223A363139303030307D5D7D);
 
@@ -199,12 +231,14 @@ CREATE TABLE `users` (
   `Address` text COLLATE utf8_unicode_ci NOT NULL,
   `Score` float NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES ('1', 'Dadawind', 'e10adc3949ba59abbe56e057f20f883e', 'Trương Minh Phát Đạt', 'tmpdat1206@gmail.com', '1996-01-01 00:00:00', '1', '40', '5', '320\\22\\17A, Nguyễn Văn Linh, Quận 7, TPHCM', '1');
-INSERT INTO `users` VALUES ('3', 'Dadawind1', 'e10adc3949ba59abbe56e057f20f883e', 'Trương Minh Phát Đạt', 'wind8673@gmail.com', '1996-01-01 00:00:00', '0', '65', '15', '244&#x2F;33 Dương Đình Hội, quận 9', '0');
-INSERT INTO `users` VALUES ('4', 'tvdong2', 'e10adc3949ba59abbe56e057f20f883e', 'Trần Văn Đông', 'Superhihiha@gmail.com', '2017-06-04 00:00:00', '0', '50', '10', 'Nguyễn Thiện Thuật', '0.7');
-INSERT INTO `users` VALUES ('5', 'tvdong', '86b5c378f5daa747fb9cb42f0e098267', 'Trần Văn Đông', 'Superhihihaha@gmail.com', '2017-06-04 00:00:00', '1', '60', '5', 'Nguyễn Thiện Thuật, TP.HCM', '1');
+INSERT INTO `users` VALUES ('1', 'Dadawind', 'e10adc3949ba59abbe56e057f20f883e', 'Trương Minh Phát Đạt', 'tmpdat1206@gmail.com', '1996-01-01 00:00:00', '1', '40', '5', '320\\22\\17A, Nguyễn Văn Linh, Quận 7, TPHCM', '0.85');
+INSERT INTO `users` VALUES ('3', 'Dadawind1', 'e10adc3949ba59abbe56e057f20f883e', 'Trương Minh Phát Đạt', 'wind8673@gmail.com', '1996-01-01 00:00:00', '0', '65', '15', '244&#x2F;33 Dương Đình Hội, quận 9', '0.3');
+INSERT INTO `users` VALUES ('4', 'tvdong2', 'e10adc3949ba59abbe56e057f20f883e', 'Trần Văn Đông', 'Superhihiha@gmail.com', '1996-06-04 00:00:00', '0', '50', '10', 'Nguyễn Thiện Thuật', '0.7');
+INSERT INTO `users` VALUES ('5', 'tvdong', 'e10adc3949ba59abbe56e057f20f883e', 'Trần Văn Đông', 'Superhihihaha@gmail.com', '1996-06-04 00:00:00', '1', '60', '5', 'Nguyễn Thiện Thuật, TP.HCM', '0.92');
+INSERT INTO `users` VALUES ('7', 'nqduy', 'e10adc3949ba59abbe56e057f20f883e', 'Nguyễn Quốc Duy', 'nqduy96@gmail.com', '1996-02-02 00:00:00', '1', '110', '30', 'Quận 8, TP.HCM', '0.81');
+INSERT INTO `users` VALUES ('8', 'nqduy2', 'e10adc3949ba59abbe56e057f20f883e', 'Nguyễn Quốc Duy', 'nqduy96@gmail.com', '1996-02-02 00:00:00', '0', '78', '35', 'Quận 8, TP.HCM', '0.43');
