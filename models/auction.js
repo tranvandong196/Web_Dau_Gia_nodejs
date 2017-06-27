@@ -59,11 +59,13 @@ exports.findHandlePrice = function(ProID) {
     var deferred = Q.defer();
 
     var sql =
-            'select * from users, (select UserID, Price from auctions WHERE ProID = ' + ProID + ' GROUP BY '
-             + 'ProID HAVING Price = MAX(Price)) as temp where ID = temp.UserID ';
+            'select Name from users where ID in (select UserID from auctions where ProID = ' + ProID + ' and Price = (select MAX(Price) from auctions))';
 
     db.load(sql).then(function(rows) {
-        deferred.resolve(rows[0].UserID);
+        if(rows[0])
+            deferred.resolve(rows[0].Name);
+        else
+            deferred.resolve(null);
     });
 
     return deferred.promise;

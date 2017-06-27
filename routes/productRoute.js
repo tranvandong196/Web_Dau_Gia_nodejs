@@ -1,5 +1,6 @@
 var express = require('express');
 var product = require('../models/product');
+var auction = require('../models/auction');
 var moment = require('moment');
 var productRoute = express.Router();
 var category = require('../models/category');
@@ -203,6 +204,8 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                     isActive: i === +curPage
                 });
             }
+
+            //the same with /search/removeLove ; get /search and post /search
             var UserID;
             if(res.locals.layoutModels.curUser)
                 UserID = res.locals.layoutModels.curUser.id;
@@ -218,6 +221,7 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                         });
                     }
                     promise.push(product.getNumberOfAuction(data.list[i].ProID));
+                    promise.push(auction.findHandlePrice(data.list[i].ProID));
                     var isLoved = false;
                     if(bool !== -1)
                     {
@@ -233,9 +237,16 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                     box.push(temp);
                 }
                 Q.all(promise).then(function(rs){
+                    var k = 0;
                     for(var i = 0; i < box.length; i++)
                     {
-                        box[i].numberOfAuctions = rs[i];
+                        box[i].numberOfAuctions = rs[k];
+                        var tmp = rs[k + 1];
+                        if(tmp)
+                            box[i].handlePrice = '****' + tmp[tmp.length - 1];
+                        else
+                            box[i].handlePrice = 'Chưa có'
+                        k = k + 2;
                     }
                     res.render('product/search', {
                         layoutModels: res.locals.layoutModels,
@@ -322,6 +333,7 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                         });
                     }
                     promise.push(product.getNumberOfAuction(data.list[i].ProID));
+                    promise.push(auction.findHandlePrice(data.list[i].ProID));
                     var isLoved = false;
                     if(bool !== -1)
                     {
@@ -337,9 +349,16 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                     box.push(temp);
                 }
                 Q.all(promise).then(function(rs){
+                    var k = 0;
                     for(var i = 0; i < box.length; i++)
                     {
-                        box[i].numberOfAuctions = rs[i];
+                        box[i].numberOfAuctions = rs[k];
+                        var tmp = rs[k + 1];
+                        if(tmp)
+                            box[i].handlePrice = '****' + tmp[tmp.length - 1];
+                        else
+                            box[i].handlePrice = 'Chưa có'
+                        k = k + 2;
                     }
                     res.render('product/search', {
                         layoutModels: res.locals.layoutModels,
@@ -524,25 +543,33 @@ productRoute.post('/search', function(req, res) {
                     });
                 }
                 promise.push(product.getNumberOfAuction(data.list[i].ProID));
-                var isLoved = false;
-                if(bool !== -1)
-                {
-                    isLoved = true;
+                    promise.push(auction.findHandlePrice(data.list[i].ProID));
+                    var isLoved = false;
+                    if(bool !== -1)
+                    {
+                        isLoved = true;
+                    }
+                    var temp = {
+                        product: data.list[i],
+                        isLoved: isLoved,
+                        restTime: 0,
+                        numberOfAuctions: 0,
+                        handlePrice: -1,
+                    }
+                    box.push(temp);
                 }
-                var temp = {
-                    product: data.list[i],
-                    isLoved: isLoved,
-                    restTime: 0,
-                    numberOfAuctions: 0,
-                    handlePrice: -1,
-                }
-                box.push(temp);
-            }
-            Q.all(promise).then(function(rs){
-                for(var i = 0; i < box.length; i++)
-                {
-                    box[i].numberOfAuctions = rs[i];
-                }
+                Q.all(promise).then(function(rs){
+                    var k = 0;
+                    for(var i = 0; i < box.length; i++)
+                    {
+                        box[i].numberOfAuctions = rs[k];
+                        var tmp = rs[k + 1];
+                        if(tmp)
+                            box[i].handlePrice = '****' + tmp[tmp.length - 1];
+                        else
+                            box[i].handlePrice = 'Chưa có'
+                        k = k + 2;
+                    }
                 res.render('product/search', {
                     layoutModels: res.locals.layoutModels,
                     box: box,
@@ -619,25 +646,33 @@ productRoute.get('/search', function(req, res) {
                     });
                 }
                 promise.push(product.getNumberOfAuction(data.list[i].ProID));
-                var isLoved = false;
-                if(bool !== -1)
-                {
-                    isLoved = true;
+                    promise.push(auction.findHandlePrice(data.list[i].ProID));
+                    var isLoved = false;
+                    if(bool !== -1)
+                    {
+                        isLoved = true;
+                    }
+                    var temp = {
+                        product: data.list[i],
+                        isLoved: isLoved,
+                        restTime: 0,
+                        numberOfAuctions: 0,
+                        handlePrice: -1,
+                    }
+                    box.push(temp);
                 }
-                var temp = {
-                    product: data.list[i],
-                    isLoved: isLoved,
-                    restTime: 0,
-                    numberOfAuctions: 0,
-                    handlePrice: -1,
-                }
-                box.push(temp);
-            }
-            Q.all(promise).then(function(rs){
-                for(var i = 0; i < box.length; i++)
-                {
-                    box[i].numberOfAuctions = rs[i];
-                }
+                Q.all(promise).then(function(rs){
+                    var k = 0;
+                    for(var i = 0; i < box.length; i++)
+                    {
+                        box[i].numberOfAuctions = rs[k];
+                        var tmp = rs[k + 1];
+                        if(tmp)
+                            box[i].handlePrice = '****' + tmp[tmp.length - 1];
+                        else
+                            box[i].handlePrice = 'Chưa có'
+                        k = k + 2;
+                    }
                 res.render('product/search', {
                     layoutModels: res.locals.layoutModels,
                     box: box,
