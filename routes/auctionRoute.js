@@ -21,8 +21,9 @@ auctionRoute.post('/add', restrict, function(req, res) {
         };
         auction.insert(entity).then(function(insertId){
             var price2Buy = -1;
-            if(pro.priceToBuy)
-                price2Buy = pro.priceToBuy;
+            if(pro.PriceToBuy)
+                price2Buy = pro.PriceToBuy;
+            console.log(price2Buy);
             if(price2Buy !== -1 && req.body.price >= price2Buy)
             {
                 var item = {
@@ -36,7 +37,6 @@ auctionRoute.post('/add', restrict, function(req, res) {
                 };
                 cart.add(req.session.cart, item);
             }
-        
             var name=res.locals.layoutModels.curUser.username;
             var tmp='';
             var temp='';
