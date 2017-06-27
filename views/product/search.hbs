@@ -28,42 +28,46 @@ Không có sản phẩm!
     <h4>#{{arrange}}</h4>
     {{#each box }}
     <div class="col-md-12" style="right: 15px">
-        <div class="thumbnail" style="min-height: 130px; max-width: ">
+        <div class="thumbnail" style="min-height: 130px;">
             <div class="row">
                 <div class="col-md-3">
                     <div class="row">
-                        <div class="col-md-3" style="top: 20px; left: 10px">
-                            {{#if ../layoutModels.isLogged }}
-                            {{#if isLoved }}
-                                <a href="/product/search/removeLove/{{product.ProID}}?page={{../curPage}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}" role="button">
-                                    <img src="/images/others/heart.jpg" width="30" height="30">
-                                </a>
-                            {{else}}
-                                <a href="/product/search/addLove/{{product.ProID}}?page={{../curPage}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}" role="button" >
-                                    <img src="/images/others/heart-empty.png" width="30" height="30">
-                                </a>
-                            {{/if}}
+                        <div class="col-md-3" style="top: 1px; left: 1px">
+                            {{#if data.isNew }}
+                                <img src="/images/others/new.png" width="60" height="60" style="margin-bottom: 50px">
                             {{/if}}
                         </div>
-                        <a href="/product/detail/{{product.ProID}}" class="col-md-8" style="top: 20px;">
-                            <img src="/images/{{product.ProID}}/1_thumb.jpg" title="{{product.ProName}}" href="/product/detail/{{product.ProID}}"/>
+                        <a href="/product/detail/{{data.item.ProID}}" class="col-md-8" style="top: 20px;">
+                            <img src="/images/{{data.item.ProID}}/1_thumb.jpg" title="{{data.item.ProName}}" href="/product/detail/{{data.item.ProID}}"/>
                         </a>
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="caption">
-                        <a href="/product/detail/{{product.ProID}}"><h4>{{product.ProName}}</h4></a>
-                        <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/price-icon.png" title="Giá" width="25" height="25">&nbsp;&nbsp;{{formatNumber product.Price}} vnđ</h4>
-                        <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/PriceToBuy.png" title="Giá mua ngay" width="25" height="25">&nbsp;&nbsp;{{formatNumber product.PriceToBuy}} vnđ</h4>
-                        <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/Quantity-icon.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;{{product.Quantity}}</h4>
+                        <a href="/product/detail/{{data.item.ProID}}"><h4>{{data.item.ProName}}</h4></a>
+                        <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/price-icon.png" title="Giá" width="25" height="25">&nbsp;&nbsp;{{formatNumber data.item.Price}} vnđ</h4>
+                        <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/PriceToBuy.png" title="Giá mua ngay" width="25" height="25">&nbsp;&nbsp;{{formatNumber data.item.PriceToBuy}} vnđ</h4>
+                        <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/Quantity-icon.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;{{data.item.Quantity}}</h4>
                         <p>&nbsp;&nbsp;&nbsp;<img src="/images/others/Comment-Describe-icon.png" title="Mổ tả ngắn gọn" width="25" height="25">&nbsp;&nbsp;
-                        {{product.TinyDes}}
+                        {{data.item.TinyDes}}
                         </p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <h4>&nbsp;</h4>
-                    <div class="form-group">
+                    <div style="position: absolute; right: 20px; top: 10px;">
+                        {{#if ../layoutModels.isLogged }}
+                            {{#if isLoved }}
+                                <a href="/product/search/removeLove/{{data.item.ProID}}?page={{../curPage}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}" role="button">
+                                    <img src="/images/others/heart.jpg" width="30" height="30">
+                                </a>
+                            {{else}}
+                                <a href="/product/search/addLove/{{data.item.ProID}}?page={{../curPage}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}" role="button">
+                                    <img src="/images/others/heart-empty.png" width="30" height="30">
+                                </a>
+                            {{/if}}
+                        {{/if}}
+                    </div>
+                    <div class="form-group" style="margin-top: 20%">
                       <div class="input-group">
                         <span class="input-group-addon">
                             <img src="/images/others/Number-auction.png" title="Số lượt đấu giá" width="20" height="20">&nbsp;Lượt đấu giá&nbsp;&nbsp;
@@ -88,11 +92,6 @@ Không có sản phẩm!
                         </input>
                       </div>
                     </div>
-
-                    <!-- <h4>&nbsp;</h4>
-                    <h4>&nbsp;<img src="/images/others/Number-auction.png" title="Số lượt đấu giá" width="25" height="25">&nbsp;&nbsp;{{numberOfAuctions}}</h4>
-                    <h4>&nbsp;<img src="/images/others/Time-remain.png" title="Thời gian còn lại" width="25" height="25">&nbsp;&nbsp;{{restTime}}</h4>
-                    <h4>&nbsp;<img src="/images/others/Handle-Price.png" title="Người đang giữ giá" width="25" height="25">&nbsp;&nbsp;{{handlePrice}}</h4> -->
                 </div>
             </div>
         </div>

@@ -45,7 +45,7 @@ accountRoute.post('/login', function(req, res) {
                 req.session.cart = [];
 
                 if (remember === true) {
-                    var hour = 1000 * 60 * 60 * 24;
+                    var hour = 1000 * 60 * 60 * 24 * 7;
                     req.session.cookie.expires = new Date(Date.now() + hour);
                     req.session.cookie.maxAge = hour;
                 }

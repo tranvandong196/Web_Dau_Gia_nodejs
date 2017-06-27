@@ -359,10 +359,22 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
              arrange: arrange,
         };
         product.search(entity).then(function(products){
-            var list = [];
+             var list = [];
             for(var i = offset; i < products.length; i++)
             {
-                list.push(products[i]);
+                var tmp = {
+                    item: null,
+                    isNew: false,
+                }
+                var d = Date.now() - products[i].TimeUp;
+                var diffMinutes = parseInt(d / (1000 * 60));
+                console.log('Moi dang: ' + diffMinutes + ' phut');
+                if(diffMinutes <= 10)
+                {
+                    tmp.isNew = true;
+                }
+                tmp.item = products[i];
+                list.push(tmp);
                 if(i === offset + 5)
                 {
                     i = products.length;
@@ -397,24 +409,23 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                     if(rows)
                     {
                         bool = rows.findIndex(function(element){
-                            return element.ProID === data.list[i].ProID;
+                            return element.ProID === data.list[i].item.ProID;
                         });
                     }
-                    promise.push(product.getNumberOfAuction(data.list[i].ProID));
-                    promise.push(auction.findHandlePrice(data.list[i].ProID));
+                    promise.push(product.getNumberOfAuction(data.list[i].item.ProID));
+                    promise.push(auction.findHandlePrice(data.list[i].item.ProID));
                     var isLoved = false;
                     if(bool !== -1)
                     {
                         isLoved = true;
                     }
-                    var ms = moment(data.list[i].TimeDown, 'YYYY-MM-DD HH:mm:ss').diff(moment(data.list[i].TimeUp, 'YYYY-MM-DD HH:mm:ss'));
-                    var d = moment.duration(ms);
+                    var d = products[i].TimeDown - Date.now();
                     var diffDays = parseInt(d / (1000 * 3600 * 24)); 
                     var hours = parseInt((d - diffDays * 24 * 3600 * 1000) / (1000 * 3600));
                     var minutes = parseInt((d - diffDays * 24 * 3600 * 1000 - hours * 1000 * 3600) / (1000 * 60));
                     var restTime = diffDays + ' ngày ' + hours + ' giờ ' + minutes + ' phút';
                     var temp = {
-                        product: data.list[i],
+                        data: data.list[i],
                         isLoved: isLoved,
                         restTime: restTime,
                         numberOfAuctions: 0,
@@ -482,7 +493,19 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
             var list = [];
             for(var i = offset; i < products.length; i++)
             {
-                list.push(products[i]);
+                var tmp = {
+                    item: null,
+                    isNew: false,
+                }
+                var d = Date.now() - products[i].TimeUp;
+                var diffMinutes = parseInt(d / (1000 * 60));
+                console.log('Moi dang: ' + diffMinutes + ' phut');
+                if(diffMinutes <= 10)
+                {
+                    tmp.isNew = true;
+                }
+                tmp.item = products[i];
+                list.push(tmp);
                 if(i === offset + 5)
                 {
                     i = products.length;
@@ -516,24 +539,23 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                     if(rows)
                     {
                         bool = rows.findIndex(function(element){
-                            return element.ProID === data.list[i].ProID;
+                            return element.ProID === data.list[i].item.ProID;
                         });
                     }
-                    promise.push(product.getNumberOfAuction(data.list[i].ProID));
-                    promise.push(auction.findHandlePrice(data.list[i].ProID));
+                    promise.push(product.getNumberOfAuction(data.list[i].item.ProID));
+                    promise.push(auction.findHandlePrice(data.list[i].item.ProID));
                     var isLoved = false;
                     if(bool !== -1)
                     {
                         isLoved = true;
                     }
-                    var ms = moment(data.list[i].TimeDown, 'YYYY-MM-DD HH:mm:ss').diff(moment(data.list[i].TimeUp, 'YYYY-MM-DD HH:mm:ss'));
-                    var d = moment.duration(ms);
+                    var d = products[i].TimeDown - Date.now();
                     var diffDays = parseInt(d / (1000 * 3600 * 24)); 
                     var hours = parseInt((d - diffDays * 24 * 3600 * 1000) / (1000 * 3600));
                     var minutes = parseInt((d - diffDays * 24 * 3600 * 1000 - hours * 1000 * 3600) / (1000 * 60));
                     var restTime = diffDays + ' ngày ' + hours + ' giờ ' + minutes + ' phút';
                     var temp = {
-                        product: data.list[i],
+                        data: data.list[i],
                         isLoved: isLoved,
                         restTime: restTime,
                         numberOfAuctions: 0,
@@ -582,8 +604,6 @@ productRoute.post('/search', function(req, res) {
     var text = req.body.search;
     var findBy = req.body.findBy;
     var arrange = req.body.arrange;
-    var now = new Date(Date.now()).toLocaleString();
-    now = moment().format('YYYY-MM-DD HH:mm:ss');
 
     var entity ={
          text: text,
@@ -595,7 +615,18 @@ productRoute.post('/search', function(req, res) {
         var list = [];
         for(var i = offset; i < products.length; i++)
         {
-            list.push(products[i]);
+            var tmp = {
+                item: null,
+                isNew: false,
+            }
+            var d = Date.now() - products[i].TimeUp;
+            var diffMinutes = parseInt(d / (1000 * 60));
+            if(diffMinutes <= 10)
+            {
+                tmp.isNew = true;
+            }
+            tmp.item = products[i];
+            list.push(tmp);
             if(i === offset + 5)
             {
                 i = products.length;
@@ -629,24 +660,23 @@ productRoute.post('/search', function(req, res) {
                 if(rows)
                 {
                     bool = rows.findIndex(function(element){
-                        return element.ProID === data.list[i].ProID;
+                        return element.ProID === data.list[i].item.ProID;
                     });
                 }
-                promise.push(product.getNumberOfAuction(data.list[i].ProID));
-                promise.push(auction.findHandlePrice(data.list[i].ProID));
+                promise.push(product.getNumberOfAuction(data.list[i].item.ProID));
+                promise.push(auction.findHandlePrice(data.list[i].item.ProID));
                 var isLoved = false;
                 if(bool !== -1)
                 {
                     isLoved = true;
                 }
-                var ms = moment(data.list[i].TimeDown, 'YYYY-MM-DD HH:mm:ss').diff(moment(data.list[i].TimeUp, 'YYYY-MM-DD HH:mm:ss'));
-                var d = moment.duration(ms);
+                var d = products[i].TimeDown - Date.now();
                 var diffDays = parseInt(d / (1000 * 3600 * 24));
                 var hours = parseInt((d - diffDays * 24 * 3600 * 1000) / (1000 * 3600));
                 var minutes = parseInt((d - diffDays * 24 * 3600 * 1000 - hours * 1000 * 3600) / (1000 * 60));
                 var restTime = diffDays + ' ngày ' + hours + ' giờ ' + minutes + ' phút';
                 var temp = {
-                    product: data.list[i],
+                    data: data.list[i],
                     isLoved: isLoved,
                     restTime: restTime,
                     numberOfAuctions: 0,
@@ -704,7 +734,19 @@ productRoute.get('/search', function(req, res) {
         var list = [];
         for(var i = offset; i < products.length; i++)
         {
-            list.push(products[i]);
+            var tmp = {
+                item: null,
+                isNew: false,
+            }
+            var d = Date.now() - products[i].TimeUp;
+            var diffMinutes = parseInt(d / (1000 * 60));
+            console.log('Moi dang: ' + diffMinutes + ' phut');
+            if(diffMinutes <= 10)
+            {
+                tmp.isNew = true;
+            }
+            tmp.item = products[i];
+            list.push(tmp);
             if(i === offset + 5)
             {
                 i = products.length;
@@ -738,24 +780,23 @@ productRoute.get('/search', function(req, res) {
                 if(rows)
                 {
                     bool = rows.findIndex(function(element){
-                        return element.ProID === data.list[i].ProID;
+                        return element.ProID === data.list[i].item.ProID;
                     });
                 }
-                promise.push(product.getNumberOfAuction(data.list[i].ProID));
-                promise.push(auction.findHandlePrice(data.list[i].ProID));
+                promise.push(product.getNumberOfAuction(data.list[i].item.ProID));
+                promise.push(auction.findHandlePrice(data.list[i].item.ProID));
                 var isLoved = false;
                 if(bool !== -1)
                 {
                     isLoved = true;
                 }
-                var ms = moment(data.list[i].TimeDown, 'YYYY-MM-DD HH:mm:ss').diff(moment(data.list[i].TimeUp, 'YYYY-MM-DD HH:mm:ss'));
-                var d = moment.duration(ms);
+                var d = products[i].TimeDown - Date.now();
                 var diffDays = parseInt(d / (1000 * 3600 * 24)); 
                 var hours = parseInt((d - diffDays * 24 * 3600 * 1000) / (1000 * 3600));
                 var minutes = parseInt((d - diffDays * 24 * 3600 * 1000 - hours * 1000 * 3600) / (1000 * 60));
                 var restTime = diffDays + ' ngày ' + hours + ' giờ ' + minutes + ' phút';
                 var temp = {
-                    product: data.list[i],
+                    data: data.list[i],
                     isLoved: isLoved,
                     restTime: restTime,
                     numberOfAuctions: 0,

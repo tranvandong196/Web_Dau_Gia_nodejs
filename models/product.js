@@ -334,6 +334,10 @@ exports.search = function(entity){
     {
         sql = sql + 'Price desc';
     }
+    else if(arrange === 'Tất cả')
+    {
+        sql = sql + 'TimeUp desc';
+    }
     db.load(sql).then(function(rows){
         deferred.resolve(rows);
     })
