@@ -54,7 +54,9 @@ auctionRoute.post('/add', restrict, function(req, res) {
             });
             auction.findHandlePrice(pro.ProID).then(function(user){
                 product.updateHandlePrice(pro.ProID, user.ID).then(function(changedRows){
-                    res.redirect('/product/detail/' + req.body.proID);
+                    product.updateState(pro.ProID, 'Đã kết thúc').then(function(changedRows){
+                        res.redirect('/product/detail/' + req.body.proID);
+                    });
                 });
             });
         });

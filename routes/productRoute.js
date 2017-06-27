@@ -855,7 +855,6 @@ productRoute.get('/byAuction', function(req, res) {
     });
 });
 productRoute.get('/byBasket', function(req, res) {
-
     var rec_per_page = 6;
     var curPage = req.query.page ? req.query.page : 1;
     var offset = (curPage - 1) * rec_per_page;

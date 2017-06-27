@@ -59,13 +59,13 @@ exports.findHandlePrice = function(ProID) {
     var deferred = Q.defer();
 
     var sql =
-            'select * from users where ID in (select UserID from auctions where ProID = ' + ProID + ' and Price = (select MAX(Price) from auctions))';
-
+            'select * from users where ID in (select UserID from auctions where ProID = ' + ProID 
+            + ' and Price = (select MAX(Price) from auctions where ProID = ' + ProID + '))';
     db.load(sql).then(function(rows) {
         if(rows[0])
             deferred.resolve(rows[0]);
         else
-            deferred.resolve(null); 
+            deferred.resolve(null);
     });
 
     return deferred.promise;

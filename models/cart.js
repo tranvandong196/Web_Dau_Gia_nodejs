@@ -2,7 +2,6 @@ var Q = require('q');
 var product = require('./product');
 
 exports.add = function(cart, item) {
-    console.log('Auction route');
     for (var i = 0; i < cart.length; i++) {
         if (item.product.ProID === cart[i].product.ProID) {
             cart[i].quantity += item.quantity;
