@@ -53,7 +53,7 @@ auctionRoute.post('/add', restrict, function(req, res) {
                 }
                 tmp+=now + '  -  ' +name+ '  =>  ' +price + '\r\n';
 
-                fs.appendFile('public/images/'+pro.ProID+'/history.txt', tmp, (err) => {
+                fs.appendFile('public/history/'+pro.ProID+'/history.txt', tmp, (err) => {
                     if (err) throw err;
                 });
             });

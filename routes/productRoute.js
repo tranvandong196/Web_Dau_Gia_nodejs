@@ -71,7 +71,7 @@ productRoute.get('/detail/:id', function(req, res) {
                 };
 
 
-                fs.readFile('public/images/'+req.params.id+'/history.txt', 'utf8', (err, data) => {
+                fs.readFile('public/history/'+req.params.id+'/history.txt', 'utf8', (err, data) => {
                   if (err) throw err;
                   history = data;
               });
@@ -104,7 +104,7 @@ productRoute.get('/detail/:id', function(req, res) {
             }
             else
             {
-                fs.readFile('public/images/'+req.params.id+'/history.txt', 'utf8', (err, data) => {
+                fs.readFile('public/history/'+req.params.id+'/history.txt', 'utf8', (err, data) => {
                   if (err) throw err;
                   history = data;
               });

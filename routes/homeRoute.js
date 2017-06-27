@@ -23,11 +23,22 @@ homeRoute.get('/', function(req, res) {
 		]).then(function(rows){
 			for(var i=1;i<=rows[0][0].COUNT;i++)
 			{
-				fs.writeFile('public/images/'+i+'/history.txt', '', (err) => {
+				try {
+					fs.statSync('public/history/'+i);
+				} catch(e) {
+					console.log("ok");
+					fs.mkdirSync('public/history/'+i);
+				}
+				
+			}
+			
+			for(var i=1;i<=rows[0][0].COUNT;i++)
+			{
+				fs.writeFile('public/history/'+i+'/history.txt', '', (err) => {
 					if (err) throw err;
 				});
 			}
-			
+
 			for(var j=0;j<rows[1][0].COUNT;j++)
 			{
 				date[j] = dateFormat(rows[2][j].Date, "yyyy-mm-dd HH:MM:ss");
@@ -42,7 +53,7 @@ homeRoute.get('/', function(req, res) {
 				}
 				tmp+=date[j] + '  -  ' +name[j]+ '  =>  ' +price[j] + '\r\n';
 
-				fs.appendFile('public/images/'+rows[2][j].ProID+'/history.txt', tmp, (err) => {
+				fs.appendFile('public/history/'+rows[2][j].ProID+'/history.txt', tmp, (err) => {
 					if (err) throw err;
 				});
 				tmp='';
