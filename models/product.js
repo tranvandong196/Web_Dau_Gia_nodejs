@@ -420,3 +420,23 @@ exports.findSolder = function(ProID){
 
     return deferred.promise;
 }
+
+exports.updateFullDes = function(entity){
+    var deferred = Q.defer();
+    if(entity.proId)
+    {
+        var sql = mustache.render(
+            'update products set FullDes = "{{desc}}" where ProID = {{proId}}',
+            entity
+            );
+        db.insert(sql).then(function(changedRows) {
+            deferred.resolve(changedRows);
+        });
+    }
+    else
+    {
+        deferred.resolve(null);
+    }
+
+    return deferred.promise;
+}
