@@ -54,6 +54,10 @@ productRoute.get('/detail/:id', function(req, res) {
     product.loadDetail(req.params.id)
     .then(function(pro) {
         var indexs = [];
+        if(!pro.PriceToBuy)
+        {
+            pro.PriceToBuy = -1;
+        }
         fs.readdir('./public/images/' + req.params.id, (err, files) => {
             for(var i = 1; i < files.length; i++)
             {
@@ -133,6 +137,7 @@ productRoute.get('/detail/:id', function(req, res) {
                                 proID: req.params.id,
                                 isLoved: isLoved,
                                 isSolder: solder.ID === user.id,
+                                hasPrice2Buy: pro.PriceToBuy !== -1,
                             });
                         });
                         

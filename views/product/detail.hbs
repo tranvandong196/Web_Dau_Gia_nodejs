@@ -90,9 +90,15 @@ Chi tiết sản phẩm
                     <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/price-icon.png" title="Giá bán" width="25" height="25">&nbsp;&nbsp;<b>
                     Giá khởi điểm:</b>  {{formatNumber Price}} vnđ</h4>
                 </div>
+                {{#if ../hasPrice2Buy }}
                 <div class="padding">
                     <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/PriceToBuy.png" title="Giá mua ngay" width="25" height="25">&nbsp;&nbsp;<b>Giá mua ngay:</b> {{formatNumber PriceToBuy}} vnđ</h4>
                 </div>
+                {{else}}
+                <div class="padding">
+                <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/PriceToBuy.png" title="Giá mua ngay" width="25" height="25">&nbsp;&nbsp;<b>Giá mua ngay:</b> Không có</h4>
+                </div>
+                {{/if}}
                 <div class="padding">
                      <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Quantity-icon.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;<b>Tồn kho:</b> {{Quantity}}</h4>
                 </div>
