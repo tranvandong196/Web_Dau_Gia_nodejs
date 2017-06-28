@@ -63,12 +63,17 @@ Chi tiết sản phẩm
 <script type="text/javascript">
     $('#btn_edit').on('click', function () {
       $('#edit').show();
-      $('#btn_save').show();
-  });
-
+      $('#btn_edit').hide();
+      $('#frmEdit').show();
+    });
+    $('#btn_cancel').on('click', function () {
+      $('#frmEdit').hide();
+      $('#btn_edit').show();
+    });
     $('#btn_save').on('click', function () {
+      $('#btn_edit').show();
       $('#frmEdit').submit();
-  });
+    });
 </script>
 {{/section}}
 
@@ -114,17 +119,32 @@ Chi tiết sản phẩm
                      <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Quantity-icon.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;<b>Tồn kho:</b> {{Quantity}}</h4>
                 </div>
                 <div class="padding">
-                     <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Product-Status.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;<b>Trạng thái:</b> {{State}}</h4>
+                      {{#if isAlive}}
+                            <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Product-Status.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;<b>Trạng thái:</b> <span style="color: #00a808">{{State}}</span></h4>
+                        {{else}}
+                            {{#if isEnd}}
+                            <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Product-Status.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;<b>Trạng thái:</b> <span style="color: #ff4300">{{State}}</span></h4>
+                            {{else}}
+                            <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Product-Status.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;<b>Trạng thái:</b> <span style="color: #ffa500">{{State}}</span></h4>
+                            {{/if}}
+                        {{/if}}
                 </div>
-                <div style="padding: 6px">&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Comment-Describe-icon.png" title="Mổ tả ngắn gọn" width="25" height="25">&nbsp;&nbsp;<b>Mô tả:</b> {{FullDes}}
+                <div style="padding: 6px">&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Comment-Describe-icon.png" title="Mổ tả ngắn gọn" width="25" height="25">&nbsp;&nbsp;<b>Mô tả:</b> {{FullDes}}&nbsp;&nbsp;
 
-                    {{#if ../isSolder }}
-                    <button type="button" class="btn btn-default" id="btn_edit">Edit</button>
-                    <form id="frmEdit" method="post" action="/product/detail/{{ProID}}">
-                     <textarea name="desc" hidden="hidden"  id="edit" style="resize: none;min-height: 70px;width:450px;">{{FullDes}}</textarea> 
-                     <button type="button" style="display:none;" class="btn btn-default" id="btn_save">Save</button>
-                 </form>
-                 {{/if}}
+                {{#if ../isSolder }}
+                    <button type="button" class="btn btn-default btn-xs" id="btn_edit">Thay đổi</button>
+                    <div class="col-md-12 col-lg-12" id="EditDesc">
+                        <form id="frmEdit" method="post" action="/product/detail/{{ProID}}" hidden>
+                            <div class="thumbnail">
+                                <textarea class="form-control" name="desc" id="edit" style="resize: none;min-height: 70px;width:450px;">{{FullDes}}</textarea>
+                                <div class="col-md-offset-8" style="margin-top: 5px;">
+                                    <button type="button" class="btn btn-default" style="margin-left: 10px" id="btn_cancel">Hủy</button>
+                                    <button type="button" class="btn btn-default" id="btn_save">Lưu lại</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                {{/if}}
 
              </div>
              <!-- </div> -->
