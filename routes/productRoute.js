@@ -85,6 +85,8 @@ productRoute.get('/detail/:id', function(req, res) {
         {
             pro.PriceToBuy = -1;
         }
+        pro.TimeUp = moment(pro.TimeUp, 'YYYY-MM-DD HH:mm:ss').format('LLL');
+        pro.TimeDown = moment(pro.TimeDown, 'YYYY-MM-DD HH:mm:ss').format('LLL');
         fs.readdir('./public/images/' + req.params.id, (err, files) => {
             for(var i = 1; i < files.length; i++)
             {
