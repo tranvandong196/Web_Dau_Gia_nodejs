@@ -119,7 +119,11 @@ Chi tiết sản phẩm
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon">
-                                <img src="/images/others/Handle-Price.png" title="Người đang giữ giá" width="20" height="20">&nbsp;&nbsp;<a href="#">Người giữ giá</a>
+                                {{#if ../isSolder }}
+                                    <img src="/images/others/Handle-Price.png" title="Người đang giữ giá" width="20" height="20">&nbsp;&nbsp;<a href="#">Người giữ giá</a>
+                                {{else}}
+                                    <img src="/images/others/Handle-Price.png" title="Người đang giữ giá" width="20" height="20">&nbsp;&nbsp;Người giữ giá</a>
+                                {{/if}}
                             </span>
                             <input type="text" class="form-control" value="{{../handlePrice.Name}}">
                             </input>
@@ -179,6 +183,10 @@ Chi tiết sản phẩm
                         </div>
                         <div class="col-md-offset-10 col-md-offset-1">
                             {{#if ../layoutModels.isLogged }}
+                            {{#if ../isSolder }}
+                            <div class="btn-group" style="margin-top: 15px">
+                            </div>
+                            {{else}}
                             <div class="btn-group" style="margin-top: 15px">
                                 {{#if ../isLoved }}
                                 <a href="/product/removeLove/{{ProID}}" role="button">
@@ -190,6 +198,7 @@ Chi tiết sản phẩm
                                 </a>
                                 {{/if}}
                             </div>
+                            {{/if}}
                             {{/if}}
                         </div>
                         <input type="hidden" id="his" value="{{../history}}" />

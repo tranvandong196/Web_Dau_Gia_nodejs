@@ -115,6 +115,10 @@ productRoute.get('/detail/:id', function(req, res) {
                             }
                             if(rs[0])
                                 curPrice = rs[0];
+                            if(solder.ID !== user.id)
+                            {
+                                handlePrice.Name = handlePrice.Name[0] + '****' + handlePrice.Name[handlePrice.Name.length - 1];
+                            }
                             res.render('product/detail', {
                                 layoutModels: res.locals.layoutModels,
                                 product: pro,
@@ -128,6 +132,7 @@ productRoute.get('/detail/:id', function(req, res) {
                                 history: history,
                                 proID: req.params.id,
                                 isLoved: isLoved,
+                                isSolder: solder.ID === user.id,
                             });
                         });
                         
@@ -368,7 +373,6 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                 }
                 var d = Date.now() - products[i].TimeUp;
                 var diffMinutes = parseInt(d / (1000 * 60));
-                console.log('Moi dang: ' + diffMinutes + ' phut');
                 if(diffMinutes <= 10)
                 {
                     tmp.isNew = true;
@@ -398,10 +402,10 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
             }
 
             //the same with /search/removeLove ; get /search and post /search
-            var UserID;
+            var curUserID;
             if(res.locals.layoutModels.curUser)
-                UserID = res.locals.layoutModels.curUser.id;
-            product.loadAllByFavorite(UserID).then(function(rows){
+                curUserID = res.locals.layoutModels.curUser.id;
+            product.loadAllByFavorite(curUserID).then(function(rows){
                 var box = [];
                 var promise = [];
                 for (var i = 0; i < data.list.length; i++) {
@@ -414,6 +418,7 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                     }
                     promise.push(product.getNumberOfAuction(data.list[i].item.ProID));
                     promise.push(auction.findHandlePrice(data.list[i].item.ProID));
+                    promise.push(product.findSolder(data.list[i].item.ProID));
                     var isLoved = false;
                     if(bool !== -1)
                     {
@@ -440,10 +445,18 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                         box[i].numberOfAuctions = rs[k];
                         var tmp = rs[k + 1];
                         if(tmp)
-                            box[i].handlePrice = '****' + tmp.Name[tmp.Name.length - 1];
+                            box[i].handlePrice = tmp.Name[0] + '****' + tmp.Name[tmp.Name.length - 1];
                         else
-                            box[i].handlePrice = 'Chưa có';;
-                        k = k + 2;
+                            box[i].handlePrice = 'Chưa có';
+                        tmp = rs[k + 2];
+                        if(tmp)
+                        {
+                            if(tmp.ID === curUserID)
+                            {
+                                box[i].handlePrice = tmp.Name;
+                            }
+                        }
+                        k = k + 3;
                     }
                     res.render('product/search', {
                         layoutModels: res.locals.layoutModels,
@@ -499,7 +512,6 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                 }
                 var d = Date.now() - products[i].TimeUp;
                 var diffMinutes = parseInt(d / (1000 * 60));
-                console.log('Moi dang: ' + diffMinutes + ' phut');
                 if(diffMinutes <= 10)
                 {
                     tmp.isNew = true;
@@ -528,10 +540,10 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                 });
             }
             //the same with /search/removeLove ; get /search and post /search
-            var UserID;
+            var curUserID;
             if(res.locals.layoutModels.curUser)
-                UserID = res.locals.layoutModels.curUser.id;
-            product.loadAllByFavorite(UserID).then(function(rows){
+                curUserID = res.locals.layoutModels.curUser.id;
+            product.loadAllByFavorite(curUserID).then(function(rows){
                 var box = [];
                 var promise = [];
                 for (var i = 0; i < data.list.length; i++) {
@@ -544,6 +556,7 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                     }
                     promise.push(product.getNumberOfAuction(data.list[i].item.ProID));
                     promise.push(auction.findHandlePrice(data.list[i].item.ProID));
+                    promise.push(product.findSolder(data.list[i].item.ProID));
                     var isLoved = false;
                     if(bool !== -1)
                     {
@@ -570,10 +583,18 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                         box[i].numberOfAuctions = rs[k];
                         var tmp = rs[k + 1];
                         if(tmp)
-                            box[i].handlePrice = '****' + tmp.Name[tmp.Name.length - 1];
+                            box[i].handlePrice = tmp.Name[0] + '****' + tmp.Name[tmp.Name.length - 1];
                         else
-                            box[i].handlePrice = 'Chưa có';;
-                        k = k + 2;
+                            box[i].handlePrice = 'Chưa có';
+                        tmp = rs[k + 2];
+                        if(tmp)
+                        {
+                            if(tmp.ID === curUserID)
+                            {
+                                box[i].handlePrice = tmp.Name;
+                            }
+                        }
+                        k = k + 3;
                     }
                     res.render('product/search', {
                         layoutModels: res.locals.layoutModels,
@@ -604,7 +625,6 @@ productRoute.post('/search', function(req, res) {
     var text = req.body.search;
     var findBy = req.body.findBy;
     var arrange = req.body.arrange;
-
     var entity ={
          text: text,
          findBy: findBy,
@@ -649,10 +669,10 @@ productRoute.post('/search', function(req, res) {
             });
         }
         //the same with /search/removeLove ; get /search and post /search
-        var UserID;
+        var curUserID;
         if(res.locals.layoutModels.curUser)
-            UserID = res.locals.layoutModels.curUser.id;
-        product.loadAllByFavorite(UserID).then(function(rows){
+            curUserID = res.locals.layoutModels.curUser.id;
+        product.loadAllByFavorite(curUserID).then(function(rows){
             var box = [];
             var promise = [];
             for (var i = 0; i < data.list.length; i++) {
@@ -665,6 +685,7 @@ productRoute.post('/search', function(req, res) {
                 }
                 promise.push(product.getNumberOfAuction(data.list[i].item.ProID));
                 promise.push(auction.findHandlePrice(data.list[i].item.ProID));
+                promise.push(product.findSolder(data.list[i].item.ProID));
                 var isLoved = false;
                 if(bool !== -1)
                 {
@@ -680,7 +701,7 @@ productRoute.post('/search', function(req, res) {
                     isLoved: isLoved,
                     restTime: restTime,
                     numberOfAuctions: 0,
-                    handlePrice: -1,
+                    handlePrice: 'Chưa có',
                 }
                 box.push(temp);
             }
@@ -691,11 +712,20 @@ productRoute.post('/search', function(req, res) {
                     box[i].numberOfAuctions = rs[k];
                     var tmp = rs[k + 1];
                     if(tmp)
-                        box[i].handlePrice = '****' + tmp.Name[tmp.Name.length - 1];
+                        box[i].handlePrice = tmp.Name[0] + '****' + tmp.Name[tmp.Name.length - 1];
                     else
                         box[i].handlePrice = 'Chưa có';
-                    k = k + 2;
+                    var tmp1 = rs[k + 2];
+                    if(tmp)
+                    {
+                        if(tmp1.ID === curUserID)
+                        {
+                            box[i].handlePrice = tmp1.Name;
+                        }
+                    }
+                    k = k + 3;
                 }
+
                 res.render('product/search', {
                     layoutModels: res.locals.layoutModels,
                     box: box,
@@ -740,7 +770,6 @@ productRoute.get('/search', function(req, res) {
             }
             var d = Date.now() - products[i].TimeUp;
             var diffMinutes = parseInt(d / (1000 * 60));
-            console.log('Moi dang: ' + diffMinutes + ' phut');
             if(diffMinutes <= 10)
             {
                 tmp.isNew = true;
@@ -769,10 +798,10 @@ productRoute.get('/search', function(req, res) {
             });
         }
         //the same with /search/removeLove ; get /search and post /search
-        var UserID;
+        var curUserID;
         if(res.locals.layoutModels.curUser)
-            UserID = res.locals.layoutModels.curUser.id;
-        product.loadAllByFavorite(UserID).then(function(rows){
+            curUserID = res.locals.layoutModels.curUser.id;
+        product.loadAllByFavorite(curUserID).then(function(rows){
             var box = [];
             var promise = [];
             for (var i = 0; i < data.list.length; i++) {
@@ -785,6 +814,7 @@ productRoute.get('/search', function(req, res) {
                 }
                 promise.push(product.getNumberOfAuction(data.list[i].item.ProID));
                 promise.push(auction.findHandlePrice(data.list[i].item.ProID));
+                promise.push(product.findSolder(data.list[i].item.ProID));
                 var isLoved = false;
                 if(bool !== -1)
                 {
@@ -811,10 +841,18 @@ productRoute.get('/search', function(req, res) {
                     box[i].numberOfAuctions = rs[k];
                     var tmp = rs[k + 1];
                     if(tmp)
-                        box[i].handlePrice = '****' + tmp.Name[tmp.Name.length - 1];
+                        box[i].handlePrice = tmp.Name[0] + '****' + tmp.Name[tmp.Name.length - 1];
                     else
-                        box[i].handlePrice = 'Chưa có';
-                    k = k + 2;
+                        box[i].handlePrice = 'Chưa có';;
+                    tmp = rs[k + 2];
+                    if(tmp)
+                    {
+                        if(tmp.ID === curUserID)
+                        {
+                            box[i].handlePrice = tmp.Name;
+                        }
+                    }
+                    k = k + 3;
                 }
                 res.render('product/search', {
                     layoutModels: res.locals.layoutModels,
