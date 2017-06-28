@@ -93,7 +93,7 @@
         </div>
     {{/if}}        
 {{/if}}
-<form id="frmchangeProfile" method="post" action="/account/profile" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="margin-bottom: 20px">
+<form id="frmchangeProfile" method="post" action="/account/profile" class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-1" style="margin-bottom: 20px">
     <div class="mainbox" id="loginbox">
         <div class="panel panel-info">
             <div class="panel-heading ">
@@ -194,20 +194,22 @@
                                     </div>
                                 </div>
                             </div>
+                            {{/with}}
                             <div class="row">
-                                {{/with}}
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-8" style="right: -5px;">
-                                    <div class="progress">
                                     {{#if canAuction}}
+                                    <div class="progress" title="Điểm >= 0.8 : Bạn có thể tham gia đấu giá ngay bây giờ">
                                       <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{percentScore}}%;">
-                                        Tổng điểm: {{percentScore}}%
+                                        {{percentScore}}%
                                       </div>
-                                      {{else}}
-                                      <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{percentScore}}%;">
-                                        Tổng điểm: {{percentScore}}%
-                                      </div>
-                                      {{/if}}
                                     </div>
+                                    {{else}}
+                                    <div class="progress" title="Bạn cần tổng điểm >= 0.8 để được tham gia đấu giá">
+                                      <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{percentScore}}%;">
+                                        {{percentScore}}%
+                                      </div>
+                                    </div>
+                                    {{/if}}
                                 </div>
                             </div>
                         </div>
