@@ -167,6 +167,7 @@ productRoute.get('/detail/:id', function(req, res) {
                                     proID: req.params.id,
                                     isLoved: isLoved,
                                     isSolder: solder.ID === user.id,
+                                    hasPrice2Buy: pro.PriceToBuy !== -1,
                                 });
                             });
 
