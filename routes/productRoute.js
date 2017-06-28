@@ -65,14 +65,13 @@ productRoute.post('/detail/:id', function(req, res){
         proId:proId,
     };
     fullDes=pro.FullDes;
-
-    desc = fullDes +' ' + desc;
     var now = new Date(Date.now()).toLocaleString();
     now = moment().format('YYYY-MM-DD');
 
     fs.appendFile(dir + '/desc.txt','\r\n' + 'EDIT (' + now + ')'+ '\r\n' + desc, (err) => {
         if (err) throw err;
     });
+    desc = fullDes +' ' + desc;
     entity.desc = desc;
     Q.all([
         product.updateFullDes(entity)
