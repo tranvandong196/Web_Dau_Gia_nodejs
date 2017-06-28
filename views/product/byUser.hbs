@@ -24,11 +24,11 @@
         // $('#frmGiveScore').submit();
     });
     $(".sendComment").click(function(){
-        $("#writeComment").show();
         var Placeholder = "Gửi nhận xét cho " + $(this).data('receiverID');
         $("#txtSubmitComment").attr("placeholder", Placeholder);
         $("html, body").animate({
         scrollTop: $('html, body').get(0).scrollHeight}, 1000);
+        $("#writeComment").show();
     });
      $("#btnSubmitComment").click(function(){
         $("html, body").animate({ scrollTop: 0 }, "slow");  //Lên top
@@ -42,7 +42,7 @@
         scrollTop: $('html, body').get(0).scrollHeight}, 1000);
         $("#feedFeedbackSuccess").hide();
         $("#feedFeedbackFailed").hide();
-        
+        $("#writeComment").show();
     });
     
 </script>
