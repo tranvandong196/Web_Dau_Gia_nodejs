@@ -46,7 +46,8 @@
                     equalTo: '#txtPWD'
                 },
                 name: {
-                    required: true
+                    required: true,
+                    minlength: 4,
                 },
                 email: {
                     required: true,
@@ -66,7 +67,7 @@
 
             messages: {
                 username: {
-                    required: 'Vui lòng nhập username.'
+                    required: 'Vui lòng nhập username.',
                 },
                 rawPWD: {
                     required: 'Vui lòng nhập mật khẩu',
@@ -76,7 +77,8 @@
                     equalTo: 'Mật khẩu nhập lại chưa khớp'
                 },
                 name: {
-                    required: 'Vui lòng nhập họ tên'
+                    required: 'Vui lòng nhập họ tên',
+                    minlength: 'Tên phải dài hơn 4 ký tự'
                 },
                 Email: {
                     required: 'Vui lòng nhập email',
