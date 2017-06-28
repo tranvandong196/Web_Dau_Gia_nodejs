@@ -2,6 +2,7 @@ var Q = require('q');
 var mustache = require('mustache');
 var db = require('../app-helpers/dbHelper');
 var fs = require('fs');
+var moment = require('moment');
 
 exports.loadPageByCat = function(id, limit, offset) {
 
@@ -99,6 +100,9 @@ exports.loadTop5OfTimeDown = function() {
     var sql = 'SELECT * FROM products ORDER BY TimeDown ASC LIMIT 5';
     db.load(sql).then(function(rows) {
         if (rows) {
+            rows.forEach( function(element, index) {
+                element.TimeDown = moment(element.TimeDown, "YYYY-MM-DD HH:mm:ss").fromNow();
+            });
             deferred.resolve(rows);
         } else {
             deferred.resolve(null);
