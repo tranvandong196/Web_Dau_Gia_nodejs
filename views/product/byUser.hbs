@@ -9,41 +9,55 @@
         $('#txtP').val(proId);
         $('#frmAddToCart').submit();
     });
-    $("#scorePlus").click(function(){
-        $("#scorePlus").addClass('btn-success');
-        $("#scoreMinus").removeClass('btn-danger');
-        $("#scoreMinus").addClass('btn-default');
-        //$('#txtgiveScore').val('1');
-        //$('#frmGiveScore').submit();
+    $(".scorePlus").click(function(){
+        var ProID = $(this).data('id');
+        var idPlusButton = "#Plus" + ProID;
+        var idMinusButton = "#Minus" + ProID;
+        $(idPlusButton).addClass('btn-success');
+        $(idMinusButton).removeClass('btn-danger');
+        $(idMinusButton).addClass('btn-default');
+
+        
+         $('#txtProID').val(ProID);
+         $('#txtgiveScore').val('1');
+         //$('#frmGiveScore').submit();
     });
-    $("#scoreMinus").click(function(){
-        $("#scoreMinus").addClass('btn-danger');
-        $("#scorePlus").removeClass('btn-success');
-        $("#scorePlus").addClass('btn-default');
-        // $('#txtgiveScore').val('-1');
-        // $('#frmGiveScore').submit();
+    $(".scoreMinus").click(function(){
+        var ProID = $(this).data('id');
+        var idPlusButton = "#Plus" + ProID;
+        var idMinusButton = "#Minus" + ProID;
+        $(idMinusButton).addClass('btn-danger');
+        $(idPlusButton).removeClass('btn-success');
+        $(idPlusButton).addClass('btn-default');
+
+        var ProID = $(this).data('id');
+         $('#txtProID').val(ProID);
+         $('#txtgiveScore').val('-1');
+         //$('#frmGiveScore').submit();
     });
     $(".sendComment").click(function(){
-        var Placeholder = "Gửi nhận xét cho " + $(this).data('receiverID');
+        var ProID = $(this).data('id');
+         $('#txtProductID').val(ProID);
+        var Placeholder = "Gửi nhận xét cho sản phẩm ProID = " + ProID;
         $("#txtSubmitComment").attr("placeholder", Placeholder);
         $("html, body").animate({
         scrollTop: $('html, body').get(0).scrollHeight}, 1000);
-        $("#writeComment").show();
+        $("#frmwriteComment").show();
     });
      $("#btnSubmitComment").click(function(){
         $("html, body").animate({ scrollTop: 0 }, "slow");  //Lên top
         //$('#scrollable').scrollTo(100); //Tới elementID và nằm dưới 100px
-        $("#feedFeedbackSuccess").show();
-        $("#feedFeedbackFailed").show();
-        $("#writeComment").hide();
+
+        //$("#frmwriteComment").submit();
+        $("#frmwriteComment").hide();
     });
-     $("#sendAgain").click(function(){
-        $("html, body").animate({
-        scrollTop: $('html, body').get(0).scrollHeight}, 1000);
-        $("#feedFeedbackSuccess").hide();
-        $("#feedFeedbackFailed").hide();
-        $("#writeComment").show();
-    });
+    //  $("#sendAgain").click(function(){
+    //     $("html, body").animate({
+    //     scrollTop: $('html, body').get(0).scrollHeight}, 1000);
+    //     $("#feedFeedbackSuccess").hide();
+    //     $("#feedFeedbackFailed").hide();
+    //     $("#frmwriteComment").show();
+    // });
     
 </script>
 <script type="text/javascript">
@@ -57,16 +71,22 @@ Không có sản phẩm!
 <form id="frmAddToCart" method="post" action="/cart/add1">
     <input type="hidden" id="txtP" name="proId" />
 </form>
-<form method="post" action="/account/delete" id="frmGiveScore">
+<form method="post" action="/account/receiverScore" id="frmGiveScore">
     <input type="hidden" name="giveScore" id="txtgiveScore">
+    <input type="hidden" name="proID" id="txtProID">
 </form>
 <!-- Thông báo gửi thành công/thất bại -->
-<div class="alert alert-success" role="alert" id="feedFeedbackSuccess" hidden>
-  Gửi đánh giá thành công!
-</div>
-<div class="alert alert-danger" role="alert" id="feedFeedbackFailed" hidden> Gửi nhận xét cho Nguyễn Quốc Duy (Tên sản phẩm) thất bại!
-  <a href="#" class="alert-link" id="sendAgain">Gửi lại</a>
-</div>
+{{#if resultSendComment}}
+    {{#if sendCommentSuccess}}
+    <div class="alert alert-success" role="alert" id="feedFeedbackSuccess">
+      Gửi đánh giá thành công!
+    </div>
+    {{else}}
+    <div class="alert alert-danger" role="alert" id="feedFeedbackFailed"> Gửi nhận xét cho {{userName}} ({{productName}}) thất bại!
+      <!-- <a href="#" class="alert-link" id="sendAgain">Gửi lại</a> -->
+    </div>
+    {{/if}}
+{{/if}}
 <!-- END Thông báo gửi thành công/thất bại -->
 <h4>{{Tile}} <span class="badge">{{total}}</span></h4>
 <div class="row">
@@ -104,31 +124,31 @@ Không có sản phẩm!
                         </p>
                     </div>
                 </div>
-                {{#if canGiveScore_comment_toSeller}}
+                {{# if canGiveScore_comment_toSeller}}
                 <!-- Cộng/trừ điểm - Gửi nhận xét cho NGƯỜI BÁN - UserID -->
                 <div class="col-md-2">
                     <div class="btn-group" role="group" aria-label="...">
-                      <button type="button" id="scorePlus" class="btn btn-success"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> +1</button>
-                      <button type="button" id="scoreMinus" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> -1</button>
+                      <button id="Plus{{product.ProID}}" type="button" class="btn btn-success scorePlus" data-id="{{product.ProID}}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> +1</button>
+                      <button id="Minus{{product.ProID}}" type="button" class="btn btn-default scoreMinus" data-id="{{product.ProID}}"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> -1</button>
                     </div>
                 </div>
                 <div class="col-md-2 ">
                     <br>
-                    <a href="javascript:;" class="sendComment" data-receiverID="{{product.UserID}}"><button type="button" class="btn btn-primary" >Gửi nhận xét</button></a>
+                    <a href="javascript:;" class="sendComment" data-id="{{product.ProID}}"><button type="button" class="btn btn-primary" >Gửi nhận xét</button></a>
                 </div>
                 <!-- END Cộng/trừ điểm -  Gửi nhận xét cho NGƯỜI BÁN-->
-                {{/if}}
+               {{/if}}
                 {{# if canGiveScore_comment_toBuyer}}
                 <!-- Cộng/trừ điểm - Gửi nhận xét cho  NGƯỜI CHIẾN THẮNG - HandleID -->
                 <div class="col-md-2">
                     <div class="btn-group" role="group" aria-label="...">
-                      <button type="button" id="scorePlus" class="btn btn-success"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> +1</button>
-                      <button type="button" id="scoreMinus" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> -1</button>
+                      <button id="Plus{{product.ProID}}" type="button" class="btn btn-success scorePlus" data-id="{{product.ProID}}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> +1</button>
+                      <button id="Minus{{product.ProID}}" type="button" class="btn btn-default scoreMinus" data-id="{{product.ProID}}"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> -1</button>
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 ">
                     <br>
-                    <a href="javascript:;" class="sendComment" data-receiverID="{{product.UserID}}"><button type="button" class="btn btn-primary" >Gửi nhận xét</button></a>
+                    <a href="javascript:;" class="sendComment" data-id="{{product.ProID}}"><button type="button" class="btn btn-primary" >Gửi nhận xét</button></a>
                 </div>
                 <!-- END Cộng/trừ điểm -  Gửi nhận xét NGƯỜI CHIẾN THẮNG -->
                 {{/if}}
@@ -138,20 +158,21 @@ Không có sản phẩm!
         </div>
     </div>
     {{/each}}
-     <div class="form-group" role="search" id="writeComment" hidden>
+     <form method="post" action="/account/receiverFeedback" class="form-group" role="search" id="frmwriteComment" hidden>
           <div class="col-lg-11">
               <div class="thumbnail" style="background: #d9e7f7">
                   <div style="margin-left: 20px;margin-bottom: 15px; margin-right: 20px">
+                    <input name="proID" type="hidden"  id="txtProductID">
                     <h4><a href="#">Nguyễn Quốc Duy</a> - <a href="#">Tên sản phẩm</a></h4>
-                    <textarea class="form-control" rows="3" id="txtSubmitComment" placeholder="Gửi nhận xét cho"></textarea>
+                    <textarea name="comment" class="form-control" rows="3" id="txtSubmitComment" placeholder="Gửi nhận xét cho"></textarea>
                     <br>
                     <div class=" col-md-offset-11">
-                        <button id="btnSubmitComment" type="submit" class="btn btn-primary">Gửi</button>
+                        <button id="btnSubmitComment" type="button" class="btn btn-primary">Gửi</button>
                     </div>
                   </div>
               </div>
           </div>
-    </div>
+    </form>
 </div>
 <div class="row">
     <nav aria-label="Page navigation">
