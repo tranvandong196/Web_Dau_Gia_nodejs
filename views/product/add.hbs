@@ -28,8 +28,7 @@
                     min: 500,
                 },
                 priceToBuy: {
-                    required: true,
-                    min: 500,
+                    number: true
                 },
                 catName: {
                     required: true,
@@ -62,9 +61,8 @@
                     required: 'Vui lòng nhập giá.',
                     min: 'Nhập chưa đúng.'
                 },
-                price: {
-                    required: 'Vui lòng nhập giá bán ngay.',
-                    min: 'Nhập chưa đúng.',
+                priceToBuy: {
+                    number: 'Phải là số.',
                 },
                 catName: {
                     required: 'Vui lòng chọn danh mục.',
@@ -206,7 +204,7 @@
 							<div class="row">
 								<label class="col-sm-offset-0 col-sm-4">Thêm hình ảnh</label>
 								<div class="col-sm-8">
-								  	<input type="file" name="images" multiple="multiple">
+								  	<input type="file" name="images" multiple="multiple" name="fImages">
 								    <p class="help-block">Có thể upload nhiều ảnh, tối thiểu: 3</p>
 								</div>
 							</div>

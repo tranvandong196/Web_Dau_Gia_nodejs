@@ -256,7 +256,6 @@ productRoute.get('/add', restrict, function(req, res) {
 });
 
 productRoute.post('/add/:userID', function(req, res) {
-
     var dir = './public/images';
     if(!fs.existsSync(dir))
     {
@@ -280,10 +279,33 @@ productRoute.post('/add/:userID', function(req, res) {
         category.findIdByName(req.body.catName).then(function(row){
             var catID = row.CatID;
             files = req.files;
+            if(files.length < 3)
+            {
+                res.render('product/add', {
+                    layoutModels: res.locals.layoutModels,
+                    showMsg: true,
+                    error: true,
+                    msg: 'Tối thiểu 3 hình ảnh cho 1 sản phẩm.'
+                });
+                return;
+            }
             var id = req.params.userID;
             var now = new Date(Date.now()).toLocaleString();
             now = moment().format('YYYY-MM-DD HH:mm:ss');
             var timeDown = moment(req.body.timeDown, 'D/M/YYYY').format('YYYY-MM-DD HH:mm:ss');
+            if(timeDown <= now)
+            {
+                res.render('product/add', {
+                    layoutModels: res.locals.layoutModels,
+                    showMsg: true,
+                    error: true,
+                    msg: 'Thời gian hết hạn không hợp lệ.',
+                });
+                return;
+            }
+            var price2Buy = null;
+            if(req.body.priceToBuy)
+                price2Buy = req.body.priceToBuy;
             var entity = {
                 proName: req.body.proName,
                 userID: id,
@@ -293,9 +315,9 @@ productRoute.post('/add/:userID', function(req, res) {
                 priceToBuy: req.body.priceToBuy,
                 catID: catID,
                 quantity: req.body.quantity,
-                timeUp: now,
                 timeDown: timeDown,
-                handleID: 0,
+                timeUp: now,
+                handleID: null,
                 deltaPrice: req.body.deltaPrice,
             };
 
@@ -337,8 +359,6 @@ productRoute.post('/add/:userID', function(req, res) {
                     if(!fs.existsSync(dest))
                         fs.mkdirSync(dest);
                     var size = files.length;
-                    if(size > 3)
-                        size = 3;
                     for(var i = 1; i <= size; i++)
                     {
                         //tạo file hình rỗng để chép sang

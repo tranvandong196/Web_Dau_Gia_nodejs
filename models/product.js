@@ -65,7 +65,7 @@ exports.loadTop5OfAuction = function() {
 
     var deferred = Q.defer();
 
-    var sql = 'SELECT products.*, COUNT(*) as SoLuong FROM products INNER JOIN auctions on products.ProID = auctions.ProID GROUP BY auctions.ProID ORDER BY COUNT(*) DESC';
+    var sql = 'SELECT products.*, COUNT(*) as SoLuong FROM products INNER JOIN auctions on products.ProID = auctions.ProID GROUP BY auctions.ProID ORDER BY COUNT(*) DESC limit 5';
     db.load(sql).then(function(rows) {
         if (rows) {
             deferred.resolve(rows);
@@ -81,7 +81,7 @@ exports.loadTop5OfPrice = function() {
 
     var deferred = Q.defer();
 
-    var sql = 'SELECT * FROM products ORDER BY Price DESC LIMIT 5';
+    var sql = 'SELECT * FROM products where State = "đang đấu giá" ORDER BY Price DESC LIMIT 5';
     db.load(sql).then(function(rows) {
         if (rows) {
             deferred.resolve(rows);
@@ -112,13 +112,19 @@ exports.loadTop5OfTimeDown = function() {
     return deferred.promise;
 }
 exports.insert = function(entity) {
-
+    var sql;
     var deferred = Q.defer();
-
-    var sql = mustache.render(
-        'insert into products (ProName, TinyDes, FullDes, Price, CatID, Quantity, PriceToBuy, UserID, HandleID, TimeUp, TimeDown, DeltaPrice) values ("{{proName}}", "{{tinyDes}}", "{{fullDes}}",{{price}}, {{catID}}, {{quantity}}, {{priceToBuy}}, {{userID}}, {{handleID}}, "{{timeUp}}", "{{timeDown}}", {{deltaPrice}})',
-        entity        
+    if(entity.priceToBuy)
+        sql = mustache.render(
+            'insert into products (ProName, TinyDes, FullDes, Price, CatID, Quantity, PriceToBuy, UserID, TimeUp, TimeDown, DeltaPrice) values ("{{proName}}", "{{tinyDes}}", "{{fullDes}}",{{price}}, {{catID}}, {{quantity}}, {{priceToBuy}}, {{userID}}, "{{timeUp}}", "{{timeDown}}", {{deltaPrice}})',
+            entity        
         );
+    else
+        sql = mustache.render(
+            'insert into products (ProName, TinyDes, FullDes, Price, CatID, Quantity, UserID, TimeUp, TimeDown, DeltaPrice) values ("{{proName}}", "{{tinyDes}}", "{{fullDes}}",{{price}}, {{catID}}, {{quantity}}, {{userID}}, "{{timeUp}}", "{{timeDown}}", {{deltaPrice}})',
+            entity        
+        );
+    console.log(sql);
     db.insert(sql).then(function(insertId) {
         deferred.resolve(insertId);
     });
