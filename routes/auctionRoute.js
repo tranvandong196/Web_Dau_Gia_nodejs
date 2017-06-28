@@ -6,8 +6,34 @@ var auction = require('../models/auction');
 var cart = require('../models/cart');
 var restrict = require('../middle-wares/restrict');
 var fs = require('fs');
+
 var currencyFormatter = require('currency-formatter');
 var auctionRoute = express.Router();
+
+var nodemailer = require('nodemailer');
+
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'dgnhanh@gmail.com',
+    pass: 'dgn123456'
+  }
+});
+
+var mailSuccessAuction = {
+  from: 'dgnhanh@gmail.com',
+  to: 'tmpdat1206@gmail.com',
+  subject: 'Kết quả đấu giá sản phẩm.',
+  text: 'Sản phẩm đã được đấu giá xong!'
+};
+
+// transporter.sendMail(mailSuccessAuction, function(error, info){
+//   if (error) {
+//     console.log(error);
+//   } else {
+//     console.log('Email sent: ' + info.response);
+//   }
+// }); 
 
 auctionRoute.post('/add', restrict, function(req, res) {
     product.loadDetail(req.body.proID).then(function(pro) {
@@ -35,6 +61,13 @@ auctionRoute.post('/add', restrict, function(req, res) {
                     amount: pro.Price,
                 };
                 cart.add(req.session.cart, item);
+                transporter.sendMail(mailSuccessAuction, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                    }
+                }); 
             }
             var name = res.locals.layoutModels.curUser.username;
             var tmp = '';
