@@ -103,7 +103,7 @@ Chi tiết sản phẩm
                     <h3><b>&nbsp;{{ProName}}</b></h3>
                 </div>
                 <div class="padding">
-                    <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/price-icon.png" title="Giá bán" width="25" height="25">&nbsp;&nbsp;<b>
+                    <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/price-icon.png" title="Giá bán" width="25" height="25">&nbsp;<b>
                     Giá khởi điểm:</b>  {{formatNumber Price}} vnđ</h4>
                 </div>
                 {{#if ../hasPrice2Buy }}
@@ -119,10 +119,10 @@ Chi tiết sản phẩm
                      <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Quantity-icon.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;<b>Tồn kho:</b> {{Quantity}}</h4>
                 </div>
                 <div class="padding">
-                      {{#if isAlive}}
+                      {{#if ../isAlive}}
                             <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Product-Status.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;<b>Trạng thái:</b> <span style="color: #00a808">{{State}}</span></h4>
                         {{else}}
-                            {{#if isEnd}}
+                            {{#if ../isEnd}}
                             <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Product-Status.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;<b>Trạng thái:</b> <span style="color: #ff4300">{{State}}</span></h4>
                             {{else}}
                             <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Product-Status.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;<b>Trạng thái:</b> <span style="color: #ffa500">{{State}}</span></h4>

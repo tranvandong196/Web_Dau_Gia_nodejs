@@ -231,7 +231,7 @@ productRoute.get('/detail/:id', function(req, res) {
                                 history: history,
                                 proID: req.params.id,
 
-                                isLoved: isLoved,
+                                isLoved: false,
                                 hasPrice2Buy: pro.PriceToBuy !== -1,
                                 isLoved: false,
                             });
