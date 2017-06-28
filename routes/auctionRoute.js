@@ -108,5 +108,12 @@ auctionRoute.post('/checkout', restrict, function(req, res) {
      });
     });
 });
-
+auctionRoute.get('/history', restrict, function(req, res) {
+    res.render('auction/history', {
+        layoutModels: res.locals.layoutModels,
+        isEmpty: true,
+        //products: itemProduct,
+        //auctions: data.list,
+    });
+});
 module.exports = auctionRoute;
