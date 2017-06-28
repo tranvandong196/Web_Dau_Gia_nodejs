@@ -10,7 +10,7 @@ var fs = require('fs');
 var thumb = require('node-thumbnail').thumb;
 var favorite = require('../models/favorite');
 var Q = require('q');
-
+var moment = require('moment');
 productRoute.get('/byCat/:id', function(req, res) {
     var rec_per_page = 6;
     var curPage = req.query.page ? req.query.page : 1;
@@ -48,6 +48,33 @@ productRoute.get('/byCat/:id', function(req, res) {
     });
 });
 
+
+productRoute.post('/detail/:id', function(req, res){
+
+    var dir='./public/info';
+    dir = dir + '/' + req.params.id;
+    var desc = req.body.desc;
+    var proId = req.params.id;
+    var entity = {
+        desc:desc,
+        proId:proId,
+    };
+
+    var now = new Date(Date.now()).toLocaleString();
+    now = moment().format('YYYY-MM-DD');
+
+    fs.appendFile(dir + '/desc.txt','\r\n' + 'EDIT (' + now + ')'+ '\r\n' + desc, (err) => {
+        if (err) throw err;
+    });
+
+    Q.all([
+        product.updateFullDes(entity)
+        ]).spread(function(changedRows){
+            res.redirect('/product/detail/' + proId);
+        });
+
+    });
+
 productRoute.get('/detail/:id', function(req, res) {
     var indexs = [];
     var user = res.locals.layoutModels.curUser;
@@ -78,17 +105,79 @@ productRoute.get('/detail/:id', function(req, res) {
                     proID: req.params.id,
                     userID: user.id,
                 };
-                fs.readFile(dir +'/history.txt', 'utf8', (err, data) => {
-                  if (err) throw err;
-                  history = data;
-              });
-                
+                console.log(dir);
+                if(!fs.existsSync(dir))
+                {
+                    fs.readFile(dir, 'utf8', (err, data) => {
+                      if (err) throw err;
+                      history = data;
+                  });
+                }
                 favorite.isLoved(entity).then(function(isLoved){
                     var score = user.score;
                     var x = parseFloat(0.8);
                     if (pro) {
                         Q.all([
                             auction.findMaxPrice(pro.ProID), auction.findHandlePrice(pro.ProID), product.findSolder(pro.ProID)
+                            ]).then(function(rs){
+                                var curPrice = pro.Price;
+                                var handlePrice = {
+                                    Name: 'Trống',
+                                    Score: 0.0,
+                                    ID: 0,
+                                };
+                                var solder = {
+                                    Name: 'Trống',
+                                    Score: 0.0,
+                                    ID: 0,
+                                };
+                                if(rs[1])
+                                {
+                                    handlePrice.Name = rs[1].Name;
+                                    handlePrice.Score = rs[1].Score;
+                                    handlePrice.ID = rs[1].ID;
+                                }
+                                if(rs[2])
+                                {
+                                    solder.Name = rs[2].Name;
+                                    solder.Score = rs[2].Score;
+                                    solder.ID = rs[2].ID;
+                                }
+                                if(rs[0])
+                                    curPrice = rs[0];
+                                if(solder.ID !== user.id)
+                                {
+                                    handlePrice.Name = handlePrice.Name[0] + '****' + handlePrice.Name[handlePrice.Name.length - 1];
+                                }
+                                res.render('product/detail', {
+                                    layoutModels: res.locals.layoutModels,
+                                    product: pro,
+                                    isPermit: score > x && solder.ID !== user.id,
+                                    isAlive: pro.State === 'đang đấu giá',
+                                    isEnd: pro.State === 'đã kết thúc',
+                                    handlePrice: handlePrice,
+                                    solder: solder,
+                                    curPrice: curPrice,
+                                    indexs: indexs,
+                                    history: history,
+                                    proID: req.params.id,
+                                    isLoved: isLoved,
+                                    isSolder: solder.ID === user.id,
+                                });
+                            });
+
+                        } else {
+                            res.redirect('/home');
+                        }
+                    });
+            }
+            else
+            {
+                var score = 0;
+                var x = parseFloat(0.8);
+                if (pro) {
+                    Q.all([
+                        auction.findMaxPrice(pro.ProID), auction.findHandlePrice(pro.ProID), product.findSolder(pro.ProID)
                         ]).then(function(rs){
                             var curPrice = pro.Price;
                             var handlePrice = {
@@ -115,14 +204,10 @@ productRoute.get('/detail/:id', function(req, res) {
                             }
                             if(rs[0])
                                 curPrice = rs[0];
-                            if(solder.ID !== user.id)
-                            {
-                                handlePrice.Name = handlePrice.Name[0] + '****' + handlePrice.Name[handlePrice.Name.length - 1];
-                            }
                             res.render('product/detail', {
                                 layoutModels: res.locals.layoutModels,
                                 product: pro,
-                                isPermit: score > x && solder.ID !== user.id,
+                                isPermit: score > x,
                                 isAlive: pro.State === 'đang đấu giá',
                                 isEnd: pro.State === 'đã kết thúc',
                                 handlePrice: handlePrice,
@@ -131,70 +216,15 @@ productRoute.get('/detail/:id', function(req, res) {
                                 indexs: indexs,
                                 history: history,
                                 proID: req.params.id,
-                                isLoved: isLoved,
-                                isSolder: solder.ID === user.id,
+                                isLoved: false,
                             });
                         });
-                        
                     } else {
                         res.redirect('/home');
                     }
-                });
-            }
-            else
-            {
-                var score = 0;
-                var x = parseFloat(0.8);
-                if (pro) {
-                    Q.all([
-                        auction.findMaxPrice(pro.ProID), auction.findHandlePrice(pro.ProID), product.findSolder(pro.ProID)
-                    ]).then(function(rs){
-                        var curPrice = pro.Price;
-                        var handlePrice = {
-                            Name: 'Trống',
-                            Score: 0.0,
-                            ID: 0,
-                        };
-                        var solder = {
-                            Name: 'Trống',
-                            Score: 0.0,
-                            ID: 0,
-                        };
-                        if(rs[1])
-                        {
-                            handlePrice.Name = rs[1].Name;
-                            handlePrice.Score = rs[1].Score;
-                            handlePrice.ID = rs[1].ID;
-                        }
-                        if(rs[2])
-                        {
-                            solder.Name = rs[2].Name;
-                            solder.Score = rs[2].Score;
-                            solder.ID = rs[2].ID;
-                        }
-                        if(rs[0])
-                            curPrice = rs[0];
-                        res.render('product/detail', {
-                            layoutModels: res.locals.layoutModels,
-                            product: pro,
-                            isPermit: score > x,
-                            isAlive: pro.State === 'đang đấu giá',
-                            isEnd: pro.State === 'đã kết thúc',
-                            handlePrice: handlePrice,
-                            solder: solder,
-                            curPrice: curPrice,
-                            indexs: indexs,
-                            history: history,
-                            proID: req.params.id,
-                            isLoved: false,
-                        });
-                    });
-                } else {
-                    res.redirect('/home');
                 }
-            }
-        });
-    });
+            });
+});
 });
 
 productRoute.get('/add', restrict, function(req, res) {
@@ -264,6 +294,28 @@ productRoute.post('/add/:userID', function(req, res) {
                 }
                 else
                 {
+                     var desc = ''//Description
+                     var dir2 = './public/info';
+                     if(!fs.existsSync(dir2))
+                     {
+                        fs.mkdirSync(dir2);
+                    }
+                    dir2 = dir2 + '/' + insertId;
+                    if(!fs.existsSync(dir2))
+                    {
+                        fs.mkdirSync(dir2);
+                        fs.closeSync(fs.openSync(dir2 + '/desc.txt', 'w'));
+                    }
+                    else
+                    {
+                        fs.unlinkSync(dir2);
+                        fs.mkdirSync(dir2);
+                        fs.closeSync(fs.openSync(dir2 + '/desc.txt', 'w'));
+                    }
+                    fs.writeFile(dir2 + '/desc.txt','mô tả cũ' + '\r\n' + req.body.fullDes, (err) => {
+                        if (err) throw err;
+                    });//End Description
+
                     dest = dir + '/' + insertId;
                     if(!fs.existsSync(dest))
                         fs.mkdirSync(dest);
@@ -313,7 +365,7 @@ productRoute.post('/add/:userID', function(req, res) {
                 }
             });
         });
-    });
+});
 });
 
 productRoute.get('/addLove/:id', restrict, function(req, res) {
@@ -359,47 +411,47 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
         var arrange = req.query.arrange;
 
         var entity ={
-             text: text,
-             findBy: findBy,
-             arrange: arrange,
-        };
-        product.search(entity).then(function(products){
-             var list = [];
-            for(var i = offset; i < products.length; i++)
+         text: text,
+         findBy: findBy,
+         arrange: arrange,
+     };
+     product.search(entity).then(function(products){
+         var list = [];
+         for(var i = offset; i < products.length; i++)
+         {
+            var tmp = {
+                item: null,
+                isNew: false,
+            }
+            var d = Date.now() - products[i].TimeUp;
+            var diffMinutes = parseInt(d / (1000 * 60));
+            if(diffMinutes <= 10)
             {
-                var tmp = {
-                    item: null,
-                    isNew: false,
-                }
-                var d = Date.now() - products[i].TimeUp;
-                var diffMinutes = parseInt(d / (1000 * 60));
-                if(diffMinutes <= 10)
-                {
-                    tmp.isNew = true;
-                }
-                tmp.item = products[i];
-                list.push(tmp);
-                if(i === offset + 5)
-                {
-                    i = products.length;
-                }
+                tmp.isNew = true;
             }
-            var data = {
-                total: products.length,
-                list: list,
+            tmp.item = products[i];
+            list.push(tmp);
+            if(i === offset + 5)
+            {
+                i = products.length;
             }
-            var number_of_pages = data.total / rec_per_page;
-            if (data.total % rec_per_page > 0) {
-                number_of_pages++;
-            }
+        }
+        var data = {
+            total: products.length,
+            list: list,
+        }
+        var number_of_pages = data.total / rec_per_page;
+        if (data.total % rec_per_page > 0) {
+            number_of_pages++;
+        }
 
-            var pages = [];
-            for (var i = 1; i <= number_of_pages; i++) {
-                pages.push({
-                    pageValue: i,
-                    isActive: i === +curPage
-                });
-            }
+        var pages = [];
+        for (var i = 1; i <= number_of_pages; i++) {
+            pages.push({
+                pageValue: i,
+                isActive: i === +curPage
+            });
+        }
 
             //the same with /search/removeLove ; get /search and post /search
             var curUserID;
@@ -477,7 +529,7 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                 });
             });
         });
-    });
+});
 });
 
 
@@ -498,140 +550,11 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
         var arrange = req.query.arrange;
 
         var entity ={
-             text: text,
-             findBy: findBy,
-             arrange: arrange,
-        };
-        product.search(entity).then(function(products){
-            var list = [];
-            for(var i = offset; i < products.length; i++)
-            {
-                var tmp = {
-                    item: null,
-                    isNew: false,
-                }
-                var d = Date.now() - products[i].TimeUp;
-                var diffMinutes = parseInt(d / (1000 * 60));
-                if(diffMinutes <= 10)
-                {
-                    tmp.isNew = true;
-                }
-                tmp.item = products[i];
-                list.push(tmp);
-                if(i === offset + 5)
-                {
-                    i = products.length;
-                }
-            }
-            var data = {
-                total: products.length,
-                list: list,
-            }
-            var number_of_pages = data.total / rec_per_page;
-            if (data.total % rec_per_page > 0) {
-                number_of_pages++;
-            }
-
-            var pages = [];
-            for (var i = 1; i <= number_of_pages; i++) {
-                pages.push({
-                    pageValue: i,
-                    isActive: i === +curPage
-                });
-            }
-            //the same with /search/removeLove ; get /search and post /search
-            var curUserID;
-            if(res.locals.layoutModels.curUser)
-                curUserID = res.locals.layoutModels.curUser.id;
-            product.loadAllByFavorite(curUserID).then(function(rows){
-                var box = [];
-                var promise = [];
-                for (var i = 0; i < data.list.length; i++) {
-                    var bool = -1;
-                    if(rows)
-                    {
-                        bool = rows.findIndex(function(element){
-                            return element.ProID === data.list[i].item.ProID;
-                        });
-                    }
-                    promise.push(product.getNumberOfAuction(data.list[i].item.ProID));
-                    promise.push(auction.findHandlePrice(data.list[i].item.ProID));
-                    promise.push(product.findSolder(data.list[i].item.ProID));
-                    var isLoved = false;
-                    if(bool !== -1)
-                    {
-                        isLoved = true;
-                    }
-                    var d = products[i].TimeDown - Date.now();
-                    var diffDays = parseInt(d / (1000 * 3600 * 24)); 
-                    var hours = parseInt((d - diffDays * 24 * 3600 * 1000) / (1000 * 3600));
-                    var minutes = parseInt((d - diffDays * 24 * 3600 * 1000 - hours * 1000 * 3600) / (1000 * 60));
-                    var restTime = diffDays + ' ngày ' + hours + ' giờ ' + minutes + ' phút';
-                    var temp = {
-                        data: data.list[i],
-                        isLoved: isLoved,
-                        restTime: restTime,
-                        numberOfAuctions: 0,
-                        handlePrice: -1,
-                    }
-                    box.push(temp);
-                }
-                Q.all(promise).then(function(rs){
-                    var k = 0;
-                    for(var i = 0; i < box.length; i++)
-                    {
-                        box[i].numberOfAuctions = rs[k];
-                        var tmp = rs[k + 1];
-                        if(tmp)
-                            box[i].handlePrice = tmp.Name[0] + '****' + tmp.Name[tmp.Name.length - 1];
-                        else
-                            box[i].handlePrice = 'Chưa có';
-                        tmp = rs[k + 2];
-                        if(tmp)
-                        {
-                            if(tmp.ID === curUserID)
-                            {
-                                box[i].handlePrice = tmp.Name;
-                            }
-                        }
-                        k = k + 3;
-                    }
-                    res.render('product/search', {
-                        layoutModels: res.locals.layoutModels,
-                        box: box,
-                        isEmpty: data.total === 0,
-                        text: text,
-                        findBy: findBy,
-                        arrange: arrange,
-                        length: products.length,
-
-                        pages: pages,
-                        curPage: curPage,
-                        prevPage: curPage - 1,
-                        nextPage: curPage + 1,
-                        showPrevPage: curPage > 1,
-                        showNextPage: curPage < number_of_pages - 1,
-                    });
-                });
-            });
-        });
-    });
-});
-
-productRoute.post('/search', function(req, res) {
-    var rec_per_page = 6;
-    var curPage = 1;
-    var offset = 0;
-    var text = req.body.search;
-    var findBy = req.body.findBy;
-    var arrange = req.body.arrange;
-    var entity ={
          text: text,
          findBy: findBy,
          arrange: arrange,
-    };
-
-    product.search(entity).then(function(products){
+     };
+     product.search(entity).then(function(products){
         var list = [];
         for(var i = offset; i < products.length; i++)
         {
@@ -665,9 +588,138 @@ productRoute.post('/search', function(req, res) {
         for (var i = 1; i <= number_of_pages; i++) {
             pages.push({
                 pageValue: i,
-                isActive: i === +curPage,
+                isActive: i === +curPage
             });
         }
+            //the same with /search/removeLove ; get /search and post /search
+            var curUserID;
+            if(res.locals.layoutModels.curUser)
+                curUserID = res.locals.layoutModels.curUser.id;
+            product.loadAllByFavorite(curUserID).then(function(rows){
+                var box = [];
+                var promise = [];
+                for (var i = 0; i < data.list.length; i++) {
+                    var bool = -1;
+                    if(rows)
+                    {
+                        bool = rows.findIndex(function(element){
+                            return element.ProID === data.list[i].item.ProID;
+                        });
+                    }
+                    promise.push(product.getNumberOfAuction(data.list[i].item.ProID));
+                    promise.push(auction.findHandlePrice(data.list[i].item.ProID));
+                    promise.push(product.findSolder(data.list[i].item.ProID));
+                    var isLoved = false;
+                    if(bool !== -1)
+                    {
+                        isLoved = true;
+                    }
+                    var d = products[i].TimeDown - Date.now();
+                    var diffDays = parseInt(d / (1000 * 3600 * 24)); 
+                    var hours = parseInt((d - diffDays * 24 * 3600 * 1000) / (1000 * 3600));
+                    var minutes = parseInt((d - diffDays * 24 * 3600 * 1000 - hours * 1000 * 3600) / (1000 * 60));
+                    var restTime = diffDays + ' ngày ' + hours + ' giờ ' + minutes + ' phút';
+                    var temp = {
+                        data: data.list[i],
+                        isLoved: isLoved,
+                        restTime: restTime,
+                        numberOfAuctions: 0,
+                        handlePrice: -1,
+                    }
+                    box.push(temp);
+                }
+                Q.all(promise).then(function(rs){
+                    var k = 0;
+                    for(var i = 0; i < box.length; i++)
+                    {
+                        box[i].numberOfAuctions = rs[k];
+                        var tmp = rs[k + 1];
+                        if(tmp)
+                            box[i].handlePrice = tmp.Name[0] + '****' + tmp.Name[tmp.Name.length - 1];
+                        else
+                            box[i].handlePrice = 'Chưa có';
+                        tmp = rs[k + 2];
+                        if(tmp)
+                        {
+                            if(tmp.ID === curUserID)
+                            {
+                                box[i].handlePrice = tmp.Name;
+                            }
+                        }
+                        k = k + 3;
+                    }
+                    res.render('product/search', {
+                        layoutModels: res.locals.layoutModels,
+                        box: box,
+                        isEmpty: data.total === 0,
+                        text: text,
+                        findBy: findBy,
+                        arrange: arrange,
+                        length: products.length,
+
+                        pages: pages,
+                        curPage: curPage,
+                        prevPage: curPage - 1,
+                        nextPage: curPage + 1,
+                        showPrevPage: curPage > 1,
+                        showNextPage: curPage < number_of_pages - 1,
+                    });
+                });
+            });
+        });
+});
+});
+
+productRoute.post('/search', function(req, res) {
+    var rec_per_page = 6;
+    var curPage = 1;
+    var offset = 0;
+    var text = req.body.search;
+    var findBy = req.body.findBy;
+    var arrange = req.body.arrange;
+    var entity ={
+     text: text,
+     findBy: findBy,
+     arrange: arrange,
+ };
+
+ product.search(entity).then(function(products){
+    var list = [];
+    for(var i = offset; i < products.length; i++)
+    {
+        var tmp = {
+            item: null,
+            isNew: false,
+        }
+        var d = Date.now() - products[i].TimeUp;
+        var diffMinutes = parseInt(d / (1000 * 60));
+        if(diffMinutes <= 10)
+        {
+            tmp.isNew = true;
+        }
+        tmp.item = products[i];
+        list.push(tmp);
+        if(i === offset + 5)
+        {
+            i = products.length;
+        }
+    }
+    var data = {
+        total: products.length,
+        list: list,
+    }
+    var number_of_pages = data.total / rec_per_page;
+    if (data.total % rec_per_page > 0) {
+        number_of_pages++;
+    }
+
+    var pages = [];
+    for (var i = 1; i <= number_of_pages; i++) {
+        pages.push({
+            pageValue: i,
+            isActive: i === +curPage,
+        });
+    }
         //the same with /search/removeLove ; get /search and post /search
         var curUserID;
         if(res.locals.layoutModels.curUser)
@@ -756,47 +808,47 @@ productRoute.get('/search', function(req, res) {
     var arrange = req.query.arrange;
 
     var entity ={
-         text: text,
-         findBy: findBy,
-         arrange: arrange,
-    };
-    product.search(entity).then(function(products){
-        var list = [];
-        for(var i = offset; i < products.length; i++)
+     text: text,
+     findBy: findBy,
+     arrange: arrange,
+ };
+ product.search(entity).then(function(products){
+    var list = [];
+    for(var i = offset; i < products.length; i++)
+    {
+        var tmp = {
+            item: null,
+            isNew: false,
+        }
+        var d = Date.now() - products[i].TimeUp;
+        var diffMinutes = parseInt(d / (1000 * 60));
+        if(diffMinutes <= 10)
         {
-            var tmp = {
-                item: null,
-                isNew: false,
-            }
-            var d = Date.now() - products[i].TimeUp;
-            var diffMinutes = parseInt(d / (1000 * 60));
-            if(diffMinutes <= 10)
-            {
-                tmp.isNew = true;
-            }
-            tmp.item = products[i];
-            list.push(tmp);
-            if(i === offset + 5)
-            {
-                i = products.length;
-            }
+            tmp.isNew = true;
         }
-        var data = {
-            total: products.length,
-            list: list,
+        tmp.item = products[i];
+        list.push(tmp);
+        if(i === offset + 5)
+        {
+            i = products.length;
         }
-        var number_of_pages = data.total / rec_per_page;
-        if (data.total % rec_per_page > 0) {
-            number_of_pages++;
-        }
+    }
+    var data = {
+        total: products.length,
+        list: list,
+    }
+    var number_of_pages = data.total / rec_per_page;
+    if (data.total % rec_per_page > 0) {
+        number_of_pages++;
+    }
 
-        var pages = [];
-        for (var i = 1; i <= number_of_pages; i++) {
-            pages.push({
-                pageValue: i,
-                isActive: i === +curPage
-            });
-        }
+    var pages = [];
+    for (var i = 1; i <= number_of_pages; i++) {
+        pages.push({
+            pageValue: i,
+            isActive: i === +curPage
+        });
+    }
         //the same with /search/removeLove ; get /search and post /search
         var curUserID;
         if(res.locals.layoutModels.curUser)

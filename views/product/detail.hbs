@@ -52,12 +52,23 @@ Chi tiết sản phẩm
         {
             alert($('#his').val());
         }
-       else
-       {
+        else
+        {
             alert('Chưa có lượt đấu giá nào');
-       }
-       return false;
-   });
+        }
+        return false;
+    });
+</script>
+
+<script type="text/javascript">
+    $('#btn_edit').on('click', function () {
+      $('#edit').show();
+      $('#btn_save').show();
+  });
+
+    $('#btn_save').on('click', function () {
+      $('#frmEdit').submit();
+  });
 </script>
 {{/section}}
 
@@ -88,125 +99,134 @@ Chi tiết sản phẩm
                 </div>
                 <div class="padding">
                     <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/price-icon.png" title="Giá bán" width="25" height="25">&nbsp;&nbsp;<b>
-                    Giá khởi điểm:</b>  {{formatNumber Price}} vnđ</h4>
-                </div>
-                <div class="padding">
-                    <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/PriceToBuy.png" title="Giá mua ngay" width="25" height="25">&nbsp;&nbsp;<b>Giá mua ngay:</b> {{formatNumber PriceToBuy}} vnđ</h4>
-                </div>
-                <div class="padding">
-                     <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Quantity-icon.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;<b>Tồn kho:</b> {{Quantity}}</h4>
-                </div>
-                <div class="padding">
-                     <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Product-Status.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;<b>Trạng thái:</b> {{State}}</h4>
-                </div>
-                <div style="padding: 6px">&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Comment-Describe-icon.png" title="Mổ tả ngắn gọn" width="25" height="25">&nbsp;&nbsp;<b>Mô tả:</b> {{FullDes}}
-                </div>
-                <!-- </div> -->
-                <!-- END Thông tin chung -->
-                <!-- Người bán - người giữ giá -->
-                <div class="col-md-10 col-md-offset-1">
-                    <h4>&nbsp;</h4>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <img src="/images/others/Seller.png" title="Người bán" width="20" height="20">&nbsp;&nbsp;<a href="#">Người bán</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            </span>
-                            <input type="text" class="form-control" value="{{../solder.Name}}">
-                            </input>
-                            <span class="input-group-addon">
-                                {{../solder.Score}}
-                            </span>
-                        </div>
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                {{#if ../isSolder }}
-                                    <img src="/images/others/Handle-Price.png" title="Người đang giữ giá" width="20" height="20">&nbsp;&nbsp;<a href="#">Người giữ giá</a>
-                                {{else}}
-                                    <img src="/images/others/Handle-Price.png" title="Người đang giữ giá" width="20" height="20">&nbsp;&nbsp;Người giữ giá</a>
-                                {{/if}}
-                            </span>
-                            <input type="text" class="form-control" value="{{../handlePrice.Name}}">
-                            </input>
-                            <span class="input-group-addon">
-                                {{../handlePrice.Score}}
-                            </span>
-                        </div>
-
-                        <div class="input-group" style="padding-top: 20px">
-                            <span class="input-group-addon">
-                                <img src="/images/others/Time-start.png" title="Thời gian bắt đầu" width="20" height="20">&nbsp;&nbsp;Ngày bắt đầu&nbsp;
-                            </span>
-                            <input type="text" class="form-control" value="{{TimeUp}}">
-                            </input>
-                        </div>
-
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <img src="/images/others/Time-end.png" title="Thời gian kết thúc" width="22" height="20">&nbsp;&nbsp;Ngày kết thúc
-                            </span>
-                            <input type="text" class="form-control" value="{{TimeDown}}">
-                            </input>
-                        </div>
+                        Giá khởi điểm:</b>  {{formatNumber Price}} vnđ</h4>
                     </div>
-                </div>
-                <!-- END Người bán - người giữ giá -->
-               
-                <!-- Các button: Đấu giá - yêu thích - lịch sử -->
-                     <!-- Đấu giá - Cho điểm -->
-                {{#if ../isPermit }}
-                {{#if ../isAlive }}
-                <div class="col-md-10 col-md-offset-1">
-                    <form class="form-horizontal" id="frmAddItem" method="post" action="/auction/add">
-                        <div class="form-group" style="margin-left: 0px">
-                            <input type="hidden" id="txtP" name="proID" value="{{ProID}}">
-                            <input type="hidden" id="txtStep" value="{{DeltaPrice}}">
-                            <div class="row">
-                                <div class="col-md-8" class="input-group">
-                                    <input type="text" id="txtQ" name="price" class="form-control" value="{{../curPrice}}">
-                                </div>
-                                <div class="col-md-2">
-                                    <button class="btn btn-primary" id="btnDG">
-                                        &nbsp;Đấu giá
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                {{/if}}
-                {{/if}}
-            <!-- END Đấu giá - Cho điểm -->
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-offset-3 col-md-6">
-                            <a href="#" role="button" class="btn"><img src="/images/others/History.png" title="Xem lịch sử đấu giá cho sản phẩm này" width="38" height="38" id="watch_history"></a>
-                        </div>
-                        <div class="col-md-offset-10 col-md-offset-1">
-                            {{#if ../layoutModels.isLogged }}
-                            {{#if ../isSolder }}
-                            <div class="btn-group" style="margin-top: 15px">
-                            </div>
-                            {{else}}
-                            <div class="btn-group" style="margin-top: 15px">
-                                {{#if ../isLoved }}
-                                <a href="/product/removeLove/{{ProID}}" role="button">
-                                    <img src="/images/others/heart.jpg" width="30" height="30">
-                                </a>
-                                {{else}}
-                                <a href="/product/addLove/{{ProID}}" role="button">
-                                    <img src="/images/others/heart-empty.png" width="30" height="30">
-                                </a>
-                                {{/if}}
-                            </div>
-                            {{/if}}
-                            {{/if}}
-                        </div>
-                        <input type="hidden" id="his" value="{{../history}}" />
+                    <div class="padding">
+                        <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/PriceToBuy.png" title="Giá mua ngay" width="25" height="25">&nbsp;&nbsp;<b>Giá mua ngay:</b> {{formatNumber PriceToBuy}} vnđ</h4>
                     </div>
+                    <div class="padding">
+                       <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Quantity-icon.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;<b>Tồn kho:</b> {{Quantity}}</h4>
+                   </div>
+                   <div class="padding">
+                       <h4>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Product-Status.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;<b>Trạng thái:</b> {{State}}</h4>
+                   </div>
+                   <div style="padding: 6px">&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/others/Comment-Describe-icon.png" title="Mổ tả ngắn gọn" width="25" height="25">&nbsp;&nbsp;<b>Mô tả:</b> {{FullDes}}
+
+                    {{#if ../isSolder }}
+                    <button type="button" class="btn btn-default" id="btn_edit">Edit</button>
+                    <form id="frmEdit" method="post" action="/product/detail/{{ProID}}">
+                     <textarea name="desc" hidden="hidden"  id="edit" style="resize: none;min-height: 70px;width:450px;">{{FullDes}}</textarea> 
+                     <button type="button" style="display:none;" class="btn btn-default" id="btn_save">Save</button>
+                 </form>
+                 {{/if}}
+
+             </div>
+             <!-- </div> -->
+             <!-- END Thông tin chung -->
+             <!-- Người bán - người giữ giá -->
+             <div class="col-md-10 col-md-offset-1">
+                <h4>&nbsp;</h4>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <img src="/images/others/Seller.png" title="Người bán" width="20" height="20">&nbsp;&nbsp;<a href="#">Người bán</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </span>
+                        <input type="text" class="form-control" value="{{../solder.Name}}">
+                    </input>
+                    <span class="input-group-addon">
+                        {{../solder.Score}}
+                    </span>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        {{#if ../isSolder }}
+                        <img src="/images/others/Handle-Price.png" title="Người đang giữ giá" width="20" height="20">&nbsp;&nbsp;<a href="#">Người giữ giá</a>
+                        {{else}}
+                        <img src="/images/others/Handle-Price.png" title="Người đang giữ giá" width="20" height="20">&nbsp;&nbsp;Người giữ giá</a>
+                        {{/if}}
+                    </span>
+                    <input type="text" class="form-control" value="{{../handlePrice.Name}}">
+                </input>
+                <span class="input-group-addon">
+                    {{../handlePrice.Score}}
+                </span>
+            </div>
+
+            <div class="input-group" style="padding-top: 20px">
+                <span class="input-group-addon">
+                    <img src="/images/others/Time-start.png" title="Thời gian bắt đầu" width="20" height="20">&nbsp;&nbsp;Ngày bắt đầu&nbsp;
+                </span>
+                <input type="text" class="form-control" value="{{TimeUp}}">
+            </input>
+        </div>
+
+        <div class="input-group">
+            <span class="input-group-addon">
+                <img src="/images/others/Time-end.png" title="Thời gian kết thúc" width="22" height="20">&nbsp;&nbsp;Ngày kết thúc
+            </span>
+            <input type="text" class="form-control" value="{{TimeDown}}">
+        </input>
+    </div>
+</div>
+</div>
+<!-- END Người bán - người giữ giá -->
+
+<!-- Các button: Đấu giá - yêu thích - lịch sử -->
+<!-- Đấu giá - Cho điểm -->
+{{#if ../isPermit }}
+{{#if ../isAlive }}
+<div class="col-md-10 col-md-offset-1">
+    <form class="form-horizontal" id="frmAddItem" method="post" action="/auction/add">
+        <div class="form-group" style="margin-left: 0px">
+            <input type="hidden" id="txtP" name="proID" value="{{ProID}}">
+            <input type="hidden" id="txtStep" value="{{DeltaPrice}}">
+            <div class="row">
+                <div class="col-md-8" class="input-group">
+                    <input type="text" id="txtQ" name="price" class="form-control" value="{{../curPrice}}">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary" id="btnDG">
+                        &nbsp;Đấu giá
+                    </button>
                 </div>
             </div>
         </div>
+    </form>
+</div>
+{{/if}}
+{{/if}}
+<!-- END Đấu giá - Cho điểm -->
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+            <a href="#" role="button" class="btn"><img src="/images/others/History.png" title="Xem lịch sử đấu giá cho sản phẩm này" width="38" height="38" id="watch_history"></a>
+        </div>
+        <div class="col-md-offset-10 col-md-offset-1">
+            {{#if ../layoutModels.isLogged }}
+            {{#if ../isSolder }}
+            <div class="btn-group" style="margin-top: 15px">
+            </div>
+            {{else}}
+            <div class="btn-group" style="margin-top: 15px">
+                {{#if ../isLoved }}
+                <a href="/product/removeLove/{{ProID}}" role="button">
+                    <img src="/images/others/heart.jpg" width="30" height="30">
+                </a>
+                {{else}}
+                <a href="/product/addLove/{{ProID}}" role="button">
+                    <img src="/images/others/heart-empty.png" width="30" height="30">
+                </a>
+                {{/if}}
+            </div>
+            {{/if}}
+            {{/if}}
+        </div>
+        <input type="hidden" id="his" value="{{../history}}" />
     </div>
+</div>
+</div>
+</div>
+</div>
 </div>
 {{/with}}
 {{#section 'css'}}
