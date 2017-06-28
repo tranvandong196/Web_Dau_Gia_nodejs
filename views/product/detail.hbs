@@ -155,7 +155,8 @@ Chi tiết sản phẩm
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon">
-                            <img src="/images/others/Seller.png" title="Người bán" width="20" height="20">&nbsp;&nbsp;<a href="#">Người bán</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <img src="/images/others/Seller.png" title="Người bán" width="20" height="20">&nbsp;
+                            <a href="/account/profile/{{../solder.ID}}">Người bán</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </span>
                         <input type="text" class="form-control" value="{{../solder.Name}}">
                     </input>
@@ -166,7 +167,8 @@ Chi tiết sản phẩm
                 <div class="input-group">
                     <span class="input-group-addon">
                         {{#if ../isSolder }}
-                        <img src="/images/others/Handle-Price.png" title="Người đang giữ giá" width="20" height="20">&nbsp;&nbsp;<a href="#">Người giữ giá</a>
+                        <img src="/images/others/Handle-Price.png" title="Người đang giữ giá" width="20" height="20">&nbsp;&nbsp;
+                        <a href="/account/profile/{{../handlePrice.ID}}">Người giữ giá</a>
                         {{else}}
                         <img src="/images/others/Handle-Price.png" title="Người đang giữ giá" width="20" height="20">&nbsp;&nbsp;Người giữ giá</a>
                         {{/if}}

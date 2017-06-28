@@ -61,11 +61,11 @@
                                 <li><a id="manageCategories" href="/account/manageCategories">Quản lý danh mục</a></li>
                                 <li><a id="manaUsers" href="/account/manageUsers">Quản lý người dùng</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="/account/profile">Thông tin cá nhân</a></li>
+                                <li><a href="/account/profile/{{layoutModels.curUser.id}}">Thông tin cá nhân</a></li>
                                 <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
                                 {{else}}
                                 <li role="separator" class="divider"></li>
-                                <li><a href="/account/profile">Thông tin cá nhân</a></li>
+                                <li><a href="/account/profile/{{layoutModels.curUser.id}}">Thông tin cá nhân</a></li>
                                 <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
                                 {{/if}}
                             </ul>
@@ -93,7 +93,7 @@
                             <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
                             {{else}}
                             <li role="separator" class="divider"></li>
-                            <li><a href="/account/profile">Thông tin cá nhân</a></li>
+                            <li><a href="/account/profile/{{layoutModels.curUser.id}}">Thông tin cá nhân</a></li>
                             <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
                             {{/if}}
                         </ul>
@@ -132,7 +132,7 @@
                         </a>
                     </li>
                     <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
-                        <a href="others/gioi-thieu.html">
+                        <a href="/home/gioi-thieu">
                             <i style="margin-right: 5px; font-size: 17px; top: -1px">
                             </i>
                             <span style="color: #282525">
@@ -141,7 +141,7 @@
                         </a>
                     </li>
                     <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
-                        <a href="others/hoi-dap.html">
+                        <a href="/home/hoi-dap">
                             <i style="margin-right: 5px; font-size: 17px; top: -1px">
                             </i>
                             <span style="color: #282525">
@@ -152,7 +152,7 @@
                         </a>
                     </li>
                     <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
-                        <a href="#">
+                        <a href="/home/lien-he">
                             <i style="margin-right: 5px; font-size: 17px; top: -1px">
                             </i>
                             <span style="color: #282525">

@@ -95,6 +95,23 @@ exports.loadAll = function() {
     return deferred.promise;
 }
 
+exports.load = function(id) {
+
+    var deferred = Q.defer();
+
+    var sql = 'select * from users where ID = ' + id;
+
+    db.load(sql).then(function(rows) {
+        if (rows) {
+            deferred.resolve(rows[0]);
+        } else {
+            deferred.resolve(null);
+        }
+    });
+
+    return deferred.promise;
+}
+
 // score là 1 hoặc là -1
 exports.updateScore = function(id, score){
     var deferred = Q.defer();

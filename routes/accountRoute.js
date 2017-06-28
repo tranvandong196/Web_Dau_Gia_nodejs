@@ -134,12 +134,32 @@ accountRoute.post('/register', function(req, res) {
     });
 });
 
-accountRoute.get('/profile', restrict, function(req, res) {
-    res.render('account/profile', {
-        layoutModels: res.locals.layoutModels,
-        percentScore: res.locals.layoutModels.curUser.score*100,
-        canAuction: res.locals.layoutModels.curUser.score >= 0.8
-    });
+accountRoute.get('/profile/:id', restrict, function(req, res) {
+    account.load(req.params.id).then(function(user){
+        if(user)
+        {
+            user.DOB = moment(user.DOB).format('l');
+            res.render('account/profile', {
+                layoutModels: res.locals.layoutModels,
+                percentScore: user.Score*100,
+                canAuction: user.Score >= 0.8,
+                user: user,
+                isMyProfile: user.ID === res.locals.layoutModels.curUser.id,
+                isTrashAccount: user === null,
+            });
+        }
+        else
+        {
+            res.render('account/profile', {
+                layoutModels: res.locals.layoutModels,
+                percentScore: 0,
+                canAuction: false,
+                user: user,
+                isMyProfile: false,
+                isTrashAccount: true,
+            });
+        }
+    })
 });
 
 accountRoute.get('/changePassword', restrict, function(req, res) {

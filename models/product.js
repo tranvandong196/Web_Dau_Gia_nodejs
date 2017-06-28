@@ -224,11 +224,9 @@ exports.loadPageByBasket = function(userid, limit, offset) {
         limit: limit,
         offset: offset
     };
-
-    var sqlCount = mustache.render('SELECT COUNT(*) as total FROM products WHERE HandleID  = {{userid}} AND (NOW() > TimeDown OR Price >= PriceToBuy)', view);
-    promises.push(db.load(sqlCount));
-
-    var sql = mustache.render('SELECT * FROM products WHERE HandleID  = {{userid}} AND (NOW() > TimeDown OR Price >= PriceToBuy) limit {{limit}} offset {{offset}}', view);
+    var sql1 = mustache.render('SELECT count(*) as total FROM products WHERE HandleID  = {{userid}} AND State <> "đang đấu giá"', view);
+    promises.push(db.load(sql1));
+    var sql = mustache.render('SELECT * FROM products WHERE HandleID  = {{userid}} AND State <> "đang đấu giá" limit {{limit}} offset {{offset}}', view);
     promises.push(db.load(sql));
 
     Q.all(promises).spread(function(totalRow, rows) {
@@ -236,7 +234,6 @@ exports.loadPageByBasket = function(userid, limit, offset) {
             total: totalRow[0].total,
             list: rows
         }
-        console.log("[Product] Da lay danh sach thang dau gia userID: " + userid + ", SoLuong = " + rows.length)
         deferred.resolve(data);
     });
     

@@ -26,4 +26,22 @@ homeRoute.get('/', function(req, res) {
 	});
 });
 
+homeRoute.get('/gioi-thieu', function(req, res) {
+	res.render('home/gioiThieu', {
+		layoutModels: res.locals.layoutModels,
+	});
+});
+
+homeRoute.get('/hoi-dap', function(req, res) {
+	res.render('home/hoiDap', {
+		layoutModels: res.locals.layoutModels,
+	});
+});
+
+homeRoute.get('/lien-he', function(req, res) {
+	res.render('home/lienHe', {
+		layoutModels: res.locals.layoutModels,
+	});
+});
+
 module.exports = homeRoute;

@@ -97,16 +97,24 @@
     <div class="mainbox" id="loginbox">
         <div class="panel panel-info">
             <div class="panel-heading ">
+                {{#if isTrashAccount}}
+                <div class="panel-title">
+                    Không có người dùng này!
+                </div>
+                {{else}}
                 <div class="panel-title">
                     Thông tin cá nhân
                 </div>
+                {{/if}}
+                {{#if isMyProfile}}
                 <div style="float:right; font-size: 80%; position: relative; top:-20px">
                     <button  id="changeProfile" type="button"  class="btn btn-default btn-xs">
                         Chỉnh sửa thông tin cá nhân
                     </button>
                 </div>
+                {{/if}}
             </div>
-            {{#with layoutModels.curUser}}
+            {{#with user}}
             <div  class="panel-body" style="padding-top:30px;">
                 <div class="form-horizontal col-sm-12" role="form">
                     <div class="input-group" id="inputUsername">
@@ -114,7 +122,7 @@
                             <i class="glyphicon glyphicon-user">
                             </i>
                         </span>
-                        <input class="form-control" placeholder="Username" type="text" name="username" value="{{username}}">
+                        <input class="form-control" placeholder="Username" type="text" name="username" value="{{Username}}">
                         </input>
                     </div>
                     <div id="spaceline"><br></div>
@@ -123,7 +131,7 @@
                             <i class="glyphicon glyphicon-envelope">
                             </i>
                         </span>
-                        <input class="form-control" placeholder="Your Email" type="text" name="email" value="{{email}}">
+                        <input class="form-control" placeholder="Your Email" type="text" name="email" value="{{Email}}">
                         </input>
                     </div>
                     <div><br></div>
@@ -132,7 +140,7 @@
                             <i class="glyphicon glyphicon-tag">
                             </i>
                         </span>
-                        <input class="form-control" type="text" placeholder="Your Fullname" name="name" value="{{name}}">
+                        <input class="form-control" type="text" placeholder="Your Fullname" name="name" value="{{Name}}">
                         </input>
                     </div>
                     <div><br></div>
@@ -141,7 +149,7 @@
                             <i class="glyphicon glyphicon-calendar">
                             </i>
                         </span>
-                        <input class="form-control datepicker" type="text" placeholder="Your Birthday" name="dOB" value="{{dOB}}">
+                        <input class="form-control datepicker" type="text" placeholder="Your Birthday" name="dOB" value="{{DOB}}">
                         </input>
                     </div>
                     <div><br></div>
@@ -150,7 +158,7 @@
                             <i class="glyphicon glyphicon-map-marker">
                             </i>
                         </span>
-                        <input class="form-control" placeholder="Your Address" type="text" name="address" value="{{address}}">
+                        <input class="form-control" placeholder="Your Address" type="text" name="address" value="{{Address}}">
                         </input>
                     </div>
                     <div><br></div>
@@ -168,7 +176,7 @@
                                             <i class="glyphicon glyphicon-plus-sign">
                                             </i>
                                         </span>
-                                        <input type="text" class="form-control" name="scorePlus" value="{{scorePlus}}">
+                                        <input type="text" class="form-control" name="scorePlus" value="{{ScorePlus}}">
                                         </inpput>
                                       </div>
                                     </div>
@@ -180,24 +188,13 @@
                                             <i class="glyphicon glyphicon-minus-sign">
                                             </i>
                                         </span>
-                                        <input type="text" class="form-control" name="scoreMinus" value="{{scoreMinus}}">
+                                        <input type="text" class="form-control" name="scoreMinus" value="{{ScoreMinus}}">
                                         </inpput>
                                       </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <!-- <div class="col-sm-offset-8 col-sm-5" style="margin-left: 15px">
-                                    <div class="form-group">
-                                      <div class="input-group">
-                                        <span class="input-group-addon">
-                                            Tổng
-                                        </span>
-                                        <input type="text" class="form-control" name="score" value="{{score}}">
-                                        </input>
-                                      </div>
-                                    </div>
-                                </div> -->
                                 {{/with}}
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-8" style="right: -5px;">
                                     <div class="progress">
@@ -230,9 +227,11 @@
 										</button>	
 									</div>
                                 </div>
+                                {{#if isMyProfile}}
                                 <a  id="changePassword" href="/account/changePassword">
                                     Đổi mật khẩu
                                 </a>
+                                {{/if}}
                             </div>
                         </div>
                     </div>

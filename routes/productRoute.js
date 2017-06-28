@@ -11,6 +11,7 @@ var thumb = require('node-thumbnail').thumb;
 var favorite = require('../models/favorite');
 var Q = require('q');
 var moment = require('moment');
+
 productRoute.get('/byCat/:id', function(req, res) {
     var rec_per_page = 6;
     var curPage = req.query.page ? req.query.page : 1;
@@ -1042,7 +1043,6 @@ productRoute.get('/byBasket', function(req, res) {
     if (res.locals.layoutModels.isLogged)
         userIDcurrent = res.locals.layoutModels.curUser.id;
     product.loadPageByBasket(userIDcurrent, rec_per_page, offset).then(function(data) {
-        console.log("[ProductRoute] Da lay danh sach SP thang dau gia: SoLuong = " + data.list.length)
         var number_of_pages = data.total / rec_per_page;
         if (data.total % rec_per_page > 0) {
             number_of_pages++;
