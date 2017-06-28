@@ -134,9 +134,9 @@ Chi tiết sản phẩm
                 {{#if ../isSolder }}
                     <button type="button" class="btn btn-default btn-xs" id="btn_edit">Thay đổi</button>
                     <div class="col-md-12 col-lg-12" id="EditDesc">
-                        <form id="frmEdit" method="post" action="/product/detail/{{ProID}}" hidden>
+                        <form id="frmEdit" method="post" action="/product/detail/{{ProID}}" hidden="hidden">
                             <div class="thumbnail">
-                                <textarea class="form-control" name="desc" id="edit" style="resize: none;min-height: 70px;width:450px;">{{FullDes}}</textarea>
+                                <textarea class="form-control" name="desc" id="edit" style="resize: none;min-height: 70px;width:450px;"></textarea>
                                 <div class="col-md-offset-8" style="margin-top: 5px;">
                                     <button type="button" class="btn btn-default" style="margin-left: 10px" id="btn_cancel">Hủy</button>
                                     <button type="button" class="btn btn-default" id="btn_save">Lưu lại</button>

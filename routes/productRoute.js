@@ -51,22 +51,28 @@ productRoute.get('/byCat/:id', function(req, res) {
 
 productRoute.post('/detail/:id', function(req, res){
 
-    var dir='./public/info';
-    dir = dir + '/' + req.params.id;
-    var desc = req.body.desc;
-    var proId = req.params.id;
-    var entity = {
+    product.loadDetail(req.params.id)
+    .then(function(pro) {
+
+       var dir='./public/info';
+       dir = dir + '/' + req.params.id;
+       var desc = req.body.desc;
+       var fullDes;
+       var proId = req.params.id;
+       var entity = {
         desc:desc,
         proId:proId,
     };
+    fullDes=pro.FullDes;
 
+    desc = fullDes +' ' + desc;
     var now = new Date(Date.now()).toLocaleString();
     now = moment().format('YYYY-MM-DD');
 
     fs.appendFile(dir + '/desc.txt','\r\n' + 'EDIT (' + now + ')'+ '\r\n' + desc, (err) => {
         if (err) throw err;
     });
-
+    entity.desc = desc;
     Q.all([
         product.updateFullDes(entity)
         ]).spread(function(changedRows){
@@ -74,6 +80,8 @@ productRoute.post('/detail/:id', function(req, res){
         });
 
     });
+
+});
 
 productRoute.get('/detail/:id', function(req, res) {
     var indexs = [];
@@ -111,7 +119,6 @@ productRoute.get('/detail/:id', function(req, res) {
                     proID: req.params.id,
                     userID: user.id,
                 };
-                console.log(dir);
                 if(!fs.existsSync(dir))
                 {
                     fs.readFile(dir, 'utf8', (err, data) => {
@@ -225,10 +232,8 @@ productRoute.get('/detail/:id', function(req, res) {
                                 proID: req.params.id,
 
                                 isLoved: isLoved,
-                                isSolder: solder.ID === user.id,
                                 hasPrice2Buy: pro.PriceToBuy !== -1,
                                 isLoved: false,
-
                             });
                         });
                     } else {
@@ -423,14 +428,14 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
         var arrange = req.query.arrange;
 
         var entity ={
-         text: text,
-         findBy: findBy,
-         arrange: arrange,
-     };
-     product.search(entity).then(function(products){
-         var list = [];
-         for(var i = offset; i < products.length; i++)
-         {
+           text: text,
+           findBy: findBy,
+           arrange: arrange,
+       };
+       product.search(entity).then(function(products){
+           var list = [];
+           for(var i = offset; i < products.length; i++)
+           {
             var tmp = {
                 item: null,
                 isNew: false,
@@ -562,11 +567,11 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
         var arrange = req.query.arrange;
 
         var entity ={
-         text: text,
-         findBy: findBy,
-         arrange: arrange,
-     };
-     product.search(entity).then(function(products){
+           text: text,
+           findBy: findBy,
+           arrange: arrange,
+       };
+       product.search(entity).then(function(products){
         var list = [];
         for(var i = offset; i < products.length; i++)
         {
@@ -690,12 +695,12 @@ productRoute.post('/search', function(req, res) {
     var findBy = req.body.findBy;
     var arrange = req.body.arrange;
     var entity ={
-     text: text,
-     findBy: findBy,
-     arrange: arrange,
- };
+       text: text,
+       findBy: findBy,
+       arrange: arrange,
+   };
 
- product.search(entity).then(function(products){
+   product.search(entity).then(function(products){
     var list = [];
     for(var i = offset; i < products.length; i++)
     {
@@ -820,11 +825,11 @@ productRoute.get('/search', function(req, res) {
     var arrange = req.query.arrange;
 
     var entity ={
-     text: text,
-     findBy: findBy,
-     arrange: arrange,
- };
- product.search(entity).then(function(products){
+       text: text,
+       findBy: findBy,
+       arrange: arrange,
+   };
+   product.search(entity).then(function(products){
     var list = [];
     for(var i = offset; i < products.length; i++)
     {
