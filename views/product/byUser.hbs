@@ -20,7 +20,7 @@
         
          $('#txtProID').val(ProID);
          $('#txtgiveScore').val('1');
-         //$('#frmGiveScore').submit();
+         $('#frmGiveScore').submit();
     });
     $(".scoreMinus").click(function(){
         var ProID = $(this).data('id');
@@ -33,12 +33,13 @@
         var ProID = $(this).data('id');
          $('#txtProID').val(ProID);
          $('#txtgiveScore').val('-1');
-         //$('#frmGiveScore').submit();
+         $('#frmGiveScore').submit();
     });
     $(".sendComment").click(function(){
         var ProID = $(this).data('id');
+        var name = $('#txtProName' + ProID).val();
          $('#txtProductID').val(ProID);
-        var Placeholder = "Gửi nhận xét cho sản phẩm ProID = " + ProID;
+        var Placeholder = "Gửi nhận xét cho sản phẩm " + name;
         $("#txtSubmitComment").attr("placeholder", Placeholder);
         $("html, body").animate({
         scrollTop: $('html, body').get(0).scrollHeight}, 1000);
@@ -50,6 +51,7 @@
 
         //$("#frmwriteComment").submit();
         $("#frmwriteComment").hide();
+        $("#frmwriteComment").submit();
     });
     //  $("#sendAgain").click(function(){
     //     $("html, body").animate({
@@ -71,7 +73,7 @@ Không có sản phẩm!
 <form id="frmAddToCart" method="post" action="/cart/add1">
     <input type="hidden" id="txtP" name="proId" />
 </form>
-<form method="post" action="/account/receiverScore" id="frmGiveScore">
+<form method="post" action="/account/receiveScore" id="frmGiveScore">
     <input type="hidden" name="giveScore" id="txtgiveScore">
     <input type="hidden" name="proID" id="txtProID">
 </form>
@@ -113,6 +115,7 @@ Không có sản phẩm!
                 </div>
                 <div class="col-md-6">
                     <div class="caption">
+                        <input type="hidden" id="txtProName{{product.ProID}}" value="{{product.ProName}}">
                         <a href="/product/detail/{{product.ProID}}"><h4>{{product.ProName}}</h4></a>
                         <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/price-icon.png" title="Giá" width="25" height="25">&nbsp;&nbsp;{{formatNumber product.Price}}</h4>
                         <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/Quantity-icon.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;{{product.Quantity}}</h4>
@@ -124,31 +127,65 @@ Không có sản phẩm!
                         </p>
                     </div>
                 </div>
-                {{# if canGiveScore_comment_toSeller}}
+                {{#if canGiveScore_comment_toSeller}}
                 <!-- Cộng/trừ điểm - Gửi nhận xét cho NGƯỜI BÁN - UserID -->
                 <div class="col-md-2">
+                    {{#if isGaveScore }}
+                    {{#if isPlus }}
                     <div class="btn-group" role="group" aria-label="...">
                       <button id="Plus{{product.ProID}}" type="button" class="btn btn-success scorePlus" data-id="{{product.ProID}}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> +1</button>
                       <button id="Minus{{product.ProID}}" type="button" class="btn btn-default scoreMinus" data-id="{{product.ProID}}"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> -1</button>
                     </div>
+                    {{else}}
+                     <div class="btn-group" role="group" aria-label="...">
+                      <button id="Plus{{product.ProID}}" type="button" class="btn btn-default scorePlus" data-id="{{product.ProID}}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> +1</button>
+                      <button id="Minus{{product.ProID}}" type="button" class="btn btn-danger scoreMinus" data-id="{{product.ProID}}"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> -1</button>
+                    </div>
+                    {{/if}}
+                    {{else}}
+                    <div class="btn-group" role="group" aria-label="...">
+                      <button id="Plus{{product.ProID}}" type="button" class="btn btn-default scorePlus" data-id="{{product.ProID}}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> +1</button>
+                      <button id="Minus{{product.ProID}}" type="button" class="btn btn-default scoreMinus" data-id="{{product.ProID}}"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> -1</button>
+                    </div>
+                    {{/if}}                    
                 </div>
-                <div class="col-md-2 ">
+                <div class="col-md-2">
                     <br>
                     <a href="javascript:;" class="sendComment" data-id="{{product.ProID}}"><button type="button" class="btn btn-primary" >Gửi nhận xét</button></a>
+                    {{#if isGaveComment }}
+                    <h4><img src="/images/others/Product-Status.png" width="20" height="20">Đã nhận xét</h4>
+                    {{/if}}
                 </div>
                 <!-- END Cộng/trừ điểm -  Gửi nhận xét cho NGƯỜI BÁN-->
                {{/if}}
-                {{# if canGiveScore_comment_toBuyer}}
+                {{#if canGiveScore_comment_toBuyer}}
                 <!-- Cộng/trừ điểm - Gửi nhận xét cho  NGƯỜI CHIẾN THẮNG - HandleID -->
                 <div class="col-md-2">
+                    {{#if isGaveScore }}
+                    {{#if isPlus }}
                     <div class="btn-group" role="group" aria-label="...">
                       <button id="Plus{{product.ProID}}" type="button" class="btn btn-success scorePlus" data-id="{{product.ProID}}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> +1</button>
                       <button id="Minus{{product.ProID}}" type="button" class="btn btn-default scoreMinus" data-id="{{product.ProID}}"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> -1</button>
                     </div>
+                    {{else}}
+                     <div class="btn-group" role="group" aria-label="...">
+                      <button id="Plus{{product.ProID}}" type="button" class="btn btn-default scorePlus" data-id="{{product.ProID}}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> +1</button>
+                      <button id="Minus{{product.ProID}}" type="button" class="btn btn-danger scoreMinus" data-id="{{product.ProID}}"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> -1</button>
+                    </div>
+                    {{/if}}
+                    {{else}}
+                    <div class="btn-group" role="group" aria-label="...">
+                      <button id="Plus{{product.ProID}}" type="button" class="btn btn-default scorePlus" data-id="{{product.ProID}}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> +1</button>
+                      <button id="Minus{{product.ProID}}" type="button" class="btn btn-default scoreMinus" data-id="{{product.ProID}}"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> -1</button>
+                    </div>
+                    {{/if}}          
                 </div>
-                <div class="col-md-2 ">
+                <div class="col-md-2">
                     <br>
                     <a href="javascript:;" class="sendComment" data-id="{{product.ProID}}"><button type="button" class="btn btn-primary" >Gửi nhận xét</button></a>
+                    {{#if isGaveComment }}
+                    <h4><img src="/images/others/Product-Status.png" width="20" height="20">Đã nhận xét</h4>
+                    {{/if}}
                 </div>
                 <!-- END Cộng/trừ điểm -  Gửi nhận xét NGƯỜI CHIẾN THẮNG -->
                 {{/if}}
@@ -158,12 +195,12 @@ Không có sản phẩm!
         </div>
     </div>
     {{/each}}
-     <form method="post" action="/account/receiverFeedback" class="form-group" role="search" id="frmwriteComment" hidden>
+     <form method="post" action="/account/receiveFeedback" class="form-group" role="search" id="frmwriteComment" hidden>
           <div class="col-lg-11">
               <div class="thumbnail" style="background: #d9e7f7">
                   <div style="margin-left: 20px;margin-bottom: 15px; margin-right: 20px">
                     <input name="proID" type="hidden"  id="txtProductID">
-                    <h4><a href="#">Nguyễn Quốc Duy</a> - <a href="#">Tên sản phẩm</a></h4>
+                    <h4>Gửi nhận xét</h4>
                     <textarea name="comment" class="form-control" rows="3" id="txtSubmitComment" placeholder="Gửi nhận xét cho"></textarea>
                     <br>
                     <div class=" col-md-offset-11">
