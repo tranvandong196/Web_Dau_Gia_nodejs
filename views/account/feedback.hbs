@@ -9,16 +9,72 @@
 {{/section}}
 
 {{!-- body --}}
-<div style="padding-right: 50px">
+<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-right: 50px">
     {{#if isEmpty }}
     <div class="alert alert-danger" role="alert">Không có đánh giá nào cho bạn!
       <a href="/home" class="alert-link"> Trở về</a>
     </div>
     {{else}}
-    <h1>Danh sách phản hồi dành cho bạn</h1>
-    <table class="table table-hover table-striped table-bordered" style="max-width: 1000px;">
+    <div style="right: 15px">
+          <div class="thumbnail" style="background: #d9e7f7">
+              <div class="row" style="padding-top: 16px">
+                  <div class="col-md-6"  style="text-align: center;padding-top: 6px">
+                      <div class="col-md-4" style="text-align: right;">
+                        <label>Tổng điểm:</label>
+                      </div>
+                      <div class="col-md-8">
+                            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-12"">
+                                {{#if canAuction}}
+                                <div class="progress" title="Điểm >= 0.8 : Bạn có thể tham gia đấu giá ngay bây giờ">
+                                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{percentScore}}%;">
+                                    {{percentScore}}%
+                                  </div>
+                                </div>
+                                {{else}}
+                                <div class="progress" title="Bạn cần tổng điểm >= 0.8 để được tham gia đấu giá">
+                                  <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{percentScore}}%;">
+                                    {{percentScore}}%
+                                  </div>
+                                </div>
+                                {{/if}}
+                            </div>
+                        </div>
+                  </div>
+                  <div class="col-sm-6">
+                      <div class="row">
+                            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                                <div class="form-group has-success has-feedback">           
+                                  <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-plus-sign">
+                                        </i>
+                                    </span>
+                                    <input type="text" class="form-control" name="scorePlus" value="{{layoutModels.curUser.scorePlus}}">
+                                    </inpput>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="margin-left: 10px">
+                                <div class="form-group has-error has-feedback">
+                                  <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-minus-sign">
+                                        </i>
+                                    </span>
+                                    <input type="text" class="form-control" name="scoreMinus" value="{{layoutModels.curUser.scoreMinus}}">
+                                    </inpput>
+                                  </div>
+                                </div>
+                            </div>
+                        </div
+                    </div>
+              </div>
+          </div>
+    </div>
+    <h1 style="text-align: center;padding-top: 15px"><b>Danh sách phản hồi dành cho bạn</b></h1>
+    <table class="table table-hover table-striped table-bordered">
         <thead>
-            <tr>
+            <tr style="background: #cecece">
                 <th style="width: 30%">Tên sản phẩm</th>
                 <th style="width: 20%">Người đánh giá</th>
                 <th style="width: 5%; text-align: center;">Điểm</th>
@@ -28,7 +84,7 @@
         <tbody>
             {{#each box}}
             <tr>
-                <td><b>{{product.ProName}}</b></td>
+                <td><b><a href="/product/detail/{{product.ProID}}">{{product.ProName}}</a></b></td>
                 <td><a href="/account/profile/{{sender.ID}}">{{sender.Name}}</a></td>
                 <td style="text-align: center;">
                     {{#if isPlus}}
@@ -49,74 +105,7 @@
         </tbody>
     </table>
     {{/if}}
-    <form class="col-xs-12 col-sm-10 col-md-8 col-lg-6" style="margin-bottom: 20px; text-align: center;">
-    <div class="mainbox" id="loginbox">
-        <div class="panel panel-info">
-            <div class="panel-heading ">
-                <div class="panel-title">
-                    Điểm đánh giá
-                </div>
-            </div>
-            <div class="panel-body" style="padding-top:30px;">
-                <div class="form-horizontal col-sm-12" role="form">
-                    <!-- Điểm đánh giá  -->
-                    <div class="row form-horizontal" id="userScore">
-                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                            <label class="control-label">Điểm đánh giá</label>
-                        </div>
-                        <div class="col-sm-9">
-                            <div class="row">
-                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-4">
-                                    <div class="form-group has-success has-feedback">           
-                                      <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="glyphicon glyphicon-plus-sign">
-                                            </i>
-                                        </span>
-                                        <input type="text" class="form-control" name="scorePlus" value="{{layoutModels.curUser.scorePlus}}">
-                                        </inpput>
-                                      </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-4" style="margin-left: 10px">
-                                    <div class="form-group has-error has-feedback">
-                                      <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="glyphicon glyphicon-minus-sign">
-                                            </i>
-                                        </span>
-                                        <input type="text" class="form-control" name="scoreMinus" value="{{layoutModels.curUser.scoreMinus}}">
-                                        </inpput>
-                                      </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-8" style="right: -5px;">
-                                    {{#if canAuction}}
-                                    <div class="progress" title="Điểm >= 0.8 : Bạn có thể tham gia đấu giá ngay bây giờ">
-                                      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{percentScore}}%;">
-                                        {{percentScore}}%
-                                      </div>
-                                    </div>
-                                    {{else}}
-                                    <div class="progress" title="Bạn cần tổng điểm >= 0.8 để được tham gia đấu giá">
-                                      <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{percentScore}}%;">
-                                        {{percentScore}}%
-                                      </div>
-                                    </div>
-                                    {{/if}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End điểm đánh giá -->
-                </div>
-            </div>
-            <!-- {/with} -->
-        </div>
-    </div>
-</form>
+    
 </div>
 {{!-- end body --}}
 
