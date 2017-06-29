@@ -439,5 +439,27 @@ accountRoute.post('/receiveFeedback', restrict, function(req, res) {
         
     });
 });
+accountRoute.get('/feedback', restrict, function(req, res) {
 
+    var box = [];
+    for (var i = 0; i < 6; i++) {
+        var temp = {
+            proName: 'Chưa tìm',
+            senderName: 'Chưa tìm',
+            note: 'Sản phẩm dùng rất tốt và bền theo thời gian',
+            isPlus: true,
+            isMinus: false
+        }
+        box.push(temp);
+    }
+    res.render('account/feedback', {
+        layoutModels: res.locals.layoutModels,
+        box: box,
+        isEmpty: false,
+        canAuction: res.locals.layoutModels.curUser.score >= 0.8,
+        percentScore: res.locals.layoutModels.curUser.score*100,
+        //products: itemProduct,
+        //auctions: data.list,
+    });
+});
 module.exports = accountRoute;
