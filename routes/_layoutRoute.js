@@ -13,6 +13,9 @@ module.exports = function(req, res, next) {
     if (req.session.isCanSale === undefined) {
         req.session.isCanSale = false;
     }
+    if (req.session.numberOfRequests === undefined) {
+        req.session.numberOfRequests = 0;
+    }
 
     Q.all([
         category.loadAll()
@@ -24,6 +27,7 @@ module.exports = function(req, res, next) {
             cartSumQ: cart.sumQ(req.session.cart),
             isAdmin: req.session.isAdmin,
             isCanSale: req.session.isCanSale,
+            numberOfRequests: req.session.numberOfRequests,
         };
 
         next();

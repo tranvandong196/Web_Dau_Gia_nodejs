@@ -247,5 +247,28 @@ exports.changePassword = function(entity){
             deferred.resolve(changedRows);
         });
     });
+
+    return deferred.promise;
+}
+
+exports.updateAccToSeller = function(id){
+    var deferred = Q.defer();
+    var sql = 'update users set Permission = 1 where ID = ' + id;
+    db.update(sql).then(function(changedRows)
+    {
+        deferred.resolve(changedRows);
+    });
+
+    return deferred.promise;
+}
+
+exports.updateAccToAdminator = function(id){
+    var deferred = Q.defer();
+    var sql = 'update users set Permission = 2 where ID = ' + id;
+    db.update(sql).then(function(changedRows)
+    {
+        deferred.resolve(changedRows);
+    });
+
     return deferred.promise;
 }

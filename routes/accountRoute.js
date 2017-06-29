@@ -43,19 +43,24 @@ accountRoute.post('/login', function(req, res) {
     var remember = req.body.remember ? true : false;
 
     account.login(entity)
-        .then(function(user) {
-            if (user === null) {
-                res.render('account/login', {
-                    layoutModels: res.locals.layoutModels,
-                    showError: true,
-                    errorMsg: 'Thông tin đăng nhập không đúng.'
-                });
-            } else {
+    .then(function(user) {
+        if (user === null) {
+            res.render('account/login', {
+                layoutModels: res.locals.layoutModels,
+                showError: true,
+                errorMsg: 'Thông tin đăng nhập không đúng.'
+            });
+        } else {
+            request.loadAll(user.id).then(function(rows){
+                var length = 0;
+                if(rows)
+                    length = rows.length;
                 req.session.isLogged = true;
                 req.session.isCanSale = user.permission >= 1;
                 req.session.isAdmin = user.permission === 2;
                 req.session.user = user;
                 req.session.cart = [];
+                req.session.numberOfRequests = length;
 
                 if (remember === true) {
                     var hour = 1000 * 60 * 60 * 24 * 7;
@@ -68,14 +73,16 @@ accountRoute.post('/login', function(req, res) {
                     url = req.query.retUrl;
                 }
                 res.redirect(url);
-            }
-        });
+            });
+        }
+    });
 });
 
 accountRoute.post('/logout', restrict, function(req, res) {
     req.session.isLogged = false;
     req.session.isAdmin = false;
     req.session.isCanSale = false;
+    req.session.numberOfRequests = 0;
     req.session.user = null;
     req.session.cart = null;
     req.session.cookie.expires = new Date(Date.now() - 1000);
@@ -144,8 +151,7 @@ accountRoute.post('/register', function(req, res) {
                   from: 'dgnhanh@gmail.com',
                   to: entity.email,
                   subject: 'Đăng ký tài khoản',
-                  text: 'Chúc mừng, bạn đã đăng ký tài khoản trên daugianhanh.com.vn thành công. Username: '
-                   + entity.username + ' password: ' + req.body.rawPWD,
+                  text: 'Chúc mừng, bạn đã đăng ký tài khoản trên daugianhanh.com.vn thành công. Username: ' + entity.username + ' password: ' + req.body.rawPWD,
             };
             transporter.sendMail(mail, function(error, info){
             if (error) {
@@ -347,17 +353,80 @@ accountRoute.get('/manageCategories', restrict, function(req, res) {
 
 accountRoute.get('/manageRequests', restrict, function(req, res) {
     var user = [];
-    for (var i = 0; i < 6; i++) {
-         var temp = {
-             id: 1,
-             name: 'Chưa xử lí'
+    request.loadAll().then(function(rows){
+        if(rows)
+        {
+            var box = [];
+            var promise = [];
+            rows.forEach( function(element, index) {
+                var tmp = {
+                    id: element.UserID,
+                    name: "Không rõ",
+                };
+                box.push(tmp);
+                promise.push(account.load(element.UserID));
+            });
+            Q.all(promise).then(function(rs){
+                box.forEach( function(element, index) {
+                    element.name = rs[index].Name;
+                });
+                res.render('account/manageRequests', {
+                    layoutModels: res.locals.layoutModels,
+                    users: box,
+                    isEmpty: box.length === 0,
+                });
+            });
         }
-        user.push(temp);
-    }
-    res.render('account/manageRequests', {
-        layoutModels: res.locals.layoutModels,
-        users: user,
-        isEmpty: user.length === 0
+        else
+            res.redirect("/home");
+    });
+});
+
+accountRoute.get('/manageRequests/accept/:id', restrict, function(req, res) {
+    var id = req.params.id;
+    request.delete(id).then(function(affectedRows){
+        account.updateAccToSeller(id).then(function(changedRows){
+            account.load(id).then(function(user){
+                var mail = {
+                  from: 'dgnhanh@gmail.com',
+                  to: user.Email,
+                  subject: 'Nâng cấp tài khoản',
+                  text: 'Chúc mừng, yêu cầu của bạn đã được chấp nhận. Tài khoản ' + user.Username + ' của bạn trên daugianhanh.com.vn đã được nâng cấp thành tài khoản bán.',
+                };
+                transporter.sendMail(mail, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent to: ' + user.Email);
+                    }
+                });
+                req.session.numberOfRequests = res.locals.layoutModels.numberOfRequests - 1;
+                res.redirect('/account/manageRequests');
+            });
+        });
+    });
+});
+
+accountRoute.get('/manageRequests/refuse/:id', restrict, function(req, res) {
+    var id = req.params.id;
+    request.delete(id).then(function(affectedRows){
+        account.load(id).then(function(user){
+            var mail = {
+              from: 'dgnhanh@gmail.com',
+              to: user.Email,
+              subject: 'Nâng cấp tài khoản',
+              text: 'Rất tiếc, yêu cầu của bạn đã bị từ chối. Tài khoản ' + user.Username + ' của bạn trên daugianhanh.com.vn chưa được nâng cấp thành tài khoản bán.',
+            };
+            transporter.sendMail(mail, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent to: ' + user.Email);
+                }
+            });
+            req.session.numberOfRequests = res.locals.layoutModels.numberOfRequests - 1;
+            res.redirect('/account/manageRequests');
+        });
     });
 });
 
@@ -506,6 +575,7 @@ accountRoute.get('/feedback', restrict, function(req, res) {
 
 accountRoute.get('/reqUpAccount', restrict, function(req, res){
     request.insert(res.locals.layoutModels.curUser.id).then(function(insertId){
+        req.session.numberOfRequests = res.locals.layoutModels.numberOfRequests + 1;
         res.redirect("/account/profile/" + res.locals.layoutModels.curUser.id);
     });
 });
