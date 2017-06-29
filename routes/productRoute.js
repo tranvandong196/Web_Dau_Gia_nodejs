@@ -1,6 +1,7 @@
 var express = require('express');
 var product = require('../models/product');
 var auction = require('../models/auction');
+var blacklist = require('../models/blacklist');
 var moment = require('moment');
 var productRoute = express.Router();
 var category = require('../models/category');
@@ -163,21 +164,33 @@ productRoute.get('/detail/:id', function(req, res) {
                                 {
                                     handlePrice.Name = handlePrice.Name[0] + '****' + handlePrice.Name[handlePrice.Name.length - 1];
                                 }
-                                res.render('product/detail', {
-                                    layoutModels: res.locals.layoutModels,
-                                    product: pro,
-                                    isPermit: score > x && solder.ID !== user.id,
-                                    isAlive: pro.State === 'đang đấu giá',
-                                    isEnd: pro.State === 'đã kết thúc',
-                                    handlePrice: handlePrice,
-                                    solder: solder,
-                                    curPrice: curPrice,
-                                    indexs: indexs,
-                                    history: history,
-                                    proID: req.params.id,
-                                    isLoved: isLoved,
-                                    isSolder: solder.ID === user.id,
-                                    hasPrice2Buy: pro.PriceToBuy !== -1,
+                                blacklist.loadByProID(pro.ProID).then(function(rows){
+                                    var inBlackList = false;
+                                    if(rows)
+                                    {
+                                        rows.forEach( function(element, index) {
+                                            if(element.AuctorID === user.id)
+                                            {
+                                                inBlackList = true;
+                                            }
+                                        });
+                                    }
+                                    res.render('product/detail', {
+                                        layoutModels: res.locals.layoutModels,
+                                        product: pro,
+                                        isPermit: score > x && solder.ID !== user.id && inBlackList == false,
+                                        isAlive: pro.State === 'đang đấu giá',
+                                        isEnd: pro.State === 'đã kết thúc',
+                                        handlePrice: handlePrice,
+                                        solder: solder,
+                                        curPrice: curPrice,
+                                        indexs: indexs,
+                                        history: history,
+                                        proID: req.params.id,
+                                        isLoved: isLoved,
+                                        isSolder: solder.ID === user.id,
+                                        hasPrice2Buy: pro.PriceToBuy !== -1,
+                                    });
                                 });
                             });
 
@@ -222,7 +235,7 @@ productRoute.get('/detail/:id', function(req, res) {
                             res.render('product/detail', {
                                 layoutModels: res.locals.layoutModels,
                                 product: pro,
-                                isPermit: score > x,
+                                isPermit: false,
                                 isAlive: pro.State === 'đang đấu giá',
                                 isEnd: pro.State === 'đã kết thúc',
                                 handlePrice: handlePrice,

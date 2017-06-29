@@ -3,49 +3,52 @@
 {{/section}}
 
 {{#section 'js'}}
-    <script type="text/javascript">
-        $('.removeUser').on('click', function() {
-            var id = $(this).data('id');
-            $('#txtRemoveUserID').val(id);
-            $('#frmRemoveUsers').submit();
-        });
-    </script>
+    // <script type="text/javascript">
+    //     $('.removeUser').on('click', function() {
+    //         var id = $(this).data('id');
+    //         $('#txtRemoveUserID').val(id);
+    //         $('#frmRemoveUsers').submit();
+    //     });
+    // </script>
 {{/section}}
 
 {{!-- body --}}
 <div style="padding-right: 50px">
 {{#if isEmpty }}
     <div class="alert alert-danger" role="alert">Không có lượt đấu giá nào cho sản phẩm này! 
-  <a href="/product/detail/{{ProID}}" class="alert-link"> Trở về</a>
+  <a href="/product/detail/{{product.ProID}}" class="alert-link"> Trở về</a>
 </div>
 {{/if}}
-<h1>Lịch sử đấu giá cho sản phẩm: <a href="/product/detail/{{ProID}}">{{proName}}</a></h1>
-<form method="post" action="Chưa có" id="frmRemoveUsers">
-    <input type="hidden" name="userID" id="txtRemoveUserID">
-    <input type="hidden" name="proID" id="txtFromProID" value="{{ProID}}">
-</form>
+<h3>Lịch sử đấu giá cho sản phẩm: <a href="/product/detail/{{product.ProID}}">{{product.ProName}}</a></h3>
 <table class="table table-hover table-striped table-bordered" style="max-width: 1000px;">
     <thead>
         <tr>
             <th style="max-width: 50px">Thời điểm</th>
-            <th style="max-width: 30px">Người ra giá</th>
-            <th style="max-width: 100px">Giá</th>
-            <th style="max-width: 5px; text-align: center;">Kích</th>
+            <th style="max-width: 50px">Người ra giá</th>
+            <th style="max-width: 50px">Giá đưa ra</th>
+            {{#if isSolder}}
+            <th style="max-width: 30px; text-align: center;">Kích</th>
+            {{/if}}
         </tr>
     </thead>
     <tbody>
-        
+        {{#each box}}
         <tr>
-            <td>{{Time}}</td>
-            <td>{{Name}}</td>
-            <td>{{Price}}</td>
-            <td style="max-width: 5px;text-align: center;">
-                <a href="javascript:;" class="btn btn-xs btn-danger removeUser" data-id="{{ID}}" title="Kích người mua ra khỏi sản phẩm">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <td>{{item.Date}}</td>
+            {{#if ../isSolder}}
+            <td><a href="/account/profile/{{auctor.ID}}">{{auctor.Name}}</a></td>
+            {{else}}
+            <td>{{auctor.Name}}</td>
+            {{/if}}
+            <td>{{formatNumber item.Price}} đ</td>
+            {{#if ../isSolder}}
+            <td style="max-width: 20px;text-align: center;">
+                <a href="/auction/history?proID={{item.ProID}}&auctorID={{auctor.ID}}" class="btn btn-xs btn-danger removeUser" data-id="{{auctor.ID}}" title="Kích người mua ra khỏi sản phẩm"><span class="glyphicon glyphicon-remove"></span>
                 </a>
             </td>
+            {{/if}}
         </tr>
-        
+        {{/each}}
     </tbody>
 </table>
 </div>

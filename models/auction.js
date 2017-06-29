@@ -20,13 +20,13 @@ exports.insert = function(entity) {
     return deferred.promise;
 }
 
-exports.deleteByUserID = function(id) {
+exports.deleteAuctorFromProduct = function(entity) {
 
     var deferred = Q.defer();
 
     var sql =
         mustache.render(
-            'delete from auctions where UserID = ' + id,
+            'delete from auctions where UserID = {{auctorID}} && ProID = {{proID}}',
             entity
         );
 
@@ -37,22 +37,39 @@ exports.deleteByUserID = function(id) {
     return deferred.promise;
 }
 
-exports.deleteByProID = function(id) {
+// exports.deleteByUserID = function(id) {
 
-    var deferred = Q.defer();
+//     var deferred = Q.defer();
 
-    var sql =
-        mustache.render(
-            'delete from auctions where ProID = ' + id,
-            entity
-        );
+//     var sql =
+//         mustache.render(
+//             'delete from auctions where UserID = ' + id,
+//             entity
+//         );
 
-    db.delete(sql).then(function(affectedRows) {
-        deferred.resolve(affectedRows);
-    });
+//     db.delete(sql).then(function(affectedRows) {
+//         deferred.resolve(affectedRows);
+//     });
 
-    return deferred.promise;
-}
+//     return deferred.promise;
+// }
+
+// exports.deleteByProID = function(id) {
+
+//     var deferred = Q.defer();
+
+//     var sql =
+//         mustache.render(
+//             'delete from auctions where ProID = ' + id,
+//             entity
+//         );
+
+//     db.delete(sql).then(function(affectedRows) {
+//         deferred.resolve(affectedRows);
+//     });
+
+//     return deferred.promise;
+// }
 
 exports.findHandlePrice = function(ProID) {
 
@@ -87,12 +104,28 @@ exports.findMaxPrice = function(ProID) {
     return deferred.promise;
 }
 
-exports.loadAllAuctionByProID = function(ProID) {
+exports.loadAllAuctorByProID = function(ProID) {
 
     var deferred = Q.defer();
 
     var sql =
             'select * from users where ID in (select UserID from auctions where ProID = ' + ProID + ')';
+
+    db.load(sql).then(function(rows) {
+        if(rows)
+            deferred.resolve(rows);
+        else
+            deferred.resolve(null); 
+    });
+    return deferred.promise;
+}
+
+exports.loadAllAuctionByProID = function(ProID) {
+
+    var deferred = Q.defer();
+
+    var sql =
+            'select * from auctions where ProID = ' + ProID;
 
     db.load(sql).then(function(rows) {
         if(rows)

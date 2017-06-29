@@ -1,11 +1,14 @@
 var express = require('express');
 var moment = require('moment');
 
+var account = require('../models/account');
 var product = require('../models/product');
 var auction = require('../models/auction');
+var blacklist = require('../models/blacklist');
 var cart = require('../models/cart');
 var restrict = require('../middle-wares/restrict');
 var fs = require('fs');
+var Q = require('q');
 
 var currencyFormatter = require('currency-formatter');
 var auctionRoute = express.Router();
@@ -54,11 +57,6 @@ auctionRoute.post('/add', restrict, function(req, res) {
                     amount: pro.Price,
                 };
                 cart.add(req.session.cart, item);
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log('Email sent: ' + info.response);
-                }
             }
             var name = res.locals.layoutModels.curUser.username;
             var tmp = '';
@@ -110,7 +108,7 @@ auctionRoute.post('/add', restrict, function(req, res) {
                                     console.log('Email sent to: ' + solder.Email);
                                     }
                                 });
-                                auction.findAllAuctionByProID(pro.ProID).then(function(rs){
+                                auction.findAllAuctorByProID(pro.ProID).then(function(rs){
                                     if(rs)
                                     {
                                         rs.forEach( function(element, index) {
@@ -206,12 +204,80 @@ auctionRoute.post('/checkout', restrict, function(req, res) {
      });
     });
 });
+
+auctionRoute.get('/history/:id', restrict, function(req, res) {
+    var proID = req.params.id;
+    var isSolder = false;
+    var curUser = res.locals.layoutModels.curUser;
+    product.findSolder(proID).then(function(solder){
+        if(solder.ID === curUser.id)
+        {
+            isSolder = true;
+        }
+        var box = [];
+        var promise = [];
+        auction.loadAllAuctionByProID(proID).then(function(rs){
+            rs.forEach( function(element, index) {
+                element.Date = moment(element.Date).format('LLL');
+                var tmp = {
+                    item: element,
+                    auctor: null,
+                }
+                box.push(tmp);
+                promise.push(account.load(element.UserID));
+            });
+            Q.all(promise).then(function(rs){
+                rs.forEach( function(element, index) {
+                    if(!isSolder)
+                    {
+                        element.Name = element.Name[0] + '****' + element.Name[element.Name.length - 1];
+                    }
+                    box[index].auctor = element;
+                });
+                product.loadDetail(proID).then(function(pro){
+                    res.render('auction/history', {
+                        layoutModels: res.locals.layoutModels,
+                        isEmpty: box.length == 0,
+                        box: box,
+                        isSolder: isSolder,
+                        product: pro,
+                    });
+                });
+            });
+        });
+    });
+});
+
 auctionRoute.get('/history', restrict, function(req, res) {
-    res.render('auction/history', {
-        layoutModels: res.locals.layoutModels,
-        isEmpty: true,
-        //products: itemProduct,
-        //auctions: data.list,
+    var proID = req.query.proID;
+    var auctorID = req.query.auctorID;
+    var curUser = res.locals.layoutModels.curUser;
+    var entity = {
+        proID: proID,
+        auctorID: auctorID,
+    };
+    blacklist.insert(entity).then(function(insertId){
+        auction.deleteAuctorFromProduct(entity).then(function(affectedRows){
+            account.load(auctorID).then(function(user){
+                product.loadDetail(proID).then(function(pro){
+                    var mail = {
+                      from: 'dgnhanh@gmail.com',
+                      to: user.Email,
+                      subject: 'Đấu giá sản phẩm',
+                      text: 'Rất tiêc, bạn đã bị kick ra khỏi phiên đấu giá sản phẩm ' + pro.ProName
+                       + '. Bạn sẽ không thể đấu giá sản phẩm này trong tương lai.',
+                    };
+                    transporter.sendMail(mail, function(error, info){
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email sent to: ' + user.Email);
+                        }
+                    });
+                    res.redirect('/auction/history/' + proID);
+                });
+            });
+        });
     });
 });
 module.exports = auctionRoute;
