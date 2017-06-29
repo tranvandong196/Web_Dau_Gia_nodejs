@@ -23,8 +23,8 @@
 <table class="table table-hover table-striped table-bordered" style="max-width: 1000px;">
     <thead>
         <tr>
-            <th style="max-width: 50px">Thời điểm</th>
-            <th style="max-width: 50px">Người ra giá</th>
+        <th style="max-width: 50px">Người ra giá</th>
+            <th style="max-width: 30px">Thời điểm</th>
             <th style="max-width: 50px">Giá đưa ra</th>
             {{#if isSolder}}
             <th style="max-width: 30px; text-align: center;">Kích</th>
@@ -34,12 +34,16 @@
     <tbody>
         {{#each box}}
         <tr>
-            <td>{{item.Date}}</td>
             {{#if ../isSolder}}
             <td><a href="/account/profile/{{auctor.ID}}">{{auctor.Name}}</a></td>
             {{else}}
+            {{#if isMyName }}
+            <td style="background-color: #483D8B; color: #00FFFF"><b>Tôi</b></td>
+            {{else}}
             <td>{{auctor.Name}}</td>
             {{/if}}
+            {{/if}}
+            <td>{{item.Date}}</td>
             <td>{{formatNumber item.Price}} đ</td>
             {{#if ../isSolder}}
             <td style="max-width: 20px;text-align: center;">

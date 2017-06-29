@@ -222,17 +222,19 @@ auctionRoute.get('/history/:id', restrict, function(req, res) {
                 var tmp = {
                     item: element,
                     auctor: null,
+                    isMyName: false,
                 }
                 box.push(tmp);
                 promise.push(account.load(element.UserID));
             });
             Q.all(promise).then(function(rs){
                 rs.forEach( function(element, index) {
-                    if(!isSolder)
+                    if(!isSolder && element.ID !== curUser.id)
                     {
                         element.Name = element.Name[0] + '****' + element.Name[element.Name.length - 1];
                     }
                     box[index].auctor = element;
+                    box[index].isMyName = element.ID === curUser.id;
                 });
                 product.loadDetail(proID).then(function(pro){
                     res.render('auction/history', {
