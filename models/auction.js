@@ -86,3 +86,19 @@ exports.findMaxPrice = function(ProID) {
     });
     return deferred.promise;
 }
+
+exports.loadAllAuctionByProID = function(ProID) {
+
+    var deferred = Q.defer();
+
+    var sql =
+            'select * from users where ID in (select UserID from auctions where ProID = ' + ProID + ')';
+
+    db.load(sql).then(function(rows) {
+        if(rows)
+            deferred.resolve(rows);
+        else
+            deferred.resolve(null); 
+    });
+    return deferred.promise;
+}

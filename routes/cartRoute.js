@@ -32,22 +32,6 @@ cartRoute.post('/add', restrict, function(req, res) {
     });
 });
 
-cartRoute.post('/add1', restrict, function(req, res) {
-    product.loadDetail(req.body.proId).then(function(pro) {
-        var item = {
-            product: {
-                ProID: pro.ProID,
-                ProName: pro.ProName,
-                Price: pro.Price,
-            },
-            quantity: 1,
-            amount: pro.Price
-        };
-        cart.add(req.session.cart, item);
-        res.redirect('/product/byCat/' + req.body.catId);
-    });
-});
-
 cartRoute.post('/remove', restrict, function(req, res) {
     var proId = +req.body.proId;
     cart.remove(req.session.cart, proId);

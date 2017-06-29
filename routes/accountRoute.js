@@ -6,6 +6,15 @@ var restrict = require('../middle-wares/restrict');
 var account = require('../models/account');
 var product = require('../models/product');
 var feedback = require('../models/feedback');
+var nodemailer = require('nodemailer');
+
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'dgnhanh@gmail.com',
+    pass: 'dgn123456'
+  }
+});
 var accountRoute = express.Router();
 
 accountRoute.get('/login', function(req, res) {
@@ -97,41 +106,57 @@ accountRoute.post('/register', function(req, res) {
     };
 
     account.insert(entity)
-        .then(function(insertId) {
-            if(insertId === -3)
-            {
-                res.render('account/register', {
-                    layoutModels: res.locals.layoutModels,
-                    showMsg: true,
-                    error: true,
-                    msg: 'Tên đăng nhập đã có người sử dụng.',
-                });
-            }
-            else if(insertId === -2)
-            {
-                res.render('account/register', {
-                    layoutModels: res.locals.layoutModels,
-                    showMsg: true,
-                    error: true,
-                    msg: 'Email này đã có người sử dụng.',
-                });
-            }
-            else if(insertId === -1)
-            {
-                res.render('account/register', {
-                    layoutModels: res.locals.layoutModels,
-                    showMsg: true,
-                    error: true,
-                    msg: 'Địa chỉ này đã có người sử dụng.',
-                });
-            }
-            else
-                res.render('account/register', {
-                    layoutModels: res.locals.layoutModels,
-                    showMsg: true,
-                    error: false,
-                    msg: 'Đăng ký thành công.',
-        });
+    .then(function(insertId) {
+        if(insertId === -3)
+        {
+            res.render('account/register', {
+                layoutModels: res.locals.layoutModels,
+                showMsg: true,
+                error: true,
+                msg: 'Tên đăng nhập đã có người sử dụng.',
+            });
+        }
+        else if(insertId === -2)
+        {
+            res.render('account/register', {
+                layoutModels: res.locals.layoutModels,
+                showMsg: true,
+                error: true,
+                msg: 'Email này đã có người sử dụng.',
+            });
+        }
+        else if(insertId === -1)
+        {
+            res.render('account/register', {
+                layoutModels: res.locals.layoutModels,
+                showMsg: true,
+                error: true,
+                msg: 'Địa chỉ này đã có người sử dụng.',
+            });
+        }
+        else
+        {
+            var mail = {
+                  from: 'dgnhanh@gmail.com',
+                  to: entity.email,
+                  subject: 'Đăng ký tài khoản',
+                  text: 'Chúc mừng, bạn đã đăng ký tài khoản trên daugianhanh.com.vn thành công. Username: '
+                   + entity.username + ' password: ' + req.body.rawPWD,
+            };
+            transporter.sendMail(mail, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent to: ' + entity.email);
+                }
+            });
+            res.render('account/register', {
+                layoutModels: res.locals.layoutModels,
+                showMsg: true,
+                error: false,
+                msg: 'Đăng ký thành công.',
+            });
+        }
     });
 });
 
@@ -237,6 +262,19 @@ accountRoute.post('/changePassword', restrict, function(req, res) {
         }
         else
         {
+            var mail = {
+                  from: 'dgnhanh@gmail.com',
+                  to: res.locals.layoutModels.curUser.email,
+                  subject: 'Đổi mật khẩu',
+                  text: 'Chúc mừng, bạn đã đổi mật khẩu thành công. Password mới: ' + req.body.rawPWDnew1,
+            };
+            transporter.sendMail(mail, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent to: ' + res.locals.layoutModels.curUser.email);
+                }
+            });
             res.render('account/changePassword', {
                 layoutModels: res.locals.layoutModels,
                 showMsg: true,
@@ -300,7 +338,22 @@ accountRoute.get('/manageRequests', restrict, function(req, res) {
 accountRoute.get('/resetPW/:id', restrict, function(req, res) {
     var id = req.params.id;
     account.resetPW(id).then(function(changedRows){
-        res.redirect('/account/manageUsers');
+        account.load(id).then(function(user){
+            var mail = {
+                  from: 'dgnhanh@gmail.com',
+                  to: user.Email,
+                  subject: 'Đổi mật khẩu',
+                  text: 'Xin chào, Mật khẩu của bạn đã được reset trên daugianhanh.com.vn. Password mới: 123456',
+            };
+            transporter.sendMail(mail, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent to: ' + user.Email);
+                }
+            });
+            res.redirect('/account/manageUsers');
+        });
     });
 });
 

@@ -46,7 +46,11 @@ Không có sản phẩm!
                     <div class="caption">
                         <a href="/product/detail/{{data.item.ProID}}"><h4>{{data.item.ProName}}</h4></a>
                         <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/price-icon.png" title="Giá" width="25" height="25">&nbsp;&nbsp;{{formatNumber data.item.Price}} vnđ</h4>
+                        {{#if data.hasPrice2Buy}}
                         <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/PriceToBuy.png" title="Giá mua ngay" width="25" height="25">&nbsp;&nbsp;{{formatNumber data.item.PriceToBuy}} vnđ</h4>
+                        {{else}}
+                        <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/PriceToBuy.png" title="Giá mua ngay" width="25" height="25">&nbsp;&nbsp;Không có</h4>
+                        {{/if}}
                         <h4>&nbsp;&nbsp;&nbsp;<img src="/images/others/Quantity-icon.png" title="Tồn kho" width="25" height="25">&nbsp;&nbsp;{{data.item.Quantity}}</h4>
                         <p>&nbsp;&nbsp;&nbsp;<img src="/images/others/Comment-Describe-icon.png" title="Mổ tả ngắn gọn" width="25" height="25">&nbsp;&nbsp;
                         {{data.item.TinyDes}}

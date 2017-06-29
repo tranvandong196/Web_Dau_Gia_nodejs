@@ -20,13 +20,6 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-var mailSuccessAuction = {
-  from: 'dgnhanh@gmail.com',
-  to: 'tmpdat1206@gmail.com',
-  subject: 'Kết quả đấu giá sản phẩm.',
-  text: 'Sản phẩm đã được đấu giá xong!'
-};
-
 // transporter.sendMail(mailSuccessAuction, function(error, info){
 //   if (error) {
 //     console.log(error);
@@ -45,10 +38,10 @@ auctionRoute.post('/add', restrict, function(req, res) {
             proID: req.body.proID,
             date: now,
         };
+        var price2Buy = -1;
+        if(pro.PriceToBuy)
+            price2Buy = pro.PriceToBuy;
         auction.insert(entity).then(function(insertId){
-            var price2Buy = -1;
-            if(pro.PriceToBuy)
-                price2Buy = pro.PriceToBuy;
             if(price2Buy !== -1 && req.body.price >= price2Buy)
             {
                 var item = {
@@ -61,13 +54,11 @@ auctionRoute.post('/add', restrict, function(req, res) {
                     amount: pro.Price,
                 };
                 cart.add(req.session.cart, item);
-                transporter.sendMail(mailSuccessAuction, function(error, info){
                 if (error) {
                     console.log(error);
                 } else {
                     console.log('Email sent: ' + info.response);
-                    }
-                }); 
+                }
             }
             var name = res.locals.layoutModels.curUser.username;
             var tmp = '';
@@ -87,28 +78,102 @@ auctionRoute.post('/add', restrict, function(req, res) {
             });
             auction.findHandlePrice(pro.ProID).then(function(user){
                 product.updateHandlePrice(pro.ProID, user.ID).then(function(changedRows){
-                    product.updateState(pro.ProID, 'Đã kết thúc').then(function(changedRows){
-                        res.redirect('/product/detail/' + req.body.proID);
-                    });
+                    if(price2Buy !== -1 && req.body.price >= price2Buy)
+                    {
+                        product.updateState(pro.ProID, 'Đã kết thúc').then(function(changedRows){
+                            //gửi cho người thắng
+                            var mail = {
+                              from: 'dgnhanh@gmail.com',
+                              to: user.Email,
+                              subject: 'Đấu giá thắng',
+                              text: 'Chúc mừng, bạn đã đấu giá thành công sản phẩm ' + pro.ProName + ' với giá ' + req.body.price + 'đồng',
+                            };
+                            transporter.sendMail(mail, function(error, info){
+                            if (error) {
+                                console.log(error);
+                            } else {
+                                console.log('Email sent to: ' + user.Email);
+                                }
+                            });
+                            product.findSolder(pro.ProID).then(function(solder){
+                                //gửi cho người bán
+                                mail = {
+                                  from: 'dgnhanh@gmail.com',
+                                  to: solder.Email,
+                                  subject: 'Đấu giá xong',
+                                  text: 'Xin chào, ' + user.Username + ' đã đấu giá thành công sản phẩm ' + pro.ProName + ' của bạn với giá ' + req.body.price + 'đồng',
+                                };
+                                transporter.sendMail(mail, function(error, info){
+                                if (error) {
+                                    console.log(error);
+                                } else {
+                                    console.log('Email sent to: ' + solder.Email);
+                                    }
+                                });
+                                auction.findAllAuctionByProID(pro.ProID).then(function(rs){
+                                    if(rs)
+                                    {
+                                        rs.forEach( function(element, index) {
+                                            if(element.ID !== user.ID)
+                                            {
+                                                mail = {
+                                                  from: 'dgnhanh@gmail.com',
+                                                  to: element.Email,
+                                                  subject: 'Đấu giá kết thúc',
+                                                  text: 'Xin chào, ' + user.Username + ' đã đấu giá thành công sản phẩm ' + pro.ProName 
+                                                  + ' mà bạn đã tham gia đấu giá. Sản phẩm được bán với giá là ' + req.body.price + 'đồng',
+                                                };
+                                                transporter.sendMail(mail, function(error, info){
+                                                if (error) {
+                                                    console.log(error);
+                                                } else {
+                                                    console.log('Email sent to: ' + element.Email);
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                    res.redirect('/product/detail/' + req.body.proID);
+                                }); 
+                            });
+                        });
+                    }
+                    else
+                    {
+                        var mail = {
+                          from: 'dgnhanh@gmail.com',
+                          to: user.Email,
+                          subject: 'Đặt giá thành công',
+                          text: 'Bạn đã đấu giá sản phẩm ' + pro.ProName + ' với giá ' + req.body.price + 'đồng',
+                        };
+                        transporter.sendMail(mail, function(error, info){
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log('Email sent to: ' + user.Email);
+                            }
+                        });
+                        product.findSolder(pro.ProID).then(function(solder){
+                            //gửi cho người bán
+                            mail = {
+                              from: 'dgnhanh@gmail.com',
+                              to: solder.Email,
+                              subject: 'Sản phẩm được đấu giá',
+                              text: 'Xin chào, ' + user.Username + ' đã đấu giá sản phẩm ' + pro.ProName + ' của bạn với giá ' + req.body.price + 'đồng',
+                            };
+                            transporter.sendMail(mail, function(error, info){
+                            if (error) {
+                                console.log(error);
+                            } else {
+                                console.log('Email sent to: ' + solder.Email);
+                                }
+                            });
+                            res.redirect('/product/detail/' + req.body.proID);
+                        });
+                    }
                 });
             });
         });
-    });
-});
-
-auctionRoute.post('/add1', restrict, function(req, res) {
-    product.loadDetail(req.body.proId).then(function(pro) {
-        var item = {
-            product: {
-                ProID: pro.ProID,
-                ProName: pro.ProName,
-                Price: pro.Price,
-            },
-            quantity: 1,
-            amount: pro.Price
-        };
-        cart.add(req.session.cart, item);
-        res.redirect('/product/byCat/' + req.body.catId);
     });
 });
 
