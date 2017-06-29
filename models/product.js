@@ -124,7 +124,6 @@ exports.insert = function(entity) {
             'insert into products (ProName, TinyDes, FullDes, Price, CatID, Quantity, UserID, TimeUp, TimeDown, DeltaPrice) values ("{{proName}}", "{{tinyDes}}", "{{fullDes}}",{{price}}, {{catID}}, {{quantity}}, {{userID}}, "{{timeUp}}", "{{timeDown}}", {{deltaPrice}})',
             entity        
         );
-    console.log(sql);
     db.insert(sql).then(function(insertId) {
         deferred.resolve(insertId);
     });
@@ -182,7 +181,6 @@ exports.loadPageByFavorite = function(userid, limit, offset) {
             total: totalRow[0].total,
             list: rows
         }
-        console.log("[Product] Da lay danh sach yeu thich userID: " + userid + ", SoLuong = " + rows.length)
         deferred.resolve(data);
     });
     

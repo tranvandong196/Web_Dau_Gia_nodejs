@@ -113,39 +113,54 @@ exports.load = function(id) {
 }
 
 // score là 1 hoặc là -1
-exports.updateScore = function(id, score){
+exports.updateScore = function(id, score, oldScore){
     var deferred = Q.defer();
 
     var sql = 'select * from users where ID = ' + id;
-    var plus;
-    var minus;
+    var plus = 1;
+    var minus = 1;
     db.load(sql).then(function(rows) {
         if (rows[0]) {
-            plus = rows[0].ScorePlus + 1;
-            minus = rows[0].ScoreMinus + 1;
-        } else {
-            score = 0;
+            plus = rows[0].ScorePlus;
+            minus = rows[0].ScoreMinus;
         }
-    });
-    var sql;
-    if(score === 1)
-    {
-        sql = 'update users set SocrePlus = ' + plus + ' where ID = ' + id;
-        minus = minus - 1;
-    }
-    else
-    {
-        sql = 'update users set SocreMinus = ' + minus + ' where ID = ' + id;
-        plus = plus - 1;
-    }
-     db.update(sql).then(function(changedRows){
-        var score = plus / (plus + minus);
-        sql = 'update users set Socre = ' + score + ' where ID = ' + id;
+        if(score == 1)
+        {
+            if(oldScore == -1)
+            {
+                plus = plus + 1;
+                minus = minus - 1;
+            }
+            else
+            {
+                plus = plus + 1;
+            }
+            sql = 'update users set ScorePlus = ' + plus + ', ScoreMinus = ' + minus + ' where ID = ' + id;
+        }
+        else
+        {
+           if(oldScore == 1)
+            {
+                plus = plus - 1;
+                minus = minus + 1;
+            }
+            else
+            {
+                minus = minus + 1;
+            }
+            sql = 'update users set ScorePlus = ' + plus + ', ScoreMinus = ' + minus + ' where ID = ' + id;
+        }
         db.update(sql).then(function(changedRows){
-            deferred.resolve(changedRows);
+            var score = parseFloat(plus) / parseFloat(plus + minus);
+            score = score.toFixed(2);
+            sql = 'update users set Score = ' + score + ' where ID = ' + id;
+            db.update(sql).then(function(changedRows){
+                deferred.resolve(changedRows);
+            });
+            
         });
-        
     });
+    
 
     return deferred.promise;
 }
@@ -182,7 +197,6 @@ exports.resetPW = function(id){
 exports.changeProfile = function(entity){
     var deferred = Q.defer();
     var sql = mustache.render('select * from users where ID != {{id}}', entity);
-    console.log(entity.dOB);
     db.load(sql).then(function(rows)
     {
         var email = mustache.render('{{email}}', entity);

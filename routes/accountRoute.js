@@ -4,7 +4,8 @@ var moment = require('moment');
 var category = require('../models/category');
 var restrict = require('../middle-wares/restrict');
 var account = require('../models/account');
-
+var product = require('../models/product');
+var feedback = require('../models/feedback');
 var accountRoute = express.Router();
 
 accountRoute.get('/login', function(req, res) {
@@ -287,12 +288,12 @@ accountRoute.get('/manageCategories', restrict, function(req, res) {
 accountRoute.get('/manageRequests', restrict, function(req, res) {
     category.loadAll().then(function(rows){
         res.render('account/manageRequests', {
-        layoutModels: res.locals.layoutModels,
-        categories: rows,
-        showMsg: false,
-        error: false,
-        msg: '',
-    });
+            layoutModels: res.locals.layoutModels,
+            categories: rows,
+            showMsg: false,
+            error: false,
+            msg: '',
+        });
     });
 });
 
@@ -300,6 +301,89 @@ accountRoute.get('/resetPW/:id', restrict, function(req, res) {
     var id = req.params.id;
     account.resetPW(id).then(function(changedRows){
         res.redirect('/account/manageUsers');
+    });
+});
+
+accountRoute.post('/receiveScore', restrict, function(req, res) {
+    var proID = req.body.proID;
+    var score = req.body.giveScore;
+    var sender = res.locals.layoutModels.curUser;
+    var receiverID;
+    product.loadDetail(proID).then(function(pro){
+        var redirect = '/product/';
+        if(sender.id === pro.UserID)
+        {
+            redirect = redirect + 'bySold';
+            receiverID = pro.HandleID;
+        }
+        else{
+            redirect = redirect + 'byBasket';
+            receiverID = pro.UserID;
+        }
+        var entity = {
+            proID: proID,
+            receiverID: receiverID,
+            senderID: sender.id,
+            score: score,
+        };
+        feedback.isGaveScore(entity).then(function(oldScore){
+            if(oldScore == score)
+            {
+                res.redirect(redirect);
+                return;
+            }
+            account.updateScore(receiverID, score, oldScore).then(function(changedRows){
+                feedback.insert(entity, oldScore).then(function(insertId){
+                    res.redirect(redirect);
+                });
+            });
+        });
+        
+    });
+});
+
+accountRoute.post('/receiveFeedback', restrict, function(req, res) {
+    var proID = req.body.proID;
+    var comment = req.body.comment;
+    var sender = res.locals.layoutModels.curUser;
+    var receiverID;
+    product.loadDetail(proID).then(function(pro){
+        var redirect = '/product/';
+        if(sender.id == pro.UserID)
+        {
+            redirect = redirect + 'bySold';
+            receiverID = pro.HandleID;
+        }
+        else{
+            redirect = redirect + 'byBasket';
+            receiverID = pro.UserID;
+        }
+        var entity = {
+            proID: proID,
+            receiverID: receiverID,
+            senderID: sender.id,
+            comment: comment,
+        };
+        feedback.isGaveComment(entity).then(function(rs){
+            feedback.isGaveScore(entity).then(function(oldScore){
+                if(oldScore == -2)
+                {
+                    console.log('Thêm nhận xét.')
+                    feedback.insertComment(entity).then(function(changedRows){
+                        res.redirect(redirect);
+                    });
+                }
+                else
+                {
+                    console.log('Cập nhật nhận xét.')
+                    feedback.updateComment(entity).then(function(changedRows){
+                        res.redirect(redirect);
+                    });
+                }
+               
+            });
+        });
+        
     });
 });
 

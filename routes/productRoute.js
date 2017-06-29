@@ -11,6 +11,7 @@ var thumb = require('node-thumbnail').thumb;
 var favorite = require('../models/favorite');
 var Q = require('q');
 var moment = require('moment');
+var feedback = require('../models/feedback');
 
 productRoute.get('/byCat/:id', function(req, res) {
     var rec_per_page = 6;
@@ -1074,27 +1075,58 @@ productRoute.get('/byBasket', function(req, res) {
                 isActive: i === +curPage
             });
         }
-        var box = [];   
+        var box = [];
+        var promise = [];
         for (var i = 0; i < data.list.length; i++) {
-            var temp = {
+             var temp = {
                 product: data.list[i],
-                canGiveScore_comment_toSeller: true
+                canGiveScore_comment_toSeller: true,
+                isGaveScore: false,
+                isPlus: false,
+                isGaveComment: false,
             }
+            var entity = {
+                proID: data.list[i].ProID,
+                receiverID: data.list[i].UserID,
+                senderID: data.list[i].HandleID,
+            };
+            promise.push(feedback.isGaveScore(entity));
+            promise.push(feedback.isGaveComment(entity));
             box.push(temp);
         }
-        res.render('product/byUser', {
-            layoutModels: res.locals.layoutModels,
-            box: box,
-            total: data.total,
-            isEmpty: data.total === 0,
-            catId: req.params.id,
-            Tile: 'Sản phẩm thắng đấu giá - giỏ hàng',
-            pages: pages,
-            curPage: curPage,
-            prevPage: curPage - 1,
-            nextPage: curPage + 1,
-            showPrevPage: curPage > 1,
-            showNextPage: curPage < number_of_pages - 1,
+        Q.all(promise).then(function(rs){
+            var k = 0;
+            box.forEach( function(element, index) {
+                if(rs[k] == 1)
+                {
+                    element.isGaveScore = true;
+                    element.isPlus = true;
+                }
+                else if(rs[k] == -1)
+                {
+                    element.isGaveScore = true;
+                    element.isPlus = false;
+                }
+                if(rs[k + 1])
+                {
+                    element.isGaveComment = true;
+                }
+                k = k + 2;
+            });
+            res.render('product/byUser', {
+                layoutModels: res.locals.layoutModels,
+                box: box,
+                total: data.total,
+                isEmpty: data.total === 0,
+                catId: req.params.id,
+                Tile: 'Sản phẩm thắng đấu giá - giỏ hàng',
+                pages: pages,
+                curPage: curPage,
+                prevPage: curPage - 1,
+                nextPage: curPage + 1,
+                showPrevPage: curPage > 1,
+                showNextPage: curPage < number_of_pages - 1,
+            });
         });
     });
 });
@@ -1153,7 +1185,6 @@ productRoute.get('/bySold', function(req, res) {
     if (res.locals.layoutModels.isLogged)
         userIDcurrent = res.locals.layoutModels.curUser.id;
     product.loadPageBySold(userIDcurrent, rec_per_page, offset).then(function(data) {
-        console.log("[ProductRoute] Da lay danh sach SP dang ban: SoLuong = " + data.list.length)
         var number_of_pages = data.total / rec_per_page;
         if (data.total % rec_per_page > 0) {
             number_of_pages++;
@@ -1167,26 +1198,57 @@ productRoute.get('/bySold', function(req, res) {
             });
         }
         var box = [];   
+        var promise = [];
         for (var i = 0; i < data.list.length; i++) {
             var temp = {
                 product: data.list[i],
-                canGiveScore_comment_toBuyer: true
+                canGiveScore_comment_toBuyer: true,
+                isGaveScore: false,
+                isPlus: false,
+                isGaveComment: false,
             }
+            var entity = {
+                proID: data.list[i].ProID,
+                receiverID: data.list[i].HandleID,
+                senderID: data.list[i].UserID,
+            };
+            promise.push(feedback.isGaveScore(entity));
+            promise.push(feedback.isGaveComment(entity));
             box.push(temp);
         }
-        res.render('product/byUser', {
-            layoutModels: res.locals.layoutModels,
-            box: box,
-            total: data.total,
-            isEmpty: data.total === 0,
-            catId: req.params.id,
-            Tile: 'Sản phẩm đang bán',
-            pages: pages,
-            curPage: curPage,
-            prevPage: curPage - 1,
-            nextPage: curPage + 1,
-            showPrevPage: curPage > 1,
-            showNextPage: curPage < number_of_pages - 1,
+        Q.all(promise).then(function(rs){
+            var k = 0;
+            box.forEach( function(element, index) {
+                if(rs[k] == 1)
+                {
+                    element.isGaveScore = true;
+                    element.isPlus = true;
+                }
+                else if(rs[k] == -1)
+                {
+                    element.isGaveScore = true;
+                    element.isPlus = false;
+                }
+                if(rs[k + 1])
+                {
+                    element.isGaveComment = true;
+                }
+                k = k + 2;
+            });
+            res.render('product/byUser', {
+                layoutModels: res.locals.layoutModels,
+                box: box,
+                total: data.total,
+                isEmpty: data.total === 0,
+                catId: req.params.id,
+                Tile: 'Sản phẩm đã bán',
+                pages: pages,
+                curPage: curPage,
+                prevPage: curPage - 1,
+                nextPage: curPage + 1,
+                showPrevPage: curPage > 1,
+                showNextPage: curPage < number_of_pages - 1,
+            });
         });
     });
 });
