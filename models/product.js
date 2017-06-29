@@ -446,9 +446,7 @@ exports.loadWonList = function(userID){
     if(userID)
     {
         var sql = 'select * from products where State <> "đang đấu giá" and HandleID = ' + userID;
-        console.log(sql);
         db.load(sql).then(function(rows) {
-            console.log(rows);
             deferred.resolve(rows);
         });
     }

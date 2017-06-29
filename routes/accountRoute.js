@@ -5,6 +5,7 @@ var category = require('../models/category');
 var restrict = require('../middle-wares/restrict');
 var account = require('../models/account');
 var product = require('../models/product');
+var request = require('../models/request');
 var feedback = require('../models/feedback');
 var nodemailer = require('nodemailer');
 var Q = require('q');
@@ -51,7 +52,7 @@ accountRoute.post('/login', function(req, res) {
                 });
             } else {
                 req.session.isLogged = true;
-                req.session.isCanSale = user.permission === 1;
+                req.session.isCanSale = user.permission >= 1;
                 req.session.isAdmin = user.permission === 2;
                 req.session.user = user;
                 req.session.cart = [];
@@ -174,14 +175,22 @@ accountRoute.get('/profile/:id', restrict, function(req, res) {
                     isCanSale = user.Score >= 0.8 && rows.length > 2;
                 }
                 user.DOB = moment(user.DOB).format('l');
-                res.render('account/profile', {
-                    layoutModels: res.locals.layoutModels,
-                    percentScore: user.Score*100,
-                    canAuction: user.Score >= 0.8,
-                    isCanSale: isCanSale,
-                    user: user,
-                    isMyProfile: user.ID === res.locals.layoutModels.curUser.id,
-                    isTrashAccount: user === null,
+                request.loadByID(user.ID).then(function(row){
+                    var isWaitingForAccept = false;
+                    if(row)
+                    {
+                        isWaitingForAccept = true;
+                    }
+                    res.render('account/profile', {
+                        layoutModels: res.locals.layoutModels,
+                        percentScore: user.Score*100,
+                        canAuction: user.Score >= 0.8,
+                        isCanSale: isCanSale,
+                        isWaitingForAccept: isWaitingForAccept,
+                        user: user,
+                        isMyProfile: user.ID === res.locals.layoutModels.curUser.id,
+                        isTrashAccount: user === null,
+                    });
                 });
             });
         }
@@ -191,7 +200,8 @@ accountRoute.get('/profile/:id', restrict, function(req, res) {
                 layoutModels: res.locals.layoutModels,
                 percentScore: 0,
                 canAuction: false,
-                isCanUpAccountToSale: false,
+                isCanSale: false,
+                isWaitingForAccept: false,
                 user: user,
                 isMyProfile: false,
                 isTrashAccount: true,
@@ -492,7 +502,7 @@ accountRoute.get('/feedback', restrict, function(req, res) {
 
 accountRoute.get('/reqUpAccount', restrict, function(req, res){
     request.insert(res.locals.layoutModels.curUser.id).then(function(insertId){
-        res.redirect('/account/profile/' + id);
+        res.redirect("/account/profile/" + res.locals.layoutModels.curUser.id);
     });
 });
 

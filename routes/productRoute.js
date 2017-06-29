@@ -1240,7 +1240,6 @@ productRoute.get('/bySold', function(req, res) {
         }
         Q.all(promise).then(function(rs){
             var k = 0;
-            console.log(rs);
                 box.forEach( function(element, index) {
                 if(rs[k] == 1)
                 {

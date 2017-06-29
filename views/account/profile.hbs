@@ -233,13 +233,21 @@
                                 <a  id="changePassword" href="/account/changePassword">
                                     Đổi mật khẩu
                                 </a>
+                                {{#if layoutModels.isCanSale}}
+                                {{else}}
                                 {{#if isCanSale}}
+                                {{#if isWaitingForAccept}}
+                                <span class="glyphicon glyphicon-option-vertical"></span>
+                                Đã gửi yêu cầu nâng cấp tài khoản.
+                                {{else}}
                                 <span class="glyphicon glyphicon-option-vertical"></span>
                                 <a  id="requestUpAccountToSale" href="/account/reqUpAccount">
                                     Yêu cầu nâng cấp tài khoản
                                 </a>
                                 {{/if}}
-
+                                {{/if}}
+                                {{/if}}
+                                {{/if}}
                             </div>
                         </div>
                     </div>
