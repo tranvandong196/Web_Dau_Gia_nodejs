@@ -346,14 +346,18 @@ accountRoute.get('/manageCategories', restrict, function(req, res) {
 });
 
 accountRoute.get('/manageRequests', restrict, function(req, res) {
-    category.loadAll().then(function(rows){
-        res.render('account/manageRequests', {
-            layoutModels: res.locals.layoutModels,
-            categories: rows,
-            showMsg: false,
-            error: false,
-            msg: '',
-        });
+    var user = [];
+    for (var i = 0; i < 6; i++) {
+         var temp = {
+             id: 1,
+             name: 'Chưa xử lí'
+        }
+        user.push(temp);
+    }
+    res.render('account/manageRequests', {
+        layoutModels: res.locals.layoutModels,
+        users: user,
+        isEmpty: user.length === 0
     });
 });
 
