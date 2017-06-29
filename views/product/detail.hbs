@@ -25,17 +25,6 @@ Chi tiết sản phẩm
 
 </script>
 <script type="text/javascript">
-    $('#img2').on('click', function() {
-        $('#img0').attr('src', $('#img2').attr('src'));
-    });
-    $('#img1').on('click', function() {
-        $('#img0').attr('src', $('#img1').attr('src'));
-    });
-    $('#img3').on('click', function() {
-        $('#img0').attr('src', $('#img3').attr('src'));
-    });
-</script>
-<script type="text/javascript">
     $('#btnDG').on('click', function () {
         var rs = confirm('Bạn có chắc ra giá sản phẩm này với giá là ' + $('#txtQ').val() + ' không?');
         if(rs === true)
@@ -74,6 +63,53 @@ Chi tiết sản phẩm
       $('#btn_edit').show();
       $('#frmEdit').submit();
     });
+    //$('#imgSmall1').show();
+    //$('#imgSmall2').show();
+    //$('#imgSmall3').show();
+    var stt = 1;
+    $(document).ready(function(){
+        $(".switchImage").click(function(){
+            var imgSmallOld = "#imgSmall" + stt;
+            $(imgSmallOld).css('border', ""); 
+            stt = $(this).data('id');
+            var newSrcImg = "/images/{{product.ProID}}/" + stt + ".jpg";
+             $('#img0').attr('src',newSrcImg);
+
+            var imgSmallNew = "#imgSmall" + stt;
+            $(imgSmallNew).css('border', "solid 2px red");
+        });
+        $("#PrevIndexImg").click(function(){
+            var imgSmallOld = "#imgSmall" + stt;
+            $('#img0').animate({opacity: '0.6'}, "fast");
+            if (stt - 1 < 1){
+                stt = {{indexs.length}};
+            } else {
+                stt = stt - 1;
+            }
+            var imgSmallNew = "#imgSmall" + stt;
+            var newSrcImg = "/images/{{product.ProID}}/" + stt + ".jpg";
+            $('#img0').attr('src',newSrcImg);
+             $('#img0').animate({opacity: '1.0'}, "fast");
+            $(imgSmallOld).css('border', ""); 
+            $(imgSmallNew).css('border', "solid 2px red"); 
+        });
+        $("#NextIndexImg").click(function(){
+            var imgSmallOld = "#imgSmall" + stt;
+            $('#img0').animate({opacity: '0.6'}, "fast");
+
+             if (stt + 1 > {{indexs.length}}){
+                stt = 1;
+            } else {
+                stt = stt + 1;
+            }
+            var imgSmallNew = "#imgSmall" + stt;
+            var newSrcImg = "/images/{{product.ProID}}/" + stt + ".jpg";
+             $('#img0').attr('src',newSrcImg);
+             $('#img0').animate({opacity: '1.0'}, "fast");
+             $(imgSmallOld).css('border', ""); 
+            $(imgSmallNew).css('border', "solid 2px red"); 
+        });
+    });
 </script>
 {{/section}}
 
@@ -81,20 +117,34 @@ Chi tiết sản phẩm
 <div class="col-md-12" style="right: 10px">
     <div class="thumbnail" style="min-height: 130px;">
         <div class="row">
-            <div class="col-md-5 picture">
-                <div class="row" style="max-height: 500px ; max-width: 440px; min-height: 500px; min-width: 440px; margin-left: 10px">
-                    <img  src="/images/{{ProID}}/1.jpg" id="img0" class="img-rounded" alt="..." style="max-height: 500px; max-width: 440px"/>
+            <div class="col-md-5" data-id="{{../indexs.stt}}">
+                <!-- Slideshow Picture -->
+                <div class="row" style="text-align: center;height: 500px">
+                <div class="col-md-12 col-lg-12">
+                    <img  src="/images/{{ProID}}/1.jpg" id="img0" class="img-rounded" alt="..." style="max-height: 500px; max-width: 410px"/>
                 </div>
-                <div class="row" style="margin-top: 10px;">
-                    <div class="col-sm-2">
-                        
-                    </div>
-                    {{#each ../indexs}}
-                    <div class="col-sm-2">
-                        <img src="/images/{{../../proID}}/{{stt}}.jpg" id="img{{stt}}" class="img-rounded" alt="..." height="50" width="50"/>
-                    </div>
-                    {{/each}}
                 </div>
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-sm-1" style="margin-top: 10px"></div>
+                    <div class="col-sm-5" style="text-align: center;">
+                        <button id="PrevIndexImg" type="button" class="btn btn-default" style="margin-top: 5px">❮ Prev</button>
+                    </div>
+                    <div class="col-sm-5" style="text-align: center;">
+                        <button id="NextIndexImg" type="button" class="btn btn-default" style="margin-top: 5px">Next ❯</button>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px; text-align: center;">
+                    <div class="col-sm-1"></div>
+                    <div class="row col-sm-10" style="margin-left: 0px;">
+                        {{#each ../indexs}}
+                        <div class="col-sm-2 switchImage" data-id="{{stt}}" style="margin-bottom: 10px;text-align: center;">
+                            <img src="/images/{{../../proID}}/{{stt}}.jpg" id="imgSmall{{stt}}" class="img-rounded" alt="..." height="50" width="50"  />
+                        </div>
+                        {{/each}}
+                    </div>
+                    <div class="col-sm-1"></div>
+                </div>
+                <!-- END Slideshow Picture -->
             </div>
             <div class="col-md-7">
                 <!-- Thông tin chung -->
@@ -259,9 +309,6 @@ Chi tiết sản phẩm
 {{/with}}
 {{#section 'css'}}
 <style type="text/css">
-    @alert-message-background: @brand-info;
-    .picture {
-        background-color: @alert-message-background;
-    }
+    <link href="/assests/otherCSS/w3.css" rel="stylesheet"/>
 </style>
 {{/section}}
