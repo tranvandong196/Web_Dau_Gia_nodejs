@@ -231,6 +231,7 @@ productRoute.get('/detail/:id', function(req, res) {
                                 indexs: indexs,
                                 history: history,
                                 proID: req.params.id,
+                                hasPrice2Buy: pro.PriceToBuy !== -1,
 
                                 isLoved: false,
                                 hasPrice2Buy: pro.PriceToBuy !== -1,
@@ -460,6 +461,7 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
             var tmp = {
                 item: null,
                 isNew: false,
+                hasPrice2Buy: true,
             }
             var d = Date.now() - products[i].TimeUp;
             var diffMinutes = parseInt(d / (1000 * 60));
@@ -468,6 +470,7 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                 tmp.isNew = true;
             }
             tmp.item = products[i];
+            tmp.hasPrice2Buy = products[i].PriceToBuy !== null;
             list.push(tmp);
             if(i === offset + 5)
             {
@@ -599,6 +602,7 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
             var tmp = {
                 item: null,
                 isNew: false,
+                hasPrice2Buy: true,
             }
             var d = Date.now() - products[i].TimeUp;
             var diffMinutes = parseInt(d / (1000 * 60));
@@ -607,6 +611,7 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                 tmp.isNew = true;
             }
             tmp.item = products[i];
+            tmp.hasPrice2Buy = products[i].PriceToBuy !== null;
             list.push(tmp);
             if(i === offset + 5)
             {
@@ -728,6 +733,7 @@ productRoute.post('/search', function(req, res) {
         var tmp = {
             item: null,
             isNew: false,
+            hasPrice2Buy: true,
         }
         var d = Date.now() - products[i].TimeUp;
         var diffMinutes = parseInt(d / (1000 * 60));
@@ -736,6 +742,7 @@ productRoute.post('/search', function(req, res) {
             tmp.isNew = true;
         }
         tmp.item = products[i];
+        tmp.hasPrice2Buy = products[i].PriceToBuy !== null;
         list.push(tmp);
         if(i === offset + 5)
         {
@@ -857,6 +864,7 @@ productRoute.get('/search', function(req, res) {
         var tmp = {
             item: null,
             isNew: false,
+            hasPrice2Buy: true,
         }
         var d = Date.now() - products[i].TimeUp;
         var diffMinutes = parseInt(d / (1000 * 60));
@@ -865,6 +873,7 @@ productRoute.get('/search', function(req, res) {
             tmp.isNew = true;
         }
         tmp.item = products[i];
+        tmp.hasPrice2Buy = products[i].PriceToBuy !== null;
         list.push(tmp);
         if(i === offset + 5)
         {
