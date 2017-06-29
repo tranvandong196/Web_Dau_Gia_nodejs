@@ -30,8 +30,8 @@ exports.delete = function(entity) {
             entity
         );
 
-    db.insert(sql).then(function(insertId) {
-        deferred.resolve(insertId);
+    db.delete(sql).then(function(affectedRows) {
+        deferred.resolve(affectedRows);
     });
 
     return deferred.promise;

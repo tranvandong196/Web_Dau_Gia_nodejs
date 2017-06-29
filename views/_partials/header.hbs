@@ -50,9 +50,11 @@
                                 Xin chào, <b>{{ layoutModels.curUser.name }}</b> <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
+                                {{#if layoutModels.isCanSale}}
                                 <li><a id="upProduct" href="/product/add">Đăng sản phẩm</a></li>
                                 <li><a id="ProductAuction" href="/product/byOnSale">Sản phẩm đang bán</a></li>
                                 <li><a id="ProductAuction" href="/product/bySold">Sản phẩm đã bán</a></li>
+                                {{/if}}
                                 <li><a id="ProductFavorite" href="/product/byFavorite">Sản phẩm yêu thích</a></li>
                                 <li><a id="ProductAuction" href="/product/byAuction">S.phẩm đang t.gia đấu giá</a></li>
                                 {{#if layoutModels.isAdmin }}
@@ -111,32 +113,27 @@
                     <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
                         <a href="/home/gioi-thieu">
                             <i style="margin-right: 5px; font-size: 17px; top: -1px">
-                            </i>
-                            <span style="color: #282525">
+                            <span class="glyphicon glyphicon-comment"></span>
                                 Giới thiệu
-                            </span>
+                            </i>
                         </a>
                     </li>
                     <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
                         <a href="/home/hoi-dap">
                             <i style="margin-right: 5px; font-size: 17px; top: -1px">
-                            </i>
-                            <span style="color: #282525">
                                 <span class="glyphicon glyphicon-triangle-right">
                                 </span>
                                 Hỏi đáp
-                            </span>
+                            </i>
                         </a>
                     </li>
                     <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
                         <a href="/home/lien-he">
                             <i style="margin-right: 5px; font-size: 17px; top: -1px">
-                            </i>
-                            <span style="color: #282525">
                                 <span class="glyphicon glyphicon-earphone">
                                 </span>
                                 Liên hệ
-                            </span>
+                            </i>
                         </a>
                     </li>
                 </ul>

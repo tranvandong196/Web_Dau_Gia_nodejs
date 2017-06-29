@@ -10,6 +10,9 @@ module.exports = function(req, res, next) {
     if (req.session.isAdmin === undefined) {
         req.session.isAdmin = false;
     }
+    if (req.session.isCanSale === undefined) {
+        req.session.isCanSale = false;
+    }
 
     Q.all([
         category.loadAll()
@@ -20,6 +23,7 @@ module.exports = function(req, res, next) {
             curUser: req.session.user,
             cartSumQ: cart.sumQ(req.session.cart),
             isAdmin: req.session.isAdmin,
+            isCanSale: req.session.isCanSale,
         };
 
         next();

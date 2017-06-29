@@ -440,3 +440,22 @@ exports.updateFullDes = function(entity){
 
     return deferred.promise;
 }
+
+exports.loadWonList = function(userID){
+    var deferred = Q.defer();
+    if(userID)
+    {
+        var sql = 'select * from products where State <> "đang đấu giá" and HandleID = ' + userID;
+        console.log(sql);
+        db.load(sql).then(function(rows) {
+            console.log(rows);
+            deferred.resolve(rows);
+        });
+    }
+    else
+    {
+        deferred.resolve(null);
+    }
+
+    return deferred.promise;
+}
