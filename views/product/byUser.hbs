@@ -70,26 +70,12 @@
 {{#if isEmpty }}
 Không có sản phẩm!
 {{else}}
-<form id="frmAddToCart" method="post" action="/cart/add1">
-    <input type="hidden" id="txtP" name="proId" />
-</form>
+
 <form method="post" action="/account/receiveScore" id="frmGiveScore">
     <input type="hidden" name="giveScore" id="txtgiveScore">
     <input type="hidden" name="proID" id="txtProID">
 </form>
-<!-- Thông báo gửi thành công/thất bại -->
-{{#if resultSendComment}}
-    {{#if sendCommentSuccess}}
-    <div class="alert alert-success" role="alert" id="feedFeedbackSuccess">
-      Gửi đánh giá thành công!
-    </div>
-    {{else}}
-    <div class="alert alert-danger" role="alert" id="feedFeedbackFailed"> Gửi nhận xét cho {{userName}} ({{productName}}) thất bại!
-      <!-- <a href="#" class="alert-link" id="sendAgain">Gửi lại</a> -->
-    </div>
-    {{/if}}
-{{/if}}
-<!-- END Thông báo gửi thành công/thất bại -->
+
 <h4>{{Tile}} <span class="badge">{{total}}</span></h4>
 <div class="row">
     <input type="hidden" id="txtname" value="{{name}}"/>

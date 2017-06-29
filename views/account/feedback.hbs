@@ -15,21 +15,21 @@
       <a href="/home" class="alert-link"> Trở về</a>
     </div>
     {{else}}
-    <h1>Danh sách phản hồi cho bạn</h1>
+    <h1>Danh sách phản hồi dành cho bạn</h1>
     <table class="table table-hover table-striped table-bordered" style="max-width: 1000px;">
         <thead>
             <tr>
                 <th style="width: 30%">Tên sản phẩm</th>
-                <th style="width: 20%">Người gửi</th>
+                <th style="width: 20%">Người đánh giá</th>
                 <th style="width: 5%; text-align: center;">Điểm</th>
-                <th style="width: 45%">Ghi chú</th>
+                <th style="width: 45%">Nhận xét</th>
             </tr>
         </thead>
         <tbody>
             {{#each box}}
             <tr>
-                <td><b>{{proName}}</b></td>
-                <td>{{senderName}}</td>
+                <td><b>{{product.ProName}}</b></td>
+                <td><a href="/account/profile/{{sender.ID}}">{{sender.Name}}</a></td>
                 <td style="text-align: center;">
                     {{#if isPlus}}
                     <div class="btn btn-xs btn-success" title="Bạn được cộng 1 điểm">

@@ -119,3 +119,18 @@ exports.isGaveComment = function(entity){
    });
     return deferred.promise;
 }
+
+exports.loadByReceiverID = function(recID){
+    var deferred = Q.defer();
+    var sql = 'select * from feedbacks where ReceiverID = ' + recID;
+    db.load(sql).then(function(rows){
+        if(!rows)
+        {
+            deferred.resolve(null);
+        }
+        else {
+            deferred.resolve(rows);
+        }
+    });
+    return deferred.promise;
+}

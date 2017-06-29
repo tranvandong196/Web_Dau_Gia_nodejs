@@ -1240,7 +1240,8 @@ productRoute.get('/bySold', function(req, res) {
         }
         Q.all(promise).then(function(rs){
             var k = 0;
-            box.forEach( function(element, index) {
+            console.log(rs);
+                box.forEach( function(element, index) {
                 if(rs[k] == 1)
                 {
                     element.isGaveScore = true;

@@ -57,7 +57,6 @@ exports.loadDetail = function(id) {
             deferred.resolve(null);
         }
     });
-
     return deferred.promise;
 }
 
@@ -376,7 +375,10 @@ exports.updateHandlePrice = function(ProID, UserID){
     }
     else
     {
-        deferred.resolve(0);
+        var sql = 'update products set HandleID = NULL where ProID = ' + ProID;
+        db.update(sql).then(function(changedRows){
+            deferred.resolve(changedRows);
+        });
     }
 
     return deferred.promise;

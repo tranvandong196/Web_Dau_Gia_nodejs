@@ -7,6 +7,7 @@ var account = require('../models/account');
 var product = require('../models/product');
 var feedback = require('../models/feedback');
 var nodemailer = require('nodemailer');
+var Q = require('q');
 
 var transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -440,26 +441,41 @@ accountRoute.post('/receiveFeedback', restrict, function(req, res) {
     });
 });
 accountRoute.get('/feedback', restrict, function(req, res) {
-
-    var box = [];
-    for (var i = 0; i < 6; i++) {
-        var temp = {
-            proName: 'Chưa tìm',
-            senderName: 'Chưa tìm',
-            note: 'Sản phẩm dùng rất tốt và bền theo thời gian',
-            isPlus: true,
-            isMinus: false
+    var curUser = res.locals.layoutModels.curUser;
+    feedback.loadByReceiverID(curUser.id).then(function(rows){
+        var promise = [];
+        var box = [];
+        if(rows)
+        {
+            rows.forEach( function(element, index) {
+                var temp = {
+                    product: 'Chưa tìm',
+                    sender: 'Chưa tìm',
+                    note: element.Note,
+                    isPlus: element.Score == 1,
+                    isMinus: element.Score == -1
+                }
+                box.push(temp);
+                promise.push(product.loadDetail(element.ProID));
+                promise.push(account.load(element.SenderID));
+            });
         }
-        box.push(temp);
-    }
-    res.render('account/feedback', {
-        layoutModels: res.locals.layoutModels,
-        box: box,
-        isEmpty: false,
-        canAuction: res.locals.layoutModels.curUser.score >= 0.8,
-        percentScore: res.locals.layoutModels.curUser.score*100,
-        //products: itemProduct,
-        //auctions: data.list,
+
+        Q.all(promise).then(function(rs){
+            var k = 0;
+            box.forEach( function(element, index) {
+                element.product = rs[k];
+                element.sender = rs[k + 1];
+                k += 2;
+            });
+            res.render('account/feedback', {
+                layoutModels: res.locals.layoutModels,
+                box: box,
+                isEmpty: box.length == 0,
+                canAuction: curUser.score >= 0.8,
+                percentScore: curUser.score*100,
+            });
+        });
     });
 });
 module.exports = accountRoute;
