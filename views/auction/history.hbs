@@ -27,7 +27,9 @@
             <th style="max-width: 30px">Thời điểm</th>
             <th style="max-width: 50px">Giá đưa ra</th>
             {{#if isSolder}}
+            {{#if isAlive}}
             <th style="max-width: 30px; text-align: center;">Kích</th>
+            {{/if}}
             {{/if}}
         </tr>
     </thead>
@@ -46,10 +48,12 @@
             <td>{{item.Date}}</td>
             <td>{{formatNumber item.Price}} đ</td>
             {{#if ../isSolder}}
+            {{#if ../isAlive}}
             <td style="max-width: 20px;text-align: center;">
                 <a href="/auction/history?proID={{item.ProID}}&auctorID={{auctor.ID}}" class="btn btn-xs btn-danger removeUser" data-id="{{auctor.ID}}" title="Kích người mua ra khỏi sản phẩm"><span class="glyphicon glyphicon-remove"></span>
                 </a>
             </td>
+            {{/if}}
             {{/if}}
         </tr>
         {{/each}}

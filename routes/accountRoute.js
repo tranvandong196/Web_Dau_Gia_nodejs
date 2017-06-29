@@ -63,7 +63,7 @@ accountRoute.post('/login', function(req, res) {
                 req.session.numberOfRequests = length;
 
                 if (remember === true) {
-                    var hour = 1000 * 60 * 60 * 24 * 7;
+                    var hour = 1000 * 60 * 60 * 24;
                     req.session.cookie.expires = new Date(Date.now() + hour);
                     req.session.cookie.maxAge = hour;
                 }
@@ -178,7 +178,7 @@ accountRoute.get('/profile/:id', restrict, function(req, res) {
                 var isCanSale = false;
                 if(rows)
                 {
-                    isCanSale = user.Score >= 0.8 && rows.length > 2;
+                    isCanSale = user.Score >= 0.8 && rows.length >= 10;
                 }
                 user.DOB = moment(user.DOB).format('l');
                 request.loadByID(user.ID).then(function(row){

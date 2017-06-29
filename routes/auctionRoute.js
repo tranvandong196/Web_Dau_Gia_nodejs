@@ -175,36 +175,6 @@ auctionRoute.post('/add', restrict, function(req, res) {
     });
 });
 
-// auctionRoute.post('/remove', restrict, function(req, res) {
-//     var proId = +req.body.proId;
-//     cart.remove(req.session.cart, proId);
-//     res.redirect('/cart');
-// });
-
-// auctionRoute.post('/update', restrict, function(req, res) {
-//     var proId = +req.body.proId;
-//     var quantity = +req.body.quantity;
-//     cart.update(req.session.cart, proId, quantity);
-//     res.redirect('/cart');
-// });
-
-// auctionRoute.post('/checkout', restrict, function(req, res) {
-//     var entity = {
-//         OrderDate: moment().format('YYYY-MM-DDTHH:mm'),
-//         UserID: req.session.user.id,
-//         Total: req.body.total
-//     };
-
-//     order.insert(entity)
-//     .then(function(orderId) {
-//         detail.insertAll(req.session.cart, orderId)
-//         .then(function(idList) {
-//          req.session.cart = [];
-//          res.redirect('/cart');
-//      });
-//     });
-// });
-
 auctionRoute.get('/history/:id', restrict, function(req, res) {
     var proID = req.params.id;
     var isSolder = false;
@@ -243,6 +213,7 @@ auctionRoute.get('/history/:id', restrict, function(req, res) {
                         box: box,
                         isSolder: isSolder,
                         product: pro,
+                        isAlive: pro.State === "đang đấu giá",
                     });
                 });
             });
@@ -258,12 +229,16 @@ auctionRoute.get('/history', restrict, function(req, res) {
         proID: proID,
         auctorID: auctorID,
     };
-    blacklist.insert(entity).then(function(insertId){
+    product.loadDetail(proID).then(function(pro){
+        if(pro.State !== 'đang đấu giá')
+        {
+            res.redirect('/auction/history/' + proID);
+            return;
+        }
         auction.deleteAuctorFromProduct(entity).then(function(affectedRows){
             account.load(auctorID).then(function(user){
-                product.loadDetail(proID).then(function(pro){
+                blacklist.insert(entity).then(function(insertId){
                     auction.findHandlePrice(pro.ProID).then(function(rs){
-                        console.log(user);
                         var uID = null;
                         if(rs)
                             uID = rs.ID;
