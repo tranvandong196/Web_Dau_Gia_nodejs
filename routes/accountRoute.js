@@ -51,7 +51,8 @@ accountRoute.post('/login', function(req, res) {
                 });
             } else {
                 req.session.isLogged = true;
-                req.session.isAdmin = (user.permission === 1);
+                req.session.isCanSale = user.permission === 1;
+                req.session.isAdmin = user.permission === 2;
                 req.session.user = user;
                 req.session.cart = [];
 
@@ -73,6 +74,7 @@ accountRoute.post('/login', function(req, res) {
 accountRoute.post('/logout', restrict, function(req, res) {
     req.session.isLogged = false;
     req.session.isAdmin = false;
+    req.session.isCanSale = false;
     req.session.user = null;
     req.session.cart = null;
     req.session.cookie.expires = new Date(Date.now() - 1000);
@@ -165,14 +167,22 @@ accountRoute.get('/profile/:id', restrict, function(req, res) {
     account.load(req.params.id).then(function(user){
         if(user)
         {
-            user.DOB = moment(user.DOB).format('l');
-            res.render('account/profile', {
-                layoutModels: res.locals.layoutModels,
-                percentScore: user.Score*100,
-                canAuction: user.Score >= 0.8,
-                user: user,
-                isMyProfile: user.ID === res.locals.layoutModels.curUser.id,
-                isTrashAccount: user === null,
+            product.loadWonList(user.ID).then(function(rows){
+                var isCanSale = false;
+                if(rows)
+                {
+                    isCanSale = user.Score >= 0.8 && rows.length > 2;
+                }
+                user.DOB = moment(user.DOB).format('l');
+                res.render('account/profile', {
+                    layoutModels: res.locals.layoutModels,
+                    percentScore: user.Score*100,
+                    canAuction: user.Score >= 0.8,
+                    isCanSale: isCanSale,
+                    user: user,
+                    isMyProfile: user.ID === res.locals.layoutModels.curUser.id,
+                    isTrashAccount: user === null,
+                });
             });
         }
         else
@@ -181,6 +191,7 @@ accountRoute.get('/profile/:id', restrict, function(req, res) {
                 layoutModels: res.locals.layoutModels,
                 percentScore: 0,
                 canAuction: false,
+                isCanUpAccountToSale: false,
                 user: user,
                 isMyProfile: false,
                 isTrashAccount: true,
@@ -482,4 +493,11 @@ accountRoute.get('/feedback', restrict, function(req, res) {
         });
     });
 });
+
+accountRoute.get('/reqUpAccount', restrict, function(req, res){
+    request.insert(res.locals.layoutModels.curUser.id).then(function(insertId){
+        res.redirect('/account/profile/' + id);
+    });
+});
+
 module.exports = accountRoute;

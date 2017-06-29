@@ -50,9 +50,11 @@
                                 Xin chào, <b>{{ layoutModels.curUser.name }}</b> <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
+                                {{#if layoutModels.isCanSale}}
                                 <li><a id="upProduct" href="/product/add">Đăng sản phẩm</a></li>
                                 <li><a id="ProductAuction" href="/product/byOnSale">Sản phẩm đang bán</a></li>
                                 <li><a id="ProductAuction" href="/product/bySold">Sản phẩm đã bán</a></li>
+                                {{/if}}
                                 <li><a id="ProductFavorite" href="/product/byFavorite">Sản phẩm yêu thích</a></li>
                                 <li><a id="ProductAuction" href="/product/byAuction">S.phẩm đang t.gia đấu giá</a></li>
                                 {{#if layoutModels.isAdmin }}
