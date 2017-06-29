@@ -5,7 +5,7 @@
             <div class="row" style="top: 15px">
                 <!-- Logo và thanh tìm kiến -->
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                    <a href="/home" title="Đấu giá nhanh"><img src="/images/Others/daugialogo.png" style="height: 80px;margin-left: 5px; margin-top: 10px"></a>
+                    <a href="/home" title="Đấu giá nhanh"><img src="/images/Others/daugialogo.png" style="height: 100px;margin-left: 10px; margin-top: 11px"></a>
                 </div>
                 <div class="col-sm-6">
                     <div class="panel panel-default" style="background-color: #CCCCCC">
@@ -54,20 +54,17 @@
                                 <li><a id="ProductAuction" href="/product/byOnSale">Sản phẩm đang bán</a></li>
                                 <li><a id="ProductAuction" href="/product/bySold">Sản phẩm đã bán</a></li>
                                 <li><a id="ProductFavorite" href="/product/byFavorite">Sản phẩm yêu thích</a></li>
-                                <li><a id="ProductAuction" href="/product/byAuction">Sản phẩm đang tham gia đấu giá</a></li>
+                                <li><a id="ProductAuction" href="/product/byAuction">S.phẩm đang t.gia đấu giá</a></li>
                                 {{#if layoutModels.isAdmin }}
                                 <li role="separator" class="divider"></li>
                                 <li><a id="manageCategories" href="/account/manageRequests">Duyệt yêu cầu</a></li>
                                 <li><a id="manageCategories" href="/account/manageCategories">Quản lý danh mục</a></li>
                                 <li><a id="manaUsers" href="/account/manageUsers">Quản lý người dùng</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="/account/profile/{{layoutModels.curUser.id}}">Thông tin cá nhân</a></li>
-                                <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
-                                {{else}}
-                                <li role="separator" class="divider"></li>
-                                <li><a href="/account/profile/{{layoutModels.curUser.id}}">Thông tin cá nhân</a></li>
-                                <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
                                 {{/if}}
+                                <li role="separator" class="divider"></li>
+                                <li><a href="/account/feedback">Đánh giá từ người mua</a></li>
+                                <li><a href="/account/profile/{{layoutModels.curUser.id}}">Thông tin cá nhân</a></li>
+                                <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
                             </ul>
                         </div>
                         <a href="/product/byBasket">
