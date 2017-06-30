@@ -22,6 +22,7 @@ homeRoute.get('/', function(req, res) {
 			top5OfAuction: top5OfAuction,
 			top5OfPrice: top5OfPrice,
 			top5OfTimeDown: top5OfTimeDown,
+			isEmptyAuction: top5OfAuction.length == 0,
 		});
 	});
 });

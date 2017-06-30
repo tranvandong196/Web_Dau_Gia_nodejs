@@ -35,6 +35,10 @@
 	            <label>Top 5 sản phẩm có nhiều lượt ra giá nhất</label>
 	        </h2>
 	        <div class="row">
+	        	    {{#if isEmptyAuction }}
+					    <div class="alert alert-danger" role="alert" style="margin-left: 15px; margin-right: 15px">Chưa có sản phẩm nào được đấu giá
+					    </div>
+				    {{else}}
 		        {{#each top5OfAuction }}
 		        <div class="col-md-4">
 		            <div class="thumbnail box Boxstyle" id="box{{ProID}}" style="min-height: 340px; max-width: 300px">
@@ -54,6 +58,7 @@
 		        	</div>
 		        </div>
 		        {{/each}}
+		        {{/if}}
 	    	</div>
 	    </div>
 	</div>
