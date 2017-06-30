@@ -12,6 +12,14 @@ Danh sách sản phẩm
 </script>
 <script type="text/javascript">
     $('#textSearch').val($('#txtname').val());
+
+    $(".Boxstyle").hover(function(){
+        $(this).removeClass('box');
+        $(this).addClass('boxHover');
+    }, function(){
+        $(this).removeClass('boxHover');
+        $(this).addClass('box');
+    });
 </script>
 {{/section}}
 
@@ -26,12 +34,13 @@ Không có sản phẩm!
     <input type="hidden" id="txtname" value="{{name}}" />
     {{#each products }}
     <div class="col-md-4" style="width: 33%">
-        <div class="thumbnail" style="min-height: 340px; max-width: 300px">
+        <div class="thumbnail box Boxstyle" id="box{{ProID}}" style="min-height: 340px; max-width: 300px">
             <a href="/product/detail/{{ProID}}"><img src="/images/{{ProID}}/1_thumb.jpg" title="{{ProName}}"/></a>
             <div class="caption">
-                <a href="/product/detail/{{ProID}}"><h4>{{ProName}}</h4></a>
-                <h4>Giá: {{formatNumber Price}} vnđ</h4>
-                <h4>Tồn: {{Quantity}}</h4>
+                <a href="/product/detail/{{ProID}}"><h4 style="text-align: center;padding-bottom: 7px"><b>{{ProName}}</b></h4></a>
+
+                <h4><b>Giá:</b> <label style="color: red">{{formatNumber Price}}</label> VND</h4>
+                <h4><b>Tồn:</b></button> {{Quantity}}</h4>
                 <p style="width: 250px;
                 white-space: nowrap;
                 overflow: hidden;
@@ -64,3 +73,18 @@ Không có sản phẩm!
     </div>
 </div>
 {{/if}}
+
+{{#section 'css'}}
+        <style type="text/css">
+        .box {
+            -webkit-box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.15);
+            -moz-box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.15);
+            box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.15);
+        }
+        .boxHover {
+            -webkit-box-shadow: 0px 3px 29px 0px rgba(0,0,0,0.35);
+            -moz-box-shadow: 0px 3px 29px 0px rgba(0,0,0,0.35);
+            box-shadow: 0px 3px 29px 0px rgba(0,0,0,0.35);
+        }
+    </style>
+{{/section}}

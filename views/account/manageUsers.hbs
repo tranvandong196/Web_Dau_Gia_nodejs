@@ -23,35 +23,37 @@
 <form method="post" action="/account/delete" id="frmDeleteUsers">
     <input type="hidden" name="userID" id="txtDelUserID">
 </form>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Họ tên</th>
-            <th>Địa chỉ</th>
-            <th>Email</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each users }}
-        <tr>
-            <td>{{ID}}</td>
-            <td><a href="/account/profile/{{ID}}">{{Name}}</a></td>
-            <td>{{Address}}</td>
-            <td>{{Email}}</td>
-            <td>
-                <a href="/account/resetPW/{{ID}}" class="btn btn-xs btn-primary" title="reset password">
-                    <span class="glyphicon glyphicon-repeat"></span>
-                </a>
-                <a href="javascript:;" class="btn btn-xs btn-danger removeUser" data-id="{{ID}}">
-                    <span class="glyphicon glyphicon-remove"></span>
-                </a>
-            </td>
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
+<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-right: 50px">
+    <table class="table table-hover  table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Họ tên</th>
+                <th>Địa chỉ</th>
+                <th>Email</th>
+                <th style="text-align: center;">Tùy chọn</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each users }}
+            <tr>
+                <td>{{ID}}</td>
+                <td><a href="/account/profile/{{ID}}">{{Name}}</a></td>
+                <td>{{Address}}</td>
+                <td>{{Email}}</td>
+                <td style="text-align: center;">
+                    <a href="/account/resetPW/{{ID}}" class="btn btn-xs btn-primary" title="reset password">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
+                    <a href="javascript:;" class="btn btn-xs btn-danger removeUser" data-id="{{ID}}">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
 {{!-- end body --}}
 
 {{#section 'css'}}
