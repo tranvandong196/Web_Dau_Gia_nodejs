@@ -3,6 +3,7 @@ var crypto = require('crypto');
 var moment = require('moment');
 var category = require('../models/category');
 var restrict = require('../middle-wares/restrict');
+var restrict1 = require('../middle-wares/restrict1');
 var account = require('../models/account');
 var product = require('../models/product');
 var request = require('../models/request');

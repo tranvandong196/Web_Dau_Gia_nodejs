@@ -6,6 +6,7 @@ var moment = require('moment');
 var productRoute = express.Router();
 var category = require('../models/category');
 var restrict = require('../middle-wares/restrict');
+var restrict1 = require('../middle-wares/restrict1');
 var multer  = require('multer');
 var fs = require('fs');
 var thumb = require('node-thumbnail').thumb;
@@ -121,13 +122,13 @@ productRoute.get('/detail/:id', function(req, res) {
                     proID: req.params.id,
                     userID: user.id,
                 };
-                // if(!fs.existsSync(dir))
-                // {
-                //     fs.readFile(dir, 'utf8', (err, data) => {
-                //       if (err) throw err;
-                //       history = data;
-                //   });
-                // }
+                if(!fs.existsSync(dir))
+                {
+                    fs.readFile(dir, 'utf8', (err, data) => {
+                      if (err) throw err;
+                      history = data;
+                  });
+                }
                 var desc;
                 if(fs.existsSync(dir + '/desc.txt'))
                 {
@@ -268,7 +269,7 @@ productRoute.get('/detail/:id', function(req, res) {
 });
 });
 
-productRoute.get('/add', restrict, function(req, res) {
+productRoute.get('/add', restrict1, function(req, res) {
     //TODO
     category.loadAll().then(function(rows){
         var vm = {
@@ -996,7 +997,7 @@ productRoute.get('/search', function(req, res) {
     });
 });
 
-productRoute.get('/byFavorite', function(req, res) {
+productRoute.get('/byFavorite', restrict, function(req, res) {
 
     var rec_per_page = 6;
     var curPage = req.query.page ? req.query.page : 1;
@@ -1042,7 +1043,7 @@ productRoute.get('/byFavorite', function(req, res) {
     });
 });
 
-productRoute.get('/byAuction', function(req, res) {
+productRoute.get('/byAuction', restrict, function(req, res) {
 
     var rec_per_page = 6;
     var curPage = req.query.page ? req.query.page : 1;
@@ -1086,7 +1087,7 @@ productRoute.get('/byAuction', function(req, res) {
         });
     });
 });
-productRoute.get('/byBasket', function(req, res) {
+productRoute.get('/byBasket', restrict, function(req, res) {
     var rec_per_page = 6;
     var curPage = req.query.page ? req.query.page : 1;
     var offset = (curPage - 1) * rec_per_page;
@@ -1162,7 +1163,7 @@ productRoute.get('/byBasket', function(req, res) {
     });
 });
 
-productRoute.get('/byOnSale', function(req, res) {
+productRoute.get('/byOnSale', restrict1, function(req, res) {
 
     var rec_per_page = 6;
     var curPage = req.query.page ? req.query.page : 1;
@@ -1207,7 +1208,7 @@ productRoute.get('/byOnSale', function(req, res) {
         });
     });
 });
-productRoute.get('/bySold', function(req, res) {
+productRoute.get('/bySold', restrict1, function(req, res) {
 
     var rec_per_page = 6;
     var curPage = req.query.page ? req.query.page : 1;
@@ -1284,7 +1285,7 @@ productRoute.get('/bySold', function(req, res) {
     });
 });
 
-productRoute.get('/byUser/removeLove/:id', function(req, res){
+productRoute.get('/byUser/removeLove/:id', restrict, function(req, res){
     var id = req.params.id;
     var user = res.locals.layoutModels.curUser;
     var entity = {
