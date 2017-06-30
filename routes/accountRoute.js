@@ -366,7 +366,7 @@ accountRoute.get('/manageRequests', restrict, function(req, res) {
                 box.push(tmp);
                 promise.push(account.load(element.UserID));
             });
-            Q.all(promise).then(function(rs){
+            Q.all(promise).done(function(rs){
                 box.forEach( function(element, index) {
                     element.name = rs[index].Name;
                 });
@@ -555,7 +555,7 @@ accountRoute.get('/feedback', restrict, function(req, res) {
             });
         }
 
-        Q.all(promise).then(function(rs){
+        Q.all(promise).done(function(rs){
             var k = 0;
             box.forEach( function(element, index) {
                 element.product = rs[k];

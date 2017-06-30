@@ -13,7 +13,7 @@ homeRoute.get('/', function(req, res) {
 
 	Q.all([
 		product.loadTop5OfAuction(), product.loadTop5OfPrice(), product.loadTop5OfTimeDown()
-	]).then(function(rows){
+	]).done(function(rows){
 		top5OfAuction = rows[0];
 		top5OfPrice = rows[1];
 		top5OfTimeDown = rows[2];

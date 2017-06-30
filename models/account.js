@@ -172,7 +172,7 @@ exports.delete = function(id){
     var sql1 = 'delete from products where UserID = ' + id;
     Q.all([
         db.delete(sql), db.delete(sql1),
-    ]).then(function(affectedRows, affectedRows1){
+    ]).done(function(affectedRows, affectedRows1){
         deferred.resolve(affectedRows);
     });
     return deferred.promise;
@@ -188,7 +188,7 @@ exports.resetPW = function(id){
     var sql = mustache.render('update users set Password = "{{pw}}" where ID = {{id}}', entity);
     Q.all([
         db.update(sql),
-    ]).then(function(changedRows){
+    ]).done(function(changedRows){
         deferred.resolve(changedRows);
     });
     return deferred.promise;
