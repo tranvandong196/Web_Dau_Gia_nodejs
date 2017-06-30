@@ -121,11 +121,19 @@ productRoute.get('/detail/:id', function(req, res) {
                     proID: req.params.id,
                     userID: user.id,
                 };
-                if(!fs.existsSync(dir))
+                // if(!fs.existsSync(dir))
+                // {
+                //     fs.readFile(dir, 'utf8', (err, data) => {
+                //       if (err) throw err;
+                //       history = data;
+                //   });
+                // }
+                var desc;
+                if(fs.existsSync(dir + '/desc.txt'))
                 {
-                    fs.readFile(dir, 'utf8', (err, data) => {
+                    fs.readFile(dir + '/desc.txt', 'utf8', (err, data) => {
                       if (err) throw err;
-                      history = data;
+                        desc = data;
                   });
                 }
                 favorite.isLoved(entity).then(function(isLoved){
@@ -134,7 +142,7 @@ productRoute.get('/detail/:id', function(req, res) {
                     if (pro) {
                         Q.all([
                             auction.findMaxPrice(pro.ProID), auction.findHandlePrice(pro.ProID), product.findSolder(pro.ProID)
-                            ]).then(function(rs){
+                            ]).done(function(rs){
                                 var curPrice = pro.Price;
                                 var handlePrice = {
                                     Name: 'Trống',
@@ -186,6 +194,7 @@ productRoute.get('/detail/:id', function(req, res) {
                                         curPrice: curPrice,
                                         indexs: indexs,
                                         history: history,
+                                        desc: desc,
                                         proID: req.params.id,
                                         isLoved: isLoved,
                                         isSolder: solder.ID === user.id,
@@ -206,7 +215,7 @@ productRoute.get('/detail/:id', function(req, res) {
                 if (pro) {
                     Q.all([
                         auction.findMaxPrice(pro.ProID), auction.findHandlePrice(pro.ProID), product.findSolder(pro.ProID)
-                        ]).then(function(rs){
+                        ]).done(function(rs){
                             var curPrice = pro.Price;
                             var handlePrice = {
                                 Name: 'Trống',
@@ -544,7 +553,7 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                     }
                     box.push(temp);
                 }
-                Q.all(promise).then(function(rs){
+                Q.all(promise).done(function(rs){
                     var k = 0;
                     for(var i = 0; i < box.length; i++)
                     {
@@ -684,7 +693,7 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                     }
                     box.push(temp);
                 }
-                Q.all(promise).then(function(rs){
+                Q.all(promise).done(function(rs){
                     var k = 0;
                     for(var i = 0; i < box.length; i++)
                     {
@@ -815,7 +824,7 @@ productRoute.post('/search', function(req, res) {
                 }
                 box.push(temp);
             }
-            Q.all(promise).then(function(rs){
+            Q.all(promise).done(function(rs){
                 var k = 0;
                 for(var i = 0; i < box.length; i++)
                 {
@@ -946,7 +955,7 @@ productRoute.get('/search', function(req, res) {
                 }
                 box.push(temp);
             }
-            Q.all(promise).then(function(rs){
+            Q.all(promise).done(function(rs){
                 var k = 0;
                 for(var i = 0; i < box.length; i++)
                 {
@@ -1116,7 +1125,7 @@ productRoute.get('/byBasket', function(req, res) {
             promise.push(feedback.isGaveComment(entity));
             box.push(temp);
         }
-        Q.all(promise).then(function(rs){
+        Q.all(promise).done(function(rs){
             var k = 0;
             box.forEach( function(element, index) {
                 if(rs[k] == 1)
@@ -1238,7 +1247,7 @@ productRoute.get('/bySold', function(req, res) {
             promise.push(feedback.isGaveComment(entity));
             box.push(temp);
         }
-        Q.all(promise).then(function(rs){
+        Q.all(promise).done(function(rs){
             var k = 0;
                 box.forEach( function(element, index) {
                 if(rs[k] == 1)

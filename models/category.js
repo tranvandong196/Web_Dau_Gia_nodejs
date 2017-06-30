@@ -33,7 +33,7 @@ exports.delete = function(id) {
     var sql1 = 'delete from products where CatID = ' + id;
     Q.all([
     	db.delete(sql), db.delete(sql1),
-    ]).then(function(affectedRows, affectedRows1){
+    ]).done(function(affectedRows, affectedRows1){
     	deferred.resolve(affectedRows);
     });
     return deferred.promise;

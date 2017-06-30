@@ -197,7 +197,7 @@ auctionRoute.get('/history/:id', restrict, function(req, res) {
                 box.push(tmp);
                 promise.push(account.load(element.UserID));
             });
-            Q.all(promise).then(function(rs){
+            Q.all(promise).done(function(rs){
                 rs.forEach( function(element, index) {
                     if(!isSolder && element.ID !== curUser.id)
                     {

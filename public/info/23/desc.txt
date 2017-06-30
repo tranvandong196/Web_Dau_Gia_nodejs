@@ -1,0 +1,4 @@
+﻿Nguồn điện : AC 100V - 240V / 50Hz
+Bình ắc quy khô (PT4.5-6) : 6V-4.5Ah
+Bóng đèn Led : 2LED
+Dòng điện sạc : 300 mA

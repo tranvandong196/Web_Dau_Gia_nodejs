@@ -50,6 +50,10 @@ Chi tiết sản phẩm
       $('#btn_edit').show();
       $('#frmEdit').submit();
     });
+    $('#watchDesc').on('click', function(){
+        var desc = $('#desc').val();
+        alert(desc);
+    });
     var stt = 1;
     $(document).ready(function(){
         $(".switchImage").click(function(){
@@ -167,6 +171,7 @@ Chi tiết sản phẩm
 
                 {{#if ../isSolder }}
                     <button type="button" class="btn btn-default btn-xs" id="btn_edit">Thêm mô tả</button>
+                    <button type="button" class="btn btn-default btn-xs" id="watchDesc">Xem lịch sử mô tả</button>
                     <div class="col-md-12 col-lg-12" id="EditDesc">
                         <form id="frmEdit" method="post" action="/product/detail/{{ProID}}" hidden="hidden">
                             <div class="thumbnail">
@@ -284,6 +289,7 @@ Chi tiết sản phẩm
             {{/if}}
         </div>
         <input type="hidden" id="his" value="{{../history}}" />
+        <input type="hidden" id="desc" value="{{../desc}}" />
     </div>
 </div>
 </div>
