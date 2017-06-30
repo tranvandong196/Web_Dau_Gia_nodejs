@@ -5,10 +5,10 @@
             <div class="row" style="top: 15px">
                 <!-- Logo và thanh tìm kiến -->
                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                    <a href="/home" title="Đấu giá nhanh"><img src="/images/Others/daugialogo.png" style="height: 100px;margin-left: 10px; margin-top: 11px"></a>
+                    <a href="/home" title="Đấu giá nhanh"><img src="/images/Others/daugialogo.png" style="height: 100px;margin-left: 5px; margin-top: 10px"></a>
                 </div>
                 <div class="col-sm-6">
-                    <div class="panel panel-default" style="background-color: #CCCCCC;left: -25px">
+                    <div class="panel panel-default" style="background-color: #CCCCCC">
                         <div class="panel-body">
                             <div class="form-group">
                                 <input class="form-control" placeholder="Tìm kiếm" type="text" id="txtSearch" value="{{text}}">
@@ -42,11 +42,11 @@
                     </div>
                 </div>
                 <!-- END Logo và thanh tìm kiến -->
-                <div style=" top: 20px; text-align: right; right: 35px">
+                <div class="col-sm-2" style=" top: 20px; text-align: right; right: 35px">
                     {{#if layoutModels.isLogged }}
                     <div class="btn-group">
                         <div class="row">
-                             <p style="margin-top: -30px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                         <p style="margin-top: -30px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Xin chào, <b>{{ layoutModels.curUser.name }}</b> <span class="caret"></span>
                             </a>
@@ -78,6 +78,26 @@
                                 </span>
                             </i>
                         </a>
+
+                        <ul class="dropdown-menu">
+                            
+                            <li><a id="upProduct" href="/product/add">Đăng sản phẩm</a></li>
+                            <li><a id="ProductFavorite" href="/product/byFavorite">Sản phẩm yêu thích</a></li>
+                            <li><a id="ProductAuction" href="/product/byAuction">Sản phẩm đang đấu giá</a></li>
+                            {{#if layoutModels.isAdmin }}
+                            <li role="separator" class="divider"></li>
+                            <li><a id="manageCategories" href="/account/manageRequests">Duyệt yêu cầu</a></li>
+                            <li><a id="manageCategories" href="/account/manageCategories">Quản lý danh mục</a></li>
+                            <li><a id="manaUsers" href="/account/manageUsers">Quản lý người dùng</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/account/profile">Thông tin cá nhân</a></li>
+                            <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
+                            {{else}}
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/account/profile">Thông tin cá nhân</a></li>
+                            <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
+                            {{/if}}
+                        </ul>
                     </div>
                     {{else}}
                     <a href="/account/login">
@@ -113,29 +133,34 @@
                         </a>
                     </li>
                     <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
-                        <a href="/home/gioi-thieu">
+                        <a href="others/gioi-thieu.html">
                             <i style="margin-right: 5px; font-size: 17px; top: -1px">
-                            <span class="glyphicon glyphicon-comment"></span>
-                                Giới thiệu
                             </i>
+                            <span style="color: #282525">
+                                Giới thiệu
+                            </span>
                         </a>
                     </li>
                     <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
-                        <a href="/home/hoi-dap">
+                        <a href="others/hoi-dap.html">
                             <i style="margin-right: 5px; font-size: 17px; top: -1px">
+                            </i>
+                            <span style="color: #282525">
                                 <span class="glyphicon glyphicon-triangle-right">
                                 </span>
                                 Hỏi đáp
-                            </i>
+                            </span>
                         </a>
                     </li>
                     <li style="margin-right: 5px; color: rgb(221, 0, 23); font-size: 16px; top: -1px">
-                        <a href="/home/lien-he">
+                        <a href="#">
                             <i style="margin-right: 5px; font-size: 17px; top: -1px">
+                            </i>
+                            <span style="color: #282525">
                                 <span class="glyphicon glyphicon-earphone">
                                 </span>
                                 Liên hệ
-                            </i>
+                            </span>
                         </a>
                     </li>
                 </ul>
