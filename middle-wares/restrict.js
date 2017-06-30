@@ -1,7 +1,6 @@
 module.exports = function(req, res, next) {
 	if(req.session.isCanSale === true)
 	{
-		console.log(req.originalUrl);
 		if(req.originalUrl == '/account/reqUpAccount')
 		{
 			res.redirect('/home');
