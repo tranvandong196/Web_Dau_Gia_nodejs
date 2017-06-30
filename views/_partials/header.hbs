@@ -4,11 +4,11 @@
         <header style="background-color: rgb(216, 242, 255);">
             <div class="row" style="top: 15px">
                 <!-- Logo và thanh tìm kiến -->
-                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                     <a href="/home" title="Đấu giá nhanh"><img src="/images/Others/daugialogo.png" style="height: 100px;margin-left: 10px; margin-top: 11px"></a>
                 </div>
                 <div class="col-sm-6">
-                    <div class="panel panel-default" style="background-color: #CCCCCC">
+                    <div class="panel panel-default" style="background-color: #CCCCCC;left: -25px">
                         <div class="panel-body">
                             <div class="form-group">
                                 <input class="form-control" placeholder="Tìm kiếm" type="text" id="txtSearch" value="{{text}}">
@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <!-- END Logo và thanh tìm kiến -->
-                <div class="col-sm-3" style=" top: 20px; text-align: right; right: 30px">
+                <div style=" top: 20px; text-align: right; right: 30px">
                     {{#if layoutModels.isLogged }}
                     <div class="btn-group">
                         <div class="row">
@@ -51,23 +51,25 @@
                             </a>
                             <ul class="dropdown-menu">
                                 {{#if layoutModels.isCanSale}}
-                                <li><a id="upProduct" href="/product/add">Đăng sản phẩm</a></li>
-                                <li><a id="ProductAuction" href="/product/byOnSale">Sản phẩm đang bán</a></li>
-                                <li><a id="ProductAuction" href="/product/bySold">Sản phẩm đã bán</a></li>
+                                <li><a id="upProduct" href="/product/add">• Đăng sản phẩm</a></li>
+                                <li><a id="ProductAuction" href="/product/byOnSale">• Sản phẩm đang bán</a></li>
+                                <li><a id="ProductAuction" href="/product/bySold">• Sản phẩm đã bán</a></li>
                                 {{/if}}
-                                <li><a id="ProductFavorite" href="/product/byFavorite">Sản phẩm yêu thích</a></li>
-                                <li><a id="ProductAuction" href="/product/byAuction">S.phẩm đang t.gia đấu giá</a></li>
+                                <li><a id="ProductFavorite" href="/product/byFavorite">• Sản phẩm yêu thích</a></li>
+                                <li><a id="ProductAuction" href="/product/byAuction">• S.phẩm đang tham gia <br>&nbsp;&nbsp;&nbsp;đấu giá</a></li>
+                                <li></li>
                                 {{#if layoutModels.isAdmin }}
                                 <li role="separator" class="divider"></li>
-                                <li><a id="manageCategories" href="/account/manageRequests">Duyệt yêu cầu <span class="badge">{{layoutModels.numberOfRequests}}</span></a></li>
-                                <li><a id="manageCategories" href="/account/manageCategories">Quản lý danh mục</a></li>
-                                <li><a id="manaUsers" href="/account/manageUsers">Quản lý người dùng</a></li>
+                                <li><a id="manageCategories" href="/account/manageRequests">• Duyệt yêu cầu <span class="badge">{{layoutModels.numberOfRequests}}</span></a></li>
+                                <li><a id="manageCategories" href="/account/manageCategories">• Quản lý danh mục</a></li>
+                                <li><a id="manaUsers" href="/account/manageUsers">• Quản lý người dùng</a></li>
                                 {{/if}}
                                 <li role="separator" class="divider"></li>
-                                <li><a href="/account/feedback">Đánh giá từ người khác</a></li>
-                                <li><a href="/account/profile/{{layoutModels.curUser.id}}">Thông tin cá nhân</a></li>
-                                <li><a id="logoutLink" href="javascript:;">Đăng xuất</a></li>
+                                <li><a href="/account/feedback">• Điểm & Đánh giá</a></li>
+                                <li><a href="/account/profile/{{layoutModels.curUser.id}}">• Thông tin cá nhân</a></li>
+                                <li><a id="logoutLink" href="javascript:;">• Đăng xuất</a></li>
                             </ul>
+
                         </div>
                         <a href="/product/byBasket">
                             <i style="margin-right: 5px; font-size: 17px; top: -1px">
