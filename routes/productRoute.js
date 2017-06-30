@@ -121,11 +121,19 @@ productRoute.get('/detail/:id', function(req, res) {
                     proID: req.params.id,
                     userID: user.id,
                 };
-                if(!fs.existsSync(dir))
+                // if(!fs.existsSync(dir))
+                // {
+                //     fs.readFile(dir, 'utf8', (err, data) => {
+                //       if (err) throw err;
+                //       history = data;
+                //   });
+                // }
+                var desc;
+                if(fs.existsSync(dir + '/desc.txt'))
                 {
-                    fs.readFile(dir, 'utf8', (err, data) => {
+                    fs.readFile(dir + '/desc.txt', 'utf8', (err, data) => {
                       if (err) throw err;
-                      history = data;
+                        desc = data;
                   });
                 }
                 favorite.isLoved(entity).then(function(isLoved){
@@ -186,6 +194,7 @@ productRoute.get('/detail/:id', function(req, res) {
                                         curPrice: curPrice,
                                         indexs: indexs,
                                         history: history,
+                                        desc: desc,
                                         proID: req.params.id,
                                         isLoved: isLoved,
                                         isSolder: solder.ID === user.id,
