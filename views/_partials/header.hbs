@@ -42,14 +42,15 @@
                     </div>
                 </div>
                 <!-- END Logo và thanh tìm kiến -->
-                <div style=" top: 20px; text-align: right; right: 30px">
+                <div style=" top: 20px; text-align: right; right: 35px">
                     {{#if layoutModels.isLogged }}
                     <div class="btn-group">
                         <div class="row">
+                             <p style="margin-top: -30px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Xin chào, <b>{{ layoutModels.curUser.name }}</b> <span class="caret"></span>
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu" style="right: -5px">
                                 {{#if layoutModels.isCanSale}}
                                 <li><a id="upProduct" href="/product/add">• Đăng sản phẩm</a></li>
                                 <li><a id="ProductAuction" href="/product/byOnSale">• Sản phẩm đang bán</a></li>
@@ -69,7 +70,6 @@
                                 <li><a href="/account/profile/{{layoutModels.curUser.id}}">• Thông tin cá nhân</a></li>
                                 <li><a id="logoutLink" href="javascript:;">• Đăng xuất</a></li>
                             </ul>
-
                         </div>
                         <a href="/product/byBasket">
                             <i style="margin-right: 5px; font-size: 17px; top: -1px">
