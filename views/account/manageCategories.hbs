@@ -23,32 +23,34 @@
 <form method="post" action="/category/delete" id="frmDeleteCategory">
     <input type="hidden" name="catID" id="txtDelCatID">
 </form>
-<table class="table table-hover">
+<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-right: 50px">
+<table class="table table-hover table-striped table-bordered">
     <thead>
-        <tr>
+        <tr style="background: #cecece">
             <th>ID</th>
             <th>Tên danh mục</th>
-            <th></th>
+            <th style="text-align: center;">Tùy chọn</th>
         </tr>
     </thead>
     <tbody>
         {{#each categories }}
         <tr>
-            <td>{{CatID}}</td>
+            <td style="width: 10%;"">{{CatID}}</td>
             <td>{{CatName}}</td>
-            <td>
-                <a href="/category/edit/{{CatID}}" class="btn btn-xs btn-primary" title="edit">
-                    <span class="glyphicon glyphicon-pencil"></span>
+            <td style="width: 25%; text-align: center;">
+                <a href="/category/edit/{{CatID}}" class="btn btn-xs btn-primary" title="Sửa danh mục">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </a>
-                <a href="javascript:;" class="btn btn-xs btn-danger removeCategory" data-id="{{CatID}}">
-                    <span class="glyphicon glyphicon-remove"></span>
+                <a href="javascript:;" class="btn btn-xs btn-danger removeCategory" data-id="{{CatID}}" title="Xóa danh mục">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </a>
             </td>
         </tr>
         {{/each}}
     </tbody>
 </table>
-<a href="/category/add" class="btn btn-primary" title="add">
+</div>
+<a href="/category/add" class="btn btn-primary" title="Thêm danh mục mới">
     <span class="glyphicon glyphicon-plus"></span>
 </a>
 {{!-- end body --}}
