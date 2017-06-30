@@ -157,7 +157,7 @@ productRoute.get('/detail/:id', function(req, res) {
                                 };
                                 if(rs[1])
                                 {
-                                    handlePrice.Name = rs[1].Name;
+                                    handlePrice.Name = rs[1].Name[0] + '****' + rs[1].Name[rs[1].Name.length - 1];
                                     handlePrice.Score = rs[1].Score;
                                     handlePrice.ID = rs[1].ID;
                                 }
@@ -169,9 +169,14 @@ productRoute.get('/detail/:id', function(req, res) {
                                 }
                                 if(rs[0])
                                     curPrice = rs[0];
-                                if(solder.ID !== user.id)
+                                console.log('handlePrice: ');
+                                console.log(handlePrice);
+                                console.log('solder: ');
+                                console.log(solder);
+                                if(solder.ID === user.id)
                                 {
-                                    handlePrice.Name = handlePrice.Name[0] + '****' + handlePrice.Name[handlePrice.Name.length - 1];
+                                    if(rs[1])
+                                        handlePrice.Name = rs[1].Name;
                                 }
                                 blacklist.loadByProID(pro.ProID).then(function(rows){
                                     var inBlackList = false;
