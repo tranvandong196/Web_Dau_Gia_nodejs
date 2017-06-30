@@ -232,6 +232,7 @@ accountRoute.post('/profile', restrict, function(req, res) {
     account.changeProfile(entity)
     .then(function(rs) {
         account.load(curUser.id).then(function(u){
+            u.DOB = moment(u.DOB).format('l');
             if(rs === -2)
             {
                 res.render('account/profile', {
@@ -280,6 +281,7 @@ accountRoute.post('/profile', restrict, function(req, res) {
                     permission: u.Permission,
                     password: u.Password,
                 };
+                res.locals.layoutModels.curUser = user;
                 req.session.user = user;
                 res.render('account/profile', {
                     layoutModels: res.locals.layoutModels,
