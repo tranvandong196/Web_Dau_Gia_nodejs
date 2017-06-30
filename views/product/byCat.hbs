@@ -44,34 +44,23 @@ Không có sản phẩm!
     {{/each}}
 </div>
 <div class="row">
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
+    <div class="btn-group" role="group" aria-label="Page navigation">
             {{#if showPrevPage}}
-            <li>
-                <a href="?page={{prevPage}}">
-                    <span class="glyphicon glyphicon-arrow-left"></span>
+                <a href="?page={{prevPage}}&text={{text}}&findBy={{findBy}}&arrange={{arrange}}"><button class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></button></span>
                 </a>
-            </li>
             {{/if}}
             {{#each pages }}
             {{#if isActive }}
-            <li class="active">
-                <a href="?page={{pageValue}}">{{pageValue}}</a>
-            </li>
+                <a href="?page={{pageValue}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}"><button class="btn btn-warning">{{pageValue}}</button></a>
             {{else}}
-            <li>
-                <a href="?page={{pageValue}}">{{pageValue}}</a>
-            </li>
+                <a href="?page={{pageValue}}&text={{../text}}&findBy={{../findBy}}&arrange={{../arrange}}"><button class="btn btn-default">{{pageValue}}</button></a>
             {{/if}}
             {{/each}}
             {{#if showNextPage }}
-            <li>
-                <a href="?page={{nextPage}}" aria-label="Next">
-                    <span class="glyphicon glyphicon-arrow-right"></span>
+                <a href="?page={{nextPage}}&text={{text}}&findBy={{findBy}}&arrange={{arrange}}" aria-label="Next">
+                    <button class="btn btn-default"><span class="glyphicon glyphicon-arrow-right"></span></button>
                 </a>
-            </li>
             {{/if}}
-        </ul>
-    </nav>
+    </div>
 </div>
 {{/if}}

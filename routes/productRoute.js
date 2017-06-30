@@ -44,7 +44,7 @@ productRoute.get('/byCat/:id', function(req, res) {
             pages: pages,
             curPage: curPage,
             prevPage: curPage - 1,
-            nextPage: curPage + 1,
+            nextPage: curPage - (-1),
             showPrevPage: curPage > 1,
             showNextPage: curPage < number_of_pages - 1,
         });
@@ -576,7 +576,7 @@ productRoute.get('/search/addLove/:id', restrict, function(req, res) {
                         pages: pages,
                         curPage: curPage,
                         prevPage: curPage - 1,
-                        nextPage: curPage + 1,
+                        nextPage: curPage - (-1),
                         showPrevPage: curPage > 1,
                         showNextPage: curPage < number_of_pages - 1,
                     });
@@ -716,7 +716,7 @@ productRoute.get('/search/removeLove/:id', restrict, function(req, res) {
                         pages: pages,
                         curPage: curPage,
                         prevPage: curPage - 1,
-                        nextPage: curPage + 1,
+                        nextPage: curPage - (-1),
                         showPrevPage: curPage > 1,
                         showNextPage: curPage < number_of_pages - 1,
                     });
@@ -848,7 +848,7 @@ productRoute.post('/search', function(req, res) {
                     pages: pages,
                     curPage: curPage,
                     prevPage: curPage - 1,
-                    nextPage: curPage + 1,
+                    nextPage: curPage - (-1),
                     showPrevPage: curPage > 1,
                     showNextPage: curPage < number_of_pages - 1,
                 });
@@ -978,7 +978,7 @@ productRoute.get('/search', function(req, res) {
                     pages: pages,
                     curPage: curPage,
                     prevPage: curPage - 1,
-                    nextPage: curPage + 1,
+                    nextPage: curPage - (-1),
                     showPrevPage: curPage > 1,
                     showNextPage: curPage < number_of_pages - 1,
                 });
@@ -1026,7 +1026,7 @@ productRoute.get('/byFavorite', function(req, res) {
             pages: pages,
             curPage: curPage,
             prevPage: curPage - 1,
-            nextPage: curPage + 1,
+            nextPage: curPage - (-1),
             showPrevPage: curPage > 1,
             showNextPage: curPage < number_of_pages - 1,
         });
@@ -1071,7 +1071,7 @@ productRoute.get('/byAuction', function(req, res) {
             pages: pages,
             curPage: curPage,
             prevPage: curPage - 1,
-            nextPage: curPage + 1,
+            nextPage: curPage - (-1),
             showPrevPage: curPage > 1,
             showNextPage: curPage < number_of_pages - 1,
         });
@@ -1145,7 +1145,7 @@ productRoute.get('/byBasket', function(req, res) {
                 pages: pages,
                 curPage: curPage,
                 prevPage: curPage - 1,
-                nextPage: curPage + 1,
+                nextPage: curPage - (-1),
                 showPrevPage: curPage > 1,
                 showNextPage: curPage < number_of_pages - 1,
             });
@@ -1192,7 +1192,7 @@ productRoute.get('/byOnSale', function(req, res) {
             pages: pages,
             curPage: curPage,
             prevPage: curPage - 1,
-            nextPage: curPage + 1,
+            nextPage: curPage - (-1),
             showPrevPage: curPage > 1,
             showNextPage: curPage < number_of_pages - 1,
         });
@@ -1267,7 +1267,7 @@ productRoute.get('/bySold', function(req, res) {
                 pages: pages,
                 curPage: curPage,
                 prevPage: curPage - 1,
-                nextPage: curPage + 1,
+                nextPage: curPage - (-1),
                 showPrevPage: curPage > 1,
                 showNextPage: curPage < number_of_pages - 1,
             });
