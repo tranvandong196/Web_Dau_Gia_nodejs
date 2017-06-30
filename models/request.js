@@ -6,11 +6,17 @@ var db = require('../app-helpers/dbHelper');
 exports.insert = function(id) {
 
     var deferred = Q.defer();
-
-    var sql = 'insert into requests (UserID) values(' + id + ')';
-    db.insert(sql).then(function(insertId) {
-        deferred.resolve(insertId);
+    var sqlLoad = 'select * from requests where UserID = ' + id;
+    db.load(sqlLoad).then(function(rows) {
+        if(rows.length == 0)
+        {
+            var sql = 'insert into requests (UserID) values(' + id + ')';
+            db.insert(sql).then(function(insertId) {
+                deferred.resolve(insertId);
+            });
+        }
     });
+    
 
     return deferred.promise;
 }
