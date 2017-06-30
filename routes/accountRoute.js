@@ -195,7 +195,7 @@ accountRoute.get('/profile/:id', restrict, function(req, res) {
                         isCanSale: isCanSale,
                         isWaitingForAccept: isWaitingForAccept,
                         user: user,
-                        isMyProfile: user.ID === res.locals.layoutModels.curUser.id,
+                        isMyProfile: true,
                         isTrashAccount: user === null,
                     });
                 });
@@ -205,12 +205,6 @@ accountRoute.get('/profile/:id', restrict, function(req, res) {
         {
             res.render('account/profile', {
                 layoutModels: res.locals.layoutModels,
-                percentScore: 0,
-                canAuction: false,
-                isCanSale: false,
-                isWaitingForAccept: false,
-                user: user,
-                isMyProfile: false,
                 isTrashAccount: true,
             });
         }
@@ -225,49 +219,83 @@ accountRoute.get('/changePassword', restrict, function(req, res) {
 
 accountRoute.post('/profile', restrict, function(req, res) {
     var nDOB = moment(req.body.dOB).format('YYYY-MM-DDTHH:mm');
+    var curUser = res.locals.layoutModels.curUser;
     var entity = {
-        id: res.locals.layoutModels.curUser.id,
+        id: curUser.id,
         name: req.body.name,
         email: req.body.email,
         address: req.body.address,
         dOB: nDOB,
-        password: res.locals.layoutModels.curUser.password,
-        username: res.locals.layoutModels.curUser.username,
+        password: curUser.password,
+        username: curUser.username,
     };
     account.changeProfile(entity)
     .then(function(rs) {
-        if(rs === -2)
-        {
-            res.render('account/profile', {
-                layoutModels: res.locals.layoutModels,
-                showMsg: true,
-                error: true,
-                msg: 'Email này đã có người sử dụng.',
-            });
-        }
-        else if(rs === -1)
-        {
-            res.render('account/profile', {
-                layoutModels: res.locals.layoutModels,
-                showMsg: true,
-                error: true,
-                msg: 'Địa chỉ này đã có người sử dụng.',
-            });
-        }
-        else
-        {
-            account.login(entity).then(function(user){
-                res.locals.layoutModels.curUser = user;
+        account.load(curUser.id).then(function(u){
+            if(rs === -2)
+            {
+                res.render('account/profile', {
+                    layoutModels: res.locals.layoutModels,
+                    showMsg: true,
+                    error: true,
+                    msg: 'Email này đã có người sử dụng.',
+                    percentScore: u.Score*100,
+                    canAuction: u.Score >= 0.8,
+                    isCanSale: false,
+                    isWaitingForAccept: false,
+                    user: u,
+                    isMyProfile: true,
+                    isTrashAccount: u === null,
+                });
+            }
+            else if(rs === -1)
+            {
+                res.render('account/profile', {
+                    layoutModels: res.locals.layoutModels,
+                    showMsg: true,
+                    error: true,
+                    msg: 'Địa chỉ này đã có người sử dụng.',
+                    percentScore: u.Score*100,
+                    canAuction: u.Score >= 0.8,
+                    isCanSale: false,
+                    isWaitingForAccept: false,
+                    user: u,
+                    isMyProfile: true,
+                    isTrashAccount: u === null,
+                });
+            }
+            else
+            {
+                u.DOB = moment(u.DOB).format('l');
+                var user = {
+                    id: u.ID,
+                    username: u.Username,
+                    name: u.Name,
+                    email: u.Email,
+                    address: u.Address,
+                    scorePlus: u.ScorePlus,
+                    scoreMinus: u.ScoreMinus,
+                    score: u.Score,
+                    dOB: u.DOB,
+                    permission: u.Permission,
+                    password: u.Password,
+                };
                 req.session.user = user;
-
                 res.render('account/profile', {
                     layoutModels: res.locals.layoutModels,
                     showMsg: true,
                     error: false,
                     msg: 'Thông tin đã được thay đổi.',
+                    percentScore: u.Score*100,
+                    canAuction: u.Score >= 0.8,
+                    isCanSale: false,
+                    isWaitingForAccept: false,
+                    user: u,
+                    isMyProfile: true,
+                    isTrashAccount: u === null,
                 });
-            })
-        }
+            }
+        });
     });
 });
 
