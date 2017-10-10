@@ -71,8 +71,10 @@ auctionRoute.post('/add', restrict, function(req, res) {
             name = temp;
             tmp += now + '  -  ' + name + '  =>  ' + price + '\r\n';
             var dir = './public/info/' + pro.ProID;
-            fs.appendFile(dir + '/history.txt', tmp, (err) => {
-                if (err) throw err;
+            fs.appendFile(dir + '/history.txt', tmp, (err) =>
+            {
+                if (err)
+                    throw err;
             });
             auction.findHandlePrice(pro.ProID).then(function(user){
                 product.updateHandlePrice(pro.ProID, user.ID).then(function(changedRows){
